@@ -5,5 +5,14 @@
     "editor.tabSize": 2,
     "[javascript]": {
         "editor.defaultFormatter": "HookyQR.beautify"
+    },
+    "[dotenv]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     }
 }
