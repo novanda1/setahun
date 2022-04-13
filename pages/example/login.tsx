@@ -2,12 +2,12 @@ import React, { useContext } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-import { Label, Input, Button, WindmillContext } from '@roketid/windmill-react-ui'
+import { Label, Input, WindmillContext } from '@roketid/windmill-react-ui'
 import { GithubIcon, TwitterIcon } from 'icons'
+import Button from 'components/Button'
 
 function LoginPage() {
   const { mode } = useContext(WindmillContext)
-  const imgSource = mode === 'dark' ? '/assets/img/login-office-dark.jpeg' : '/assets/img/login-office.jpeg'
 
   return (
     <div className='flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900'>
@@ -17,7 +17,7 @@ function LoginPage() {
             <Image
               aria-hidden='true'
               className='hidden object-cover w-full h-full'
-              src={imgSource}
+              src="https://images.unsplash.com/photo-1554904780-9ac4bdfa6a69?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
               alt='Office'
               layout='fill'
             />

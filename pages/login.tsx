@@ -1,4 +1,5 @@
-import { Button, HelperText, Input, Label, WindmillContext } from '@roketid/windmill-react-ui'
+import { HelperText, Input, Label, WindmillContext } from '@roketid/windmill-react-ui'
+import Button from 'components/Button'
 import { Formik } from 'formik'
 import { supabase } from 'lib/supabase'
 import Image from 'next/image'
@@ -9,7 +10,7 @@ type LoginError = { email: string, password: string }
 
 function LoginPage() {
   const { mode } = useContext(WindmillContext)
-  const imgSource = mode === 'dark' ? '/assets/img/login-office-dark.jpeg' : '/assets/img/login-office.jpeg'
+  const imgSource = mode === 'dark' ? '/assets/img/login.jpg' : '/assets/img/login.jpg'
   const user = supabase.auth.user()
   const { push } = useRouter()
   const [authError, SetAuthError] = useState<string>("")
@@ -78,7 +79,7 @@ function LoginPage() {
                       handleSubmit,
                       isSubmitting,
                     }) => (
-                      <form onSubmit={handleSubmit}>
+                      <form onSubmit={handleSubmit} className="pb-7">
                         <Label>
                           <span>Email</span>
                           <Input
@@ -111,7 +112,7 @@ function LoginPage() {
                         {errors.password && touched.password && (
                           <HelperText valid={false}>{errors.password}</HelperText>
                         )}
-                        <Button type='submit' className='mt-4' disabled={isSubmitting} block>
+                        <Button type='submit' className='mt-10' disabled={isSubmitting} block>
                           Log in
                         </Button>
                         {
@@ -121,8 +122,6 @@ function LoginPage() {
                       </form>
                     )}
                   </Formik>
-
-                  <hr className='my-8' />
                 </div>
               </main>
             </div>
