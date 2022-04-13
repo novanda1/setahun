@@ -1,6 +1,4 @@
 import { Windmill } from '@roketid/windmill-react-ui';
-import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs';
-import { UserProvider } from '@supabase/supabase-auth-helpers/react';
 import { supabase } from 'lib/supabase';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
@@ -9,7 +7,7 @@ import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   // suppress useLayoutEffect warnings when running outside a browser
-  if (typeof window !== 'undefined') React.useLayoutEffect = React.useEffect;
+  if (typeof window === undefined) React.useLayoutEffect = React.useEffect;
   const [authenticatedState, setAuthenticatedState] = useState<'not-authenticated' | 'authenticated'>("not-authenticated")
   const { push } = useRouter()
 
@@ -47,11 +45,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [push])
 
   return (
-    <UserProvider supabaseClient={supabaseClient}>
-      <Windmill usePreferences={true}>
-        <Component {...pageProps} />
-      </Windmill>
-    </UserProvider>
+    <Windmill usePreferences={true}>
+      <Component {...pageProps} />
+    </Windmill>
   )
 }
 export default MyApp
