@@ -106,7 +106,7 @@ function Header() {
               </DropdownItem>
               <DropdownItem onClick={async () => {
                 const a = await supabase.auth.signOut()
-                push('login')
+                push('/login')
               }}>
                 <OutlineLogoutIcon className="w-4 h-4 mr-3" aria-hidden="true" />
                 <span>Log out</span>
