@@ -14,7 +14,9 @@ import { Badge, Input, Dropdown, DropdownItem, WindmillContext } from '@roketid/
 import { supabase } from 'lib/supabase'
 import Avatar from 'react-avatar';
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
 
+const DynamicAvatarMenu = dynamic(() => import('./AvatarMenu'), { ssr: false })
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext)
@@ -74,45 +76,13 @@ function Header() {
             </button>
           </li>
           {/* <!-- Profile menu --> */}
-          <li className="relative h-8">
-            <button
-              className="rounded-full focus:shadow-outline-blue focus:outline-none"
-              onClick={handleProfileClick}
-              aria-label="Account"
-              aria-haspopup="true"
-            >
-              <div className='relative rounded-full overflow-hidden w-8 h-8'>
-                <Avatar
-                  className="align-middle"
-                  alt=""
-                  name={user?.email}
-                  aria-hidden="true"
-                  size="32"
-                />
-              </div>
-            </button>
-            <Dropdown
-              align="right"
-              isOpen={isProfileMenuOpen}
-              onClose={() => setIsProfileMenuOpen(false)}
-            >
-              <DropdownItem tag="a" href="#">
-                <OutlinePersonIcon className="w-4 h-4 mr-3" aria-hidden="true" />
-                <span>Profile</span>
-              </DropdownItem>
-              <DropdownItem tag="a" href="#">
-                <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
-                <span>Settings</span>
-              </DropdownItem>
-              <DropdownItem onClick={async () => {
-                const a = await supabase.auth.signOut()
-                push('/login')
-              }}>
-                <OutlineLogoutIcon className="w-4 h-4 mr-3" aria-hidden="true" />
-                <span>Log out</span>
-              </DropdownItem>
-            </Dropdown>
-          </li>
+          {user?.user_metadata.fullname &&
+            <DynamicAvatarMenu
+              handleProfileClick={handleProfileClick}
+              isProfileMenuOpen={isProfileMenuOpen}
+              setIsProfileMenuOpen={setIsProfileMenuOpen}
+            />
+          }
         </ul>
       </div>
     </header>
