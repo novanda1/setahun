@@ -1,30 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react'
-import Link from 'next/link'
+import { Button, HelperText, Input, Label, WindmillContext } from '@roketid/windmill-react-ui'
+import { Formik } from 'formik'
+import { supabase } from 'lib/supabase'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
+import React, { useContext, useEffect, useState } from 'react'
 
-import { Label, Input, Button, WindmillContext } from '@roketid/windmill-react-ui'
-import { GithubIcon, TwitterIcon } from 'icons'
-
-import { useUser } from '@supabase/supabase-auth-helpers/react'
-import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
-import Auth from 'components/Auth'
-
+type LoginError = { email: string, password: string }
 
 function LoginPage() {
   const { mode } = useContext(WindmillContext)
   const imgSource = mode === 'dark' ? '/assets/img/login-office-dark.jpeg' : '/assets/img/login-office.jpeg'
-  const { user, error } = useUser()
-  const [data, setData] = useState<any>({})
-
+  const user = supabase.auth.user()
+  const { push } = useRouter()
+  const [authError, SetAuthError] = useState<string>("")
 
   useEffect(() => {
-    async function loadData() {
-      const { data } = await supabaseClient.from('test').select('*')
-      setData(data)
-    }
-    // Only run query once user is logged in.
-    if (user) loadData()
-  }, [user])
+    if (user) push('/')
+  }, [user, push])
 
 
   if (!user)
@@ -48,23 +40,100 @@ function LoginPage() {
                     Login
                   </h1>
 
-                  {error && <p>{error.message}</p>}
-                  <Auth />
+                  <Formik
+                    initialValues={{ email: '', password: '' }}
+                    validate={values => {
+                      const errors: LoginError = { email: "", password: "" }
+                      if (!values.email) {
+                        errors.email = 'Email wajib diisi';
+                      } else if (
+                        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+                      ) {
+                        errors.email = 'Email salah';
+                      }
+
+
+                      if (!values.password) {
+                        errors.password = 'Password wajib diisi'
+                      }
+
+                      Object.keys(errors).forEach((key: string) => !errors[key as keyof LoginError] && delete errors[key as keyof LoginError])
+
+                      return errors;
+                    }}
+                    onSubmit={async (values, { setSubmitting }) => {
+                      setSubmitting(true)
+                      const { user, error } = await supabase.auth.signIn(values)
+                      if (user) push("/")
+                      else if (error) SetAuthError(error.message)
+                      setSubmitting(false)
+                    }}
+                  >
+                    {({
+                      values,
+                      errors,
+                      touched,
+                      handleChange,
+                      handleBlur,
+                      handleSubmit,
+                      isSubmitting,
+                    }) => (
+                      <form onSubmit={handleSubmit}>
+                        <Label>
+                          <span>Email</span>
+                          <Input
+                            className='mt-1'
+                            type="email"
+                            name="email"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.email}
+                            placeholder='john@doe.com'
+                          />
+                        </Label>
+                        {errors.email && touched.email && (
+                          <HelperText valid={false}>{errors.email}</HelperText>
+                        )}
+
+
+                        <Label className='mt-4'>
+                          <span>Password</span>
+                          <Input
+                            className='mt-1'
+                            type="password"
+                            name="password"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.password}
+                            placeholder='***************'
+                          />
+                        </Label>
+                        {errors.password && touched.password && (
+                          <HelperText valid={false}>{errors.password}</HelperText>
+                        )}
+                        <Button type='submit' className='mt-4' disabled={isSubmitting} block>
+                          Log in
+                        </Button>
+                        {
+                          authError &&
+                          <HelperText className='text-center block mt-2' valid={false}>{authError}</HelperText>
+                        }
+                      </form>
+                    )}
+                  </Formik>
+
+                  <hr className='my-8' />
                 </div>
               </main>
             </div>
           </div>
-        </div>
-        );
+        </div >
       </>
     )
+
   return (
     <>
-      <button onClick={() => supabaseClient.auth.signOut()}>Sign out</button>
-      <p>user:</p>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-      <p>client-side data fetching with RLS</p>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+
     </>
   )
 

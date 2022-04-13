@@ -15,18 +15,18 @@ interface ISidebarContext {
 }
 
 const SidebarContext = React.createContext<ISidebarContext>(
-  { 
+  {
     isSidebarOpen: false,
-    scrollY: {id: null, position: 0},
-    closeSidebar: () => {},
-    toggleSidebar: () => {},
-    saveScroll: (el: HTMLElement | null) => {}
+    scrollY: { id: null, position: 0 },
+    closeSidebar: () => { },
+    toggleSidebar: () => { },
+    saveScroll: (el: HTMLElement | null) => { }
   }
 );
 
-interface ISidebarPovider{ children: React.ReactNode }
+interface ISidebarProvider { children: React.ReactNode }
 
-export const SidebarProvider = ({ children }: ISidebarPovider) => {
+export const SidebarProvider = ({ children }: ISidebarProvider) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   function toggleSidebar() {
@@ -38,7 +38,7 @@ export const SidebarProvider = ({ children }: ISidebarPovider) => {
   }
 
   const defaultScrollY = useMemo(() => {
-    return {id: null, position: 0}
+    return { id: null, position: 0 }
   }, [])
 
   const storageScrollY = useCallback(() => {
@@ -52,7 +52,7 @@ export const SidebarProvider = ({ children }: ISidebarPovider) => {
   function saveScroll(el: HTMLElement | null) {
     const id = el?.id || null
     const position = el?.scrollTop || 0
-    setScrollY({id, position})
+    setScrollY({ id, position })
   }
 
   useEffect(() => {

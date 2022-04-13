@@ -10,7 +10,11 @@ import {
   OutlineCogIcon,
   OutlineLogoutIcon,
 } from 'icons'
-import { Avatar, Badge, Input, Dropdown, DropdownItem, WindmillContext } from '@roketid/windmill-react-ui'
+import { Badge, Input, Dropdown, DropdownItem, WindmillContext } from '@roketid/windmill-react-ui'
+import { supabase } from 'lib/supabase'
+import Avatar from 'react-avatar';
+import { useRouter } from 'next/router'
+
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext)
@@ -18,6 +22,9 @@ function Header() {
 
   const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+
+  const user = supabase.auth.user()
+  const { push } = useRouter()
 
   function handleNotificationsClick() {
     setIsNotificationsMenuOpen(!isNotificationsMenuOpen)
@@ -45,7 +52,7 @@ function Header() {
               <SearchIcon className="w-4 h-4" aria-hidden="true" />
             </div>
             <Input
-              className="pl-8 text-gray-700"
+              className="pl-8 text-gray-700 focus:ring-blue-300"
               placeholder="Search for projects"
               aria-label="Search"
             />
@@ -66,54 +73,23 @@ function Header() {
               )}
             </button>
           </li>
-          {/* <!-- Notifications menu --> */}
-          <li className="relative">
-            <button
-              className="relative align-middle rounded-md focus:outline-none focus:shadow-outline-blue"
-              onClick={handleNotificationsClick}
-              aria-label="Notifications"
-              aria-haspopup="true"
-            >
-              <BellIcon className="w-5 h-5" aria-hidden="true" />
-              {/* <!-- Notification badge --> */}
-              <span
-                aria-hidden="true"
-                className="absolute top-0 right-0 inline-block w-3 h-3 transform translate-x-1 -translate-y-1 bg-red-600 border-2 border-white rounded-full dark:border-gray-800"
-              ></span>
-            </button>
-
-            <Dropdown
-              align="right"
-              isOpen={isNotificationsMenuOpen}
-              onClose={() => setIsNotificationsMenuOpen(false)}
-            >
-              <DropdownItem tag="a" href="#" className="justify-between">
-                <span>Messages</span>
-                <Badge type="danger">13</Badge>
-              </DropdownItem>
-              <DropdownItem tag="a" href="#" className="justify-between">
-                <span>Sales</span>
-                <Badge type="danger">2</Badge>
-              </DropdownItem>
-              <DropdownItem onClick={() => alert('Alerts!')}>
-                <span>Alerts</span>
-              </DropdownItem>
-            </Dropdown>
-          </li>
           {/* <!-- Profile menu --> */}
-          <li className="relative">
+          <li className="relative h-8">
             <button
               className="rounded-full focus:shadow-outline-blue focus:outline-none"
               onClick={handleProfileClick}
               aria-label="Account"
               aria-haspopup="true"
             >
-              <Avatar
-                className="align-middle"
-                src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
-                alt=""
-                aria-hidden="true"
-              />
+              <div className='relative rounded-full overflow-hidden w-8 h-8'>
+                <Avatar
+                  className="align-middle"
+                  alt=""
+                  name={user?.email}
+                  aria-hidden="true"
+                  size="32"
+                />
+              </div>
             </button>
             <Dropdown
               align="right"
@@ -128,7 +104,10 @@ function Header() {
                 <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
                 <span>Settings</span>
               </DropdownItem>
-              <DropdownItem onClick={() => alert('Log out!')}>
+              <DropdownItem onClick={async () => {
+                const a = await supabase.auth.signOut()
+                push('login')
+              }}>
                 <OutlineLogoutIcon className="w-4 h-4 mr-3" aria-hidden="true" />
                 <span>Log out</span>
               </DropdownItem>
