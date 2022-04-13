@@ -5,10 +5,7 @@ import { supabase } from 'lib/supabase';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import 'tailwindcss/tailwind.css';
 import '../styles/globals.css';
-
-
 
 function MyApp({ Component, pageProps }: AppProps) {
   // suppress useLayoutEffect warnings when running outside a browser
@@ -48,10 +45,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       authListener?.unsubscribe()
     }
   }, [push])
-
-  useEffect(() => {
-    authenticatedState === 'not-authenticated' ? push('/login') : push('/')
-  }, [authenticatedState, push])
 
   return (
     <UserProvider supabaseClient={supabaseClient}>
