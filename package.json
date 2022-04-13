@@ -13,8 +13,10 @@
     "@supabase/supabase-js": "^1.33.3",
     "chart.js": "^3.6.1",
     "classnames": "^2.3.1",
+    "formik": "^2.2.9",
     "next": "12",
     "react": "17.0.2",
+    "react-avatar": "^4.0.0",
     "react-chartjs-2": "^4.0.0",
     "react-dom": "17.0.2"
   },

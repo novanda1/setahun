@@ -1,10 +1,13 @@
-import Link from 'next/link'
-import routes, { routeIsActive } from 'routes/sidebar'
+import { Button } from '@roketid/windmill-react-ui'
+import CreateCertifiedModalContext from 'context/CreateSertifModalContext'
+import SidebarContext from 'context/SidebarContext'
 import * as Icons from 'icons'
 import { IIcon } from 'icons'
-import SidebarSubmenu from './SidebarSubmenu'
-import { Button } from '@roketid/windmill-react-ui'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useContext } from 'react'
+import routes, { routeIsActive } from 'routes/sidebar'
+import SidebarSubmenu from './SidebarSubmenu'
 
 function Icon({ icon, ...props }: IIcon) {
   // @ts-ignore
@@ -19,6 +22,13 @@ interface ISidebarContent {
 function SidebarContent({ linkClicked }: ISidebarContent) {
   const { pathname } = useRouter();
   const appName = process.env.NEXT_PUBLIC_APP_NAME
+  const { toggleCreateCertifiedModal, isCreateCertifiedModalOpen } = useContext(CreateCertifiedModalContext)
+  const { closeSidebar } = useContext(SidebarContext)
+
+  const openModal = () => {
+    closeSidebar()
+    toggleCreateCertifiedModal()
+  }
 
   return (
     <div className="text-gray-500 dark:text-gray-400">
@@ -43,8 +53,8 @@ function SidebarContent({ linkClicked }: ISidebarContent) {
               >
                 <a
                   className={`inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 ${routeIsActive(pathname, route)
-                      ? 'dark:text-gray-100 text-gray-800'
-                      : ''
+                    ? 'dark:text-gray-100 text-gray-800'
+                    : ''
                     }`}
                   onClick={linkClicked}
                 >
@@ -68,8 +78,8 @@ function SidebarContent({ linkClicked }: ISidebarContent) {
         )}
       </ul>
       <div className="px-6 my-6">
-        <Button className="bg-blue-600">
-          Create accounta
+        <Button onClick={openModal} className="bg-blue-600  active:bg-blue-600 hover:bg-blue-700  focus:ring-blue-300">
+          Tambah Sertifikat
           <span className="ml-2" aria-hidden="true">
             +
           </span>
