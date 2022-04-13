@@ -30,11 +30,11 @@ const routes: IRoute[] = [
     name: 'Dashboard', // name that appear in Sidebar
     exact: true,
   },
-  // {
-  //   path: '/example/cards',
-  //   icon: 'CardsIcon',
-  //   name: 'Cards',
-  // },
+  {
+    path: '/example/cards',
+    icon: 'CardsIcon',
+    name: 'Karyawan',
+  },
   // {
   //   path: '/example/cards',
   //   icon: 'CardsIcon',
