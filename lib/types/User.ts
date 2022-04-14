@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IsEmail, IsInt, IsNotEmpty, IsOptional, IsPhoneNumber } from 'class-validator'
 export class UserMetaData {
   @IsNotEmpty()
   fullname: string
@@ -8,9 +8,6 @@ export class UserMetaData {
 
   @IsNotEmpty()
   unit: string
-
-  @IsOptional()
-  username?: string
 }
 
 export class CreateUserDTO {
@@ -23,4 +20,17 @@ export class CreateUserDTO {
 
   @IsNotEmpty()
   user_metadata: UserMetaData
+}
+
+
+export class UpdateUserDTO {
+  @IsOptional()
+  fullname: string
+
+  @IsOptional()
+  @IsInt()
+  nip: number
+
+  @IsOptional()
+  unit: string
 }
