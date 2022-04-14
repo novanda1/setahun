@@ -18,7 +18,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
-    "incremental": true
+    "incremental": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false
   },
   "include": [
     "next-env.d.ts",

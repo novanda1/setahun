@@ -13,11 +13,11 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const input: CreateUserDTO = {
-    email: 'novandaahsan1@gmail.com',
+    email: 'mantabmusica@gmail.com',
     password: 'password',
     user_metadata: {
-      fullname: 'Novanda Ahsan',
-      nip: 1000,
+      fullname: 'Mantab Musica',
+      nip: 1001,
       unit: 'Karyawan'
     }
   }
