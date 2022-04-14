@@ -76,15 +76,13 @@ function Header() {
             </button>
           </li>
           {/* <!-- Profile menu --> */}
-          <li className="relative h-8">
-            {user?.user_metadata.fullname &&
-              <DynamicAvatarMenu
-                handleProfileClick={handleProfileClick}
-                isProfileMenuOpen={isProfileMenuOpen}
-                setIsProfileMenuOpen={setIsProfileMenuOpen}
-              />
-            }
-          </li>
+          {user?.user_metadata.fullname &&
+            <DynamicAvatarMenu
+              handleProfileClick={handleProfileClick}
+              isProfileMenuOpen={isProfileMenuOpen}
+              setIsProfileMenuOpen={setIsProfileMenuOpen}
+            />
+          }
         </ul>
       </div>
     </header>
