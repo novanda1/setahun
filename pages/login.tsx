@@ -74,10 +74,9 @@ function LoginPage() {
                       <Label>
                         <span>Email</span>
                         <Input
-                          className='mt-1'
+                          className='mt-1 focus:border-blue-400 focus:ring-blue-300'
                           type="email"
                           name="email"
-                          autoComplete='email'
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.email}
@@ -92,10 +91,9 @@ function LoginPage() {
                       <Label className='mt-4'>
                         <span>Password</span>
                         <Input
-                          className='mt-1'
+                          className='mt-1 focus:border-blue-400 focus:ring-blue-300'
                           type="password"
                           name="password"
-                          autoComplete="password"
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.password}
