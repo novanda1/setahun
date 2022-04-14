@@ -21,7 +21,7 @@ const AvatarMenu: React.FC<any> = ({ handleProfileClick, isProfileMenuOpen, setI
 
   const user = supabase.auth.user()
   return (
-    <li className="relative h-8">
+    <>
       <button
         className="rounded-full focus:shadow-outline-blue focus:outline-none"
         onClick={handleProfileClick}
@@ -56,7 +56,7 @@ const AvatarMenu: React.FC<any> = ({ handleProfileClick, isProfileMenuOpen, setI
           <span>Log out</span>
         </DropdownItem>
       </Dropdown>
-    </li>
+    </>
   )
 }
 
