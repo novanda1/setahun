@@ -22,20 +22,32 @@ export const createUserHandler = async (req: NextApiRequest, res: NextApiRespons
 
 export const getUsersHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   const { query } = req;
-  const page: number = +query?.page || 0;
-  const { from, to } = getPagination(page, 10);
+  const page: number = +query?.page - 1 || 0;
+  const perPage: number = +query?.perPage
+
+  const { from, to } = getPagination(page, perPage);
   const { data, count } = await supabase
     .from("users")
-    .select("*", { count: "exact" })
+    .select(`
+      id,
+      fullname,
+      nip,
+      unit,
+      user_roles(
+        role
+      )
+    `, { count: "exact" })
     .order("id", { ascending: true })
     .range(from, to);
 
   if (data) {
-    res.status(200).json({ data, count, page: +page, header: req.headers })
+    res.json({ data, count, page: +page, header: req.headers })
+    res.status(200).end()
     return
   }
   else {
-    res.status(404).json({ error: { message: "failed to get users" } })
+    res.json({ error: { message: "failed to get users" } })
+    res.status(404).end()
     return
   }
 }

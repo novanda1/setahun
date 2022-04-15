@@ -31,7 +31,7 @@ const routes: IRoute[] = [
     exact: true,
   },
   {
-    path: '/example/cards',
+    path: '/users',
     icon: 'CardsIcon',
     name: 'Karyawan',
   },

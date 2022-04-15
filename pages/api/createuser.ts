@@ -13,12 +13,12 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const input: CreateUserDTO = {
-    email: 'mantabmusica1@gmail.com',
+    email: 'novandaahsan1@gmail.com',
     password: 'password',
     user_metadata: {
-      fullname: 'Mantab Musica',
-      nip: 1011,
-      unit: 'Karyawan'
+      fullname: 'Novanda Ahsan',
+      nip: 1014,
+      unit: 'Developer'
     }
   }
   const { data, error } = await supabase.auth.api.createUser({

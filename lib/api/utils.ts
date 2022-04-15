@@ -5,3 +5,9 @@ export const isNipRegistered = async (nip: number) => {
   if (data && !error) return true
   else return false
 }
+
+export const objToUrl = (obj: any) => {
+  if (obj) {
+    return 'asd'
+  }
+}

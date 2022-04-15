@@ -3,8 +3,15 @@ import { supabase } from 'lib/supabase';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import '../styles/globals.css';
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+    }
+  }
+})
 function MyApp({ Component, pageProps }: AppProps) {
   // suppress useLayoutEffect warnings when running outside a browser
   if (typeof window === undefined) React.useLayoutEffect = React.useEffect;
@@ -45,9 +52,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [push])
 
   return (
-    <Windmill usePreferences={true}>
-      <Component {...pageProps} />
-    </Windmill>
+    <QueryClientProvider client={queryClient}>
+      <Windmill usePreferences={true}>
+        <Component {...pageProps} />
+      </Windmill>
+    </QueryClientProvider>
   )
 }
 export default MyApp
