@@ -1,6 +1,5 @@
 import { useQuery } from 'react-query'
 
-
 const serialize = (obj: any) => {
   if (obj) {
     const str: string[] = [];
@@ -24,7 +23,9 @@ const getUsers = async (query: string) => {
 
 const useUsers = (filter?: { query?: string, page?: number, perPage?: number }) => {
   const query = serialize(filter)
-  return useQuery(['users', query], () => getUsers(query))
+  return useQuery(['users', filter], () => getUsers(query), {
+    keepPreviousData: true
+  })
 }
 
 export default useUsers

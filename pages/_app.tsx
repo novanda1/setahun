@@ -7,12 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import '../styles/globals.css';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-    }
-  }
-})
+const queryClient = new QueryClient()
 function MyApp({ Component, pageProps }: AppProps) {
   // suppress useLayoutEffect warnings when running outside a browser
   if (typeof window === undefined) React.useLayoutEffect = React.useEffect;

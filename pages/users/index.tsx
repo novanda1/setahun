@@ -1,6 +1,8 @@
 import {
   Badge,
   Button,
+  Input,
+  Label,
   Modal,
   ModalBody,
   ModalFooter,
@@ -12,12 +14,13 @@ import {
   CategoryScale, Chart, Legend, LinearScale, LineElement, PointElement, Title,
   Tooltip
 } from 'chart.js'
-import CTA from 'components/CTA'
-import SectionTitle from 'components/Typography/SectionTitle'
+import useCreateUser from 'hooks/useCreateUser'
 import useUsers from 'hooks/useUsers'
 import { EditIcon, TrashIcon } from 'icons'
+import produce, { Draft } from 'immer'
+import { CreateUserDTO } from 'lib/types/User'
 import Head from 'next/head'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import PageTitle from '../../components/Typography/PageTitle'
 import Layout from '../../containers/Layout'
 
@@ -34,10 +37,23 @@ function Users() {
   )
 
   const resultsPerPage = 10
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [createUserInput, setCreateUserInput] = useState<CreateUserDTO>(
+    {
+      email: '',
+      password: '',
+      user_metadata:
+      {
+        fullname: '',
+        nip: 0,
+        unit: ''
+      }
+    }
+  )
 
-  const users = useUsers({ perPage: resultsPerPage, page, query: "haloo" })
+  const users = useUsers({ perPage: resultsPerPage, page })
+  const createUser = useCreateUser(createUserInput)
 
   const onPageChange = (p: number) => {
     setPage(p)
@@ -50,6 +66,18 @@ function Users() {
   const openModal = () => {
     setIsModalOpen(true)
   }
+
+  const onInputChange = useCallback((e) => {
+    setCreateUserInput(
+      produce((draft: any) => {
+        const obj = e.target.name.split('.')
+        if (obj.length === 2)
+          draft[obj[0]][obj[1]] = e.target.value
+        else
+          draft[obj[0]] = e.target.value
+      })
+    )
+  }, [])
 
   // badge type
   const badgeType = (role: string) => {
@@ -65,10 +93,63 @@ function Users() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <ModalHeader>Modal header</ModalHeader>
+        <ModalHeader>Tambah User Baru</ModalHeader>
         <ModalBody>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nostrum et eligendi repudiandae
-          voluptatem tempore!
+          <div className='mt-5'>
+            <Label className='mt-4'>
+              <span>Email</span>
+              <Input
+                name="email"
+                value={createUserInput.email}
+                onChange={onInputChange}
+                type="email"
+                className="mt-1"
+                placeholder="sherlyayu@gmail.com" />
+            </Label>
+            <Label className='mt-4'>
+              <span>Password</span>
+              <Input
+                name="password"
+                value={createUserInput.password}
+                onChange={onInputChange}
+                type="password"
+                className="mt-1"
+                placeholder="rahasia" />
+            </Label>
+            <Label className='mt-4'>
+              <span>Konfirmasi Password</span>
+              <Input type="password" className="mt-1" placeholder="rahasia" />
+            </Label>
+            <Label className='mt-4'>
+              <span>Nama Lengkap</span>
+              <Input
+                value={createUserInput.user_metadata.fullname}
+                name='user_metadata.fullname'
+                onChange={onInputChange}
+                className="mt-1"
+                placeholder="Sherly Ayu" />
+            </Label>
+            <Label className='mt-4'>
+              <span>NIP</span>
+              <Input
+                value={createUserInput.user_metadata.nip || ''}
+                name="user_metadata.nip"
+                onChange={onInputChange}
+                type="number"
+                className="mt-1"
+                placeholder="123123123123" />
+            </Label>
+            <Label className='mt-4'>
+              <span>Unit</span>
+              <Input
+                name="user_metadata.unit"
+                value={createUserInput.user_metadata.unit}
+                onChange={onInputChange}
+                type="text"
+                className="mt-1"
+                placeholder="Logistik" />
+            </Label>
+          </div>
         </ModalBody>
         <ModalFooter>
           {/* I don't like this approach. Consider passing a prop to ModalFooter
@@ -78,20 +159,20 @@ function Users() {
            */}
           <div className="hidden sm:block">
             <Button layout="outline" onClick={closeModal}>
-              Cancel
+              Batal
             </Button>
           </div>
           <div className="hidden sm:block">
-            <Button>Accept</Button>
+            <Button>Tambah</Button>
           </div>
           <div className="block w-full sm:hidden">
             <Button block size="large" layout="outline" onClick={closeModal}>
-              Cancel
+              Batal
             </Button>
           </div>
           <div className="block w-full sm:hidden">
             <Button block size="large">
-              Accept
+              Tambah
             </Button>
           </div>
         </ModalFooter>

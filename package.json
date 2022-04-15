@@ -17,6 +17,7 @@
     "es6-shim": "^0.35.6",
     "eslint-plugin-react-hooks": "^4.4.0",
     "formik": "^2.2.9",
+    "immer": "^9.0.12",
     "next": "12",
     "react": "17.0.2",
     "react-avatar": "^4.0.0",

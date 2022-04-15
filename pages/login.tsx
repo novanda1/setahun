@@ -62,6 +62,8 @@ function LoginPage() {
                   onSubmit={async (values, { setSubmitting }) => {
                     setSubmitting(true)
                     const { user, error } = await supabase.auth.signIn(values)
+                    console.log('error :>> ', error);
+                    if (error && error.message === "Invalid login credentials") SetAuthError("Email atau password salah")
                     setSubmitting(false)
                   }}
                 >

@@ -95,7 +95,7 @@ function SidebarContent({ linkClicked }: ISidebarContent) {
         )}
       </ul>
       <div className="px-6 my-6">
-        <Button onClick={openModal} className="bg-blue-600  active:bg-blue-600 hover:bg-blue-700  focus:ring-blue-300">
+        <Button onClick={openModal}>
           Tambah Sertifikat
           <span className="ml-2" aria-hidden="true">
             +
