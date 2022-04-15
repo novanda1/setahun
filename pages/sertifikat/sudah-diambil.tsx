@@ -1,6 +1,7 @@
 import {
   Avatar,
   Badge,
+  Button,
   Pagination, Table, TableBody, TableCell, TableContainer, TableFooter, TableHeader, TableRow
 } from '@roketid/windmill-react-ui'
 import {
@@ -8,10 +9,10 @@ import {
   CategoryScale, Chart, Legend, LinearScale, LineElement, PointElement, Title,
   Tooltip
 } from 'chart.js'
-import Button from 'components/Button'
 import { EditIcon, TrashIcon } from 'icons'
 import { supabase } from 'lib/supabase'
 import withAuth from 'lib/withAuth'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import response, { ITableData } from 'utils/demo/tableData'
@@ -52,6 +53,10 @@ function SudahDiambil() {
 
   return (
     <Layout>
+      <Head>
+        <title>Sertifikat Sudah Diambil - Setahun</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <PageTitle>Sertifikat Sudah Diambil</PageTitle>
 
       <TableContainer className="mb-8">

@@ -1,4 +1,10 @@
 import {
+  Badge,
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Pagination, Table, TableBody, TableCell, TableContainer, TableFooter, TableHeader, TableRow
 } from '@roketid/windmill-react-ui'
 import {
@@ -6,12 +12,12 @@ import {
   CategoryScale, Chart, Legend, LinearScale, LineElement, PointElement, Title,
   Tooltip
 } from 'chart.js'
-import Badge from 'components/Badge'
-import Button from 'components/Button'
+import CTA from 'components/CTA'
+import SectionTitle from 'components/Typography/SectionTitle'
 import useUsers from 'hooks/useUsers'
 import { EditIcon, TrashIcon } from 'icons'
+import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
-import response, { ITableData } from 'utils/demo/tableData'
 import PageTitle from '../../components/Typography/PageTitle'
 import Layout from '../../containers/Layout'
 
@@ -28,37 +34,74 @@ function Users() {
   )
 
   const resultsPerPage = 10
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const users = useUsers({ perPage: resultsPerPage, page, query: "haloo" })
 
-  const [data, setData] = useState<ITableData[]>([])
-
-  // pagination setup
-  const totalResults = response.length
-
-  // pagination change control
-  function onPageChange(p: number) {
+  const onPageChange = (p: number) => {
     setPage(p)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
+
+  const openModal = () => {
+    setIsModalOpen(true)
   }
 
   // badge type
   const badgeType = (role: string) => {
-    if (role === "admin") return "cprimary"
+    if (role === "admin") return "primary"
     else if (role === "moderator") return "success"
     else return "neutral"
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setData(response.slice((page - 1) * resultsPerPage, page * resultsPerPage))
-  }, [page])
-
   return (
     <Layout>
-      <PageTitle>Users</PageTitle>
-
+      <Head>
+        <title>User - Setahun</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <ModalHeader>Modal header</ModalHeader>
+        <ModalBody>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nostrum et eligendi repudiandae
+          voluptatem tempore!
+        </ModalBody>
+        <ModalFooter>
+          {/* I don't like this approach. Consider passing a prop to ModalFooter
+           * that if present, would duplicate the buttons in a way similar to this.
+           * Or, maybe find some way to pass something like size="large md:regular"
+           * to Button
+           */}
+          <div className="hidden sm:block">
+            <Button layout="outline" onClick={closeModal}>
+              Cancel
+            </Button>
+          </div>
+          <div className="hidden sm:block">
+            <Button>Accept</Button>
+          </div>
+          <div className="block w-full sm:hidden">
+            <Button block size="large" layout="outline" onClick={closeModal}>
+              Cancel
+            </Button>
+          </div>
+          <div className="block w-full sm:hidden">
+            <Button block size="large">
+              Accept
+            </Button>
+          </div>
+        </ModalFooter>
+      </Modal>
+      <PageTitle> </PageTitle>
+      <div className='flex justify-end mb-4'>
+        <Button className='w-full sm:w-auto' onClick={openModal}>
+          Tambah User Baru
+        </Button>
+      </div>
       <TableContainer className="mb-8">
         <Table>
           <TableHeader>

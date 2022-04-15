@@ -1,5 +1,6 @@
 import { Windmill } from '@roketid/windmill-react-ui';
 import { supabase } from 'lib/supabase';
+import theme from 'lib/theme';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -53,7 +54,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Windmill usePreferences={true}>
+      <Windmill usePreferences={true} theme={theme}>
         <Component {...pageProps} />
       </Windmill>
     </QueryClientProvider>

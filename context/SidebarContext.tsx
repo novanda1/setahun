@@ -56,13 +56,13 @@ export const SidebarProvider = ({ children }: ISidebarProvider) => {
   }
 
   useEffect(() => {
-    if (process.browser) {
+    if (typeof window !== 'undefined') {
       localStorage.setItem('sidebarScrollY', JSON.stringify(scrollY))
     }
   }, [scrollY])
 
   useLayoutEffect(() => {
-    if (process.browser) {
+    if (typeof window !== 'undefined') {
       const { id, position } = storageScrollY()
       document.getElementById(id)?.scrollTo(0, position)
 

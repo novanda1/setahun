@@ -1,7 +1,7 @@
-import { HelperText, Input, Label, WindmillContext } from '@roketid/windmill-react-ui'
-import Button from 'components/Button'
+import { Button, HelperText, Input, Label, WindmillContext } from '@roketid/windmill-react-ui'
 import { Formik } from 'formik'
 import { supabase } from 'lib/supabase'
+import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
@@ -16,6 +16,10 @@ function LoginPage() {
 
   return (
     <>
+      <Head>
+        <title>Login - Setahun</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className='flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900'>
         <div className='flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800'>
           <div className='flex flex-col overflow-y-auto md:flex-row'>

@@ -26,6 +26,7 @@ function Header() {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
 
   const user = supabase.auth.user()
+
   const { push } = useRouter()
 
   function handleNotificationsClick() {
@@ -76,7 +77,7 @@ function Header() {
             </button>
           </li>
           {/* <!-- Profile menu --> */}
-          {user?.user_metadata.fullname &&
+          {user?.email &&
             <DynamicAvatarMenu
               handleProfileClick={handleProfileClick}
               isProfileMenuOpen={isProfileMenuOpen}

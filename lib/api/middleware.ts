@@ -1,5 +1,6 @@
+import { supabase } from "lib/supabase"
 import { NextApiRequest, NextApiResponse } from "next"
-import { supabase } from "./supabase"
+import { NextResponse, NextRequest } from "next/server"
 
 export const loggedInMiddleware = async (req: NextApiRequest, res: NextApiResponse) => {
   const { data, error } = await supabase.auth.api.getUserByCookie(req, res)
@@ -14,7 +15,13 @@ export const adminMiddleware = async (req: NextApiRequest, res: NextApiResponse)
   const { status } = await supabase.from('user_roles').select('*').eq('user_id', user.data?.id).single()
 
   if (status !== 200) {
-    res.status(200).json({ error: { message: "permission denied" } })
-    return
+    return new Response(JSON.stringify({ error: { message: "permission denied" } }), {
+      status: 401,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
+
+  return NextResponse.next();
 }

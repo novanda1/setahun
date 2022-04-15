@@ -1,19 +1,10 @@
-import { useContext, useState } from 'react'
-import SidebarContext from 'context/SidebarContext'
+import { Dropdown, DropdownItem } from '@roketid/windmill-react-ui'
 import {
-  SearchIcon,
-  MoonIcon,
-  SunIcon,
-  BellIcon,
-  MenuIcon,
-  OutlinePersonIcon,
   OutlineCogIcon,
-  OutlineLogoutIcon,
+  OutlineLogoutIcon, OutlinePersonIcon
 } from 'icons'
-import { Badge, Input, Dropdown, DropdownItem, WindmillContext } from '@roketid/windmill-react-ui'
 import { supabase } from 'lib/supabase'
-import Avatar from 'react-avatar';
-import { useRouter } from 'next/router'
+import Avatar from 'react-avatar'
 
 const AvatarMenu: React.FC<any> = ({ handleProfileClick, isProfileMenuOpen, setIsProfileMenuOpen }: {
   handleProfileClick: any, isProfileMenuOpen: any, setIsProfileMenuOpen: any
@@ -31,7 +22,7 @@ const AvatarMenu: React.FC<any> = ({ handleProfileClick, isProfileMenuOpen, setI
         <div className='relative rounded-full overflow-hidden w-8 h-8'>
           <Avatar
             className="align-middle"
-            name={user?.user_metadata.fullname}
+            name={user?.email?.split("@")[0]}
             size="32"
           />
         </div>

@@ -1,5 +1,4 @@
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '@roketid/windmill-react-ui';
-import Button from 'components/Button';
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@roketid/windmill-react-ui';
 import CreateCertifiedModalContext from 'context/CreateSertifModalContext';
 import React, { useContext } from 'react'
 

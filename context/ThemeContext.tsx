@@ -18,7 +18,7 @@ function usePrevious(theme: string) {
  * @param {string} key - localStorage key
  * @return {array} getter and setter for user preferred theme
  */
-function useStorageTheme(key: string): [string, React.Dispatch<React.SetStateAction<string | boolean>>]{
+function useStorageTheme(key: string): [string, React.Dispatch<React.SetStateAction<string | boolean>>] {
   const userPreference =
     !!window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
 
@@ -35,15 +35,15 @@ function useStorageTheme(key: string): [string, React.Dispatch<React.SetStateAct
   return [theme.toString(), setTheme]
 }
 
-interface IThemeContext{
+interface IThemeContext {
   theme: string | React.Dispatch<React.SetStateAction<string | boolean>>
   toggleTheme: () => void
 }
 
 // create context
-export const ThemeContext = React.createContext<IThemeContext>({ theme: "", toggleTheme: () => {} })
+export const ThemeContext = React.createContext<IThemeContext>({ theme: "", toggleTheme: () => { } })
 
-interface IThemeProvider{
+interface IThemeProvider {
   children: React.ReactNode
 }
 
@@ -60,10 +60,10 @@ export const ThemeProvider = ({ children }: IThemeProvider) => {
 
   function toggleTheme() {
 
-    if (theme === 'light'){
+    if (theme === 'light') {
       setTheme('dark')
     }
-    else{
+    else {
       setTheme('light')
     }
   }

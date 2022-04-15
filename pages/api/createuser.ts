@@ -10,20 +10,28 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<any>
 ) {
-  const input: CreateUserDTO = {
-    email: 'novandaahsan1@gmail.com',
-    password: 'password',
-    user_metadata: {
-      fullname: 'Novanda Ahsan',
-      nip: 1014,
-      unit: 'Developer'
+  const dynamicInput = (index: number) => {
+    const input: CreateUserDTO = {
+      email: `demouser${index}@gmail.com`,
+      password: 'password',
+      user_metadata: {
+        fullname: `Demo User ${index}`,
+        nip: 101823183 + index,
+        unit: 'Demo Unit'
+      }
     }
+
+    return input
   }
-  const { data, error } = await supabase.auth.api.createUser({
-    ...input,
-    email_confirm: true
-  })
-  res.status(200).json({ data, error })
+
+
+  for (let i = 0; i < 10; i++) {
+    const { data, error } = await supabase.auth.api.createUser({
+      ...dynamicInput(i),
+      email_confirm: true
+    })
+  }
+  res.status(200).json({ ok: 'ok' })
 }

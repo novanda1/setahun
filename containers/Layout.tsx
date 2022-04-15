@@ -1,6 +1,7 @@
 import Header from 'components/Header'
 import Sidebar from 'components/Sidebar'
 import { CreateCertifiedModalProvider } from 'context/CreateSertifModalContext'
+import { MeProvider } from 'context/MeContext'
 import SidebarContext, { SidebarProvider } from 'context/SidebarContext'
 import WithAuth from 'lib/withAuth'
 import { useContext } from 'react'
@@ -16,17 +17,19 @@ function Layout({ children }: ILayout) {
   return <WithAuth>
     <SidebarProvider>
       <CreateCertifiedModalProvider>
-        <div
-          className={`flex h-screen bg-gray-50 dark:bg-gray-900 ${isSidebarOpen && 'overflow-hidden'}`}
-        >
-          <Sidebar />
-          <div className="flex flex-col flex-1 w-full">
-            <Header />
-            <Main>
-              {children}
-            </Main>
+        <MeProvider>
+          <div
+            className={`flex h-screen bg-gray-50 dark:bg-gray-900 ${isSidebarOpen && 'overflow-hidden'}`}
+          >
+            <Sidebar />
+            <div className="flex flex-col flex-1 w-full">
+              <Header />
+              <Main>
+                {children}
+              </Main>
+            </div>
           </div>
-        </div>
+        </MeProvider>
       </CreateCertifiedModalProvider>
     </SidebarProvider>
   </WithAuth>

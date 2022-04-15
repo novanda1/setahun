@@ -2,9 +2,8 @@ import React, { useContext } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-import { Label, Input, WindmillContext } from '@roketid/windmill-react-ui'
+import { Label, Input, WindmillContext, Button } from '@roketid/windmill-react-ui'
 import { GithubIcon, TwitterIcon } from 'icons'
-import Button from 'components/Button'
 
 function LoginPage() {
   const { mode } = useContext(WindmillContext)
