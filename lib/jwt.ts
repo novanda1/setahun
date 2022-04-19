@@ -7,8 +7,7 @@ export const addUserRole = (token: string, role: string): string => {
   return jwt.sign(claims, secret);
 };
 
-export const getUserRole = (token?: string | null): string => {
-  if (!token) return "";
+export const getUserRole = (token: string): string => {
   const secret = process.env.SUPABASE_JWT_SECRET as string;
   const claims = jwt.verify(token, secret) as any;
   return claims?.userRole;

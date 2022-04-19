@@ -15,12 +15,12 @@ import {
   CategoryScale, Chart, Legend, LinearScale, LineElement, PointElement, Title,
   Tooltip
 } from 'chart.js';
+import Cookies from 'cookies';
 import useCreateUser from 'hooks/useCreateUser';
 import useUsers from 'hooks/useUsers';
 import { EditIcon, TrashIcon } from 'icons';
 import produce from 'immer';
 import { getUserRole } from 'lib/jwt';
-import { supabase } from 'lib/supabase';
 import { CreateUserDTO } from 'lib/types/User';
 import { GetServerSideProps } from "next";
 import Head from 'next/head';
@@ -28,7 +28,6 @@ import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import PageTitle from '../../components/Typography/PageTitle';
 import Layout from '../../containers/Layout';
-
 
 function Users({ role }: any) {
   Chart.register(
@@ -259,8 +258,11 @@ function Users({ role }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const { token } = await supabase.auth.api.getUserByCookie(req, res)
-  const role = getUserRole(token)
+  const cookies = new Cookies(req, res)
+  const token = cookies.get('sb-access-token')
+  let role = ''
+  if (token)
+    role = getUserRole(token)
 
   return {
     props: {

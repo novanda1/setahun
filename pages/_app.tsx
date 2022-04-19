@@ -2,10 +2,16 @@ import { Windmill } from '@roketid/windmill-react-ui';
 import { supabase } from 'lib/supabase';
 import theme from 'lib/theme';
 import type { AppProps } from 'next/app';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import '../styles/globals.css';
+import nProgress from "nprogress";
+import '../styles/nprogress.css';
+
+Router.events.on("routeChangeStart", nProgress.start);
+Router.events.on("routeChangeError", nProgress.done);
+Router.events.on("routeChangeComplete", nProgress.done);
 
 const queryClient = new QueryClient()
 function MyApp({ Component, pageProps }: AppProps) {
