@@ -23,12 +23,25 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }
   async function handleAuthChange(event: any, session: any) {
-    await fetch('/api/auth', {
+    const auth = await fetch('/api/auth', {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
       credentials: 'same-origin',
       body: JSON.stringify({ event, session }),
     })
+      .then(resp => resp.json())
+
+    if (event === 'SIGNED_IN') {
+      setAuthenticatedState('authenticated')
+      push('/?token=' + auth.token)
+    }
+
+    if (event === 'SIGNED_OUT') {
+      push('/login')
+      setAuthenticatedState('not-authenticated')
+    }
+
+    return auth
   }
 
   useEffect(() => {
@@ -40,14 +53,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       handleAuthChange(event, session)
-      if (event === 'SIGNED_IN') {
-        setAuthenticatedState('authenticated')
-        push('/')
-      }
-      if (event === 'SIGNED_OUT') {
-        push('/login')
-        setAuthenticatedState('not-authenticated')
-      }
     })
     checkUser()
     return () => {

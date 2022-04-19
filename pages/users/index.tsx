@@ -48,6 +48,7 @@ function Users({ role }: any) {
     {
       email: '',
       password: '',
+      passwordConfirm: '',
       user_metadata:
       {
         fullname: '',
