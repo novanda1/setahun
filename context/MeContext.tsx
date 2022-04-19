@@ -7,16 +7,8 @@ const MeContext = createContext<MeContext>({
   role: ''
 })
 
-export const MeProvider: React.FC = ({ children }) => {
-  const [role, setRole] = useState('')
-
-  useEffect(() => {
-    fetch('/api/v1/me')
-      .then(r => r.json())
-      .then(r => {
-        setRole(r?.role?.data?.role)
-      })
-  }, [])
+export const MeProvider: React.FC<{ role?: string }> = ({ children, role: r = '' }) => {
+  const [role, setRole] = useState(r)
 
   return <MeContext.Provider value={{ role }}>{children}</MeContext.Provider>
 }

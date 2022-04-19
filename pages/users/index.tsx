@@ -9,25 +9,27 @@ import {
   ModalFooter,
   ModalHeader,
   Pagination, Table, TableBody, TableCell, TableContainer, TableFooter, TableHeader, TableRow
-} from '@roketid/windmill-react-ui'
+} from '@roketid/windmill-react-ui';
 import {
   ArcElement,
   CategoryScale, Chart, Legend, LinearScale, LineElement, PointElement, Title,
   Tooltip
-} from 'chart.js'
-import useCreateUser from 'hooks/useCreateUser'
-import useUsers from 'hooks/useUsers'
-import { EditIcon, TrashIcon } from 'icons'
-import produce from 'immer'
-import { CreateUserDTO } from 'lib/types/User'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import React, { useCallback, useState } from 'react'
-import { QueryClient, useQueryClient } from 'react-query'
-import PageTitle from '../../components/Typography/PageTitle'
-import Layout from '../../containers/Layout'
+} from 'chart.js';
+import useCreateUser from 'hooks/useCreateUser';
+import useUsers from 'hooks/useUsers';
+import { EditIcon, TrashIcon } from 'icons';
+import produce from 'immer';
+import { supabase } from 'lib/supabase';
+import { CreateUserDTO } from 'lib/types/User';
+import { GetServerSideProps } from "next";
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useCallback, useState } from 'react';
+import PageTitle from '../../components/Typography/PageTitle';
+import Layout from '../../containers/Layout';
 
-function Users() {
+
+function Users({ role }: any) {
   Chart.register(
     ArcElement,
     CategoryScale,
@@ -39,9 +41,8 @@ function Users() {
     Legend
   )
 
-  const { push } = useRouter()
+  const { push, query } = useRouter()
   const resultsPerPage = 10
-  const [page, setPage] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [createUserInput, setCreateUserInput] = useState<CreateUserDTO>(
     {
@@ -56,11 +57,10 @@ function Users() {
     }
   )
 
-  const users = useUsers({ perPage: resultsPerPage, page })
+  const users = useUsers({ perPage: resultsPerPage, page: query?.page || 1 as number })
   const createUser = useCreateUser(createUserInput)
 
   const onPageChange = (p: number) => {
-    setPage(p)
     push('/users/?page=' + p)
   }
 
@@ -92,7 +92,7 @@ function Users() {
   }
 
   return (
-    <Layout>
+    <Layout role={role}>
       <Head>
         <title>User - Setahun</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -257,4 +257,21 @@ function Users() {
   )
 }
 
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const user = await supabase.auth.api.getUserByCookie(req);
+  if (user?.token) {
+    supabase.auth.setAuth(user.token);
+  }
+
+  const { data } = await supabase
+    .from("user_roles")
+    .select("*")
+    .single();
+
+  return {
+    props: {
+      role: data?.role
+    }
+  }
+}
 export default Users

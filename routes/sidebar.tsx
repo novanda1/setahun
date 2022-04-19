@@ -33,7 +33,7 @@ const routes: IRoute[] = [
   {
     path: '/users',
     icon: 'CardsIcon',
-    name: 'Karyawan',
+    name: 'User',
   },
   // {
   //   path: '/example/cards',

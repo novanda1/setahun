@@ -9,15 +9,16 @@ import Main from './Main'
 
 interface ILayout {
   children: React.ReactNode
+  role?: string
 }
 
-function Layout({ children }: ILayout) {
+function Layout({ children, role }: ILayout) {
   const { isSidebarOpen } = useContext(SidebarContext)
 
   return <WithAuth>
     <SidebarProvider>
       <CreateCertifiedModalProvider>
-        <MeProvider>
+        <MeProvider role={role}>
           <div
             className={`flex h-screen bg-gray-50 dark:bg-gray-900 ${isSidebarOpen && 'overflow-hidden'}`}
           >

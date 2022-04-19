@@ -50,7 +50,6 @@ function LoginPage() {
                       errors.email = 'Email salah';
                     }
 
-
                     if (!values.password) {
                       errors.password = 'Password wajib diisi'
                     }
@@ -61,8 +60,7 @@ function LoginPage() {
                   }}
                   onSubmit={async (values, { setSubmitting }) => {
                     setSubmitting(true)
-                    const { user, error } = await supabase.auth.signIn(values)
-                    console.log('error :>> ', error);
+                    const { error } = await supabase.auth.signIn(values)
                     if (error && error.message === "Invalid login credentials") SetAuthError("Email atau password salah")
                     setSubmitting(false)
                   }}

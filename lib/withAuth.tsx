@@ -15,6 +15,8 @@ const WithAuth: React.FC<any> = ({ children }) => {
     if (!user) replace("/login")
   }, [replace, user])
 
+  if (!user) return <>Wait for auth...</>
+
   return <>{children}</>;
 }
 
