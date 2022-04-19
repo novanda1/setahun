@@ -9,10 +9,6 @@ import '../styles/globals.css';
 import nProgress from "nprogress";
 import '../styles/nprogress.css';
 
-Router.events.on("routeChangeStart", nProgress.start);
-Router.events.on("routeChangeError", nProgress.done);
-Router.events.on("routeChangeComplete", nProgress.done);
-
 const queryClient = new QueryClient()
 function MyApp({ Component, pageProps }: AppProps) {
   // suppress useLayoutEffect warnings when running outside a browser
@@ -34,6 +30,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       body: JSON.stringify({ event, session }),
     })
   }
+
+  useEffect(() => {
+    Router.events.on("routeChangeStart", nProgress.start);
+    Router.events.on("routeChangeError", nProgress.done);
+    Router.events.on("routeChangeComplete", nProgress.done);
+  }, [])
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
