@@ -7,6 +7,7 @@ import Layout from '../containers/Layout'
 import Head from 'next/head'
 import { GetServerSideProps } from 'next'
 import { supabase } from 'lib/supabase'
+import { getUserRole } from 'lib/jwt'
 
 function Dashboard({ role }: any) {
   return (
@@ -21,19 +22,12 @@ function Dashboard({ role }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const user = await supabase.auth.api.getUserByCookie(req);
-  if (user?.token) {
-    supabase.auth.setAuth(user.token);
-  }
-
-  const { data } = await supabase
-    .from("user_roles")
-    .select("*")
-    .single();
+  const { token } = await supabase.auth.api.getUserByCookie(req, res)
+  const role = getUserRole(token)
 
   return {
     props: {
-      role: data?.role
+      role: role
     }
   }
 }

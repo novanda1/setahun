@@ -19,6 +19,7 @@ import useCreateUser from 'hooks/useCreateUser';
 import useUsers from 'hooks/useUsers';
 import { EditIcon, TrashIcon } from 'icons';
 import produce from 'immer';
+import { getUserRole } from 'lib/jwt';
 import { supabase } from 'lib/supabase';
 import { CreateUserDTO } from 'lib/types/User';
 import { GetServerSideProps } from "next";
@@ -258,20 +259,14 @@ function Users({ role }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const user = await supabase.auth.api.getUserByCookie(req);
-  if (user?.token) {
-    supabase.auth.setAuth(user.token);
-  }
-
-  const { data } = await supabase
-    .from("user_roles")
-    .select("*")
-    .single();
+  const { token } = await supabase.auth.api.getUserByCookie(req, res)
+  const role = getUserRole(token)
 
   return {
     props: {
-      role: data?.role
+      role: role
     }
   }
 }
+
 export default Users

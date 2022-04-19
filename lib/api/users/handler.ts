@@ -3,7 +3,7 @@ import { validate } from "class-validator";
 import { CreateUserDTO, UpdateUserDTO } from "lib/types/User";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getPagination } from "utils/getPagination";
-import { supabase } from "../supabase";
+import supabase from "../supabase";
 
 export const createUserHandler = async (
   req: NextApiRequest,
