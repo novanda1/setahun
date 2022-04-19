@@ -21,10 +21,14 @@ const getUsers = async (query: string) => {
   return response.json()
 }
 
-const useUsers = (filter?: { query?: string, page?: number, perPage?: number }) => {
+const useUsers = (filter?: { query?: string, page?: number, perPage?: number } | any) => {
+  if (filter) {
+    Object.keys(filter).map((k: string) => !filter[k] && delete filter[k])
+  }
   const query = serialize(filter)
-  return useQuery(['users', filter], () => getUsers(query), {
-    keepPreviousData: true
+  return useQuery(['users', query], () => getUsers(query), {
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
   })
 }
 

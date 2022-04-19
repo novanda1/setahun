@@ -11,7 +11,7 @@ export const MeProvider: React.FC = ({ children }) => {
   const [role, setRole] = useState('')
 
   useEffect(() => {
-    fetch('/api/me')
+    fetch('/api/v1/me')
       .then(r => r.json())
       .then(r => {
         setRole(r?.role?.data?.role)

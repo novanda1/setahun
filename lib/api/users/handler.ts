@@ -11,6 +11,8 @@ export const createUserHandler = async (req: NextApiRequest, res: NextApiRespons
     email_confirm: true
   })
 
+  console.log('data,error,user', data, error, user)
+
   if (data) {
     res.status(201).json({ data, user })
     return
@@ -37,7 +39,7 @@ export const getUsersHandler = async (req: NextApiRequest, res: NextApiResponse<
         role
       )
     `, { count: "exact" })
-    .order("id", { ascending: true })
+    .order("created_at", { ascending: false })
     .range(from, to);
 
   if (data) {

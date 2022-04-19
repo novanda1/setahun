@@ -1,6 +1,7 @@
 import {
   Badge,
   Button,
+  HelperText,
   Input,
   Label,
   Modal,
@@ -17,10 +18,12 @@ import {
 import useCreateUser from 'hooks/useCreateUser'
 import useUsers from 'hooks/useUsers'
 import { EditIcon, TrashIcon } from 'icons'
-import produce, { Draft } from 'immer'
+import produce from 'immer'
 import { CreateUserDTO } from 'lib/types/User'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import React, { useCallback, useState } from 'react'
+import { QueryClient, useQueryClient } from 'react-query'
 import PageTitle from '../../components/Typography/PageTitle'
 import Layout from '../../containers/Layout'
 
@@ -36,6 +39,7 @@ function Users() {
     Legend
   )
 
+  const { push } = useRouter()
   const resultsPerPage = 10
   const [page, setPage] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -57,6 +61,7 @@ function Users() {
 
   const onPageChange = (p: number) => {
     setPage(p)
+    push('/users/?page=' + p)
   }
 
   const closeModal = () => {
@@ -157,13 +162,23 @@ function Users() {
            * Or, maybe find some way to pass something like size="large md:regular"
            * to Button
            */}
+          <HelperText>{createUser.isError ? createUser.error as string : ''}</HelperText>
           <div className="hidden sm:block">
             <Button layout="outline" onClick={closeModal}>
               Batal
             </Button>
           </div>
           <div className="hidden sm:block">
-            <Button>Tambah</Button>
+            <Button
+              onClick={() => {
+                createUser.mutate(createUserInput, {
+                  onSuccess: () => {
+                    closeModal()
+                  }
+                })
+              }}>
+              {createUser.isLoading ? "Memproses.." : 'Tambah'}
+            </Button>
           </div>
           <div className="block w-full sm:hidden">
             <Button block size="large" layout="outline" onClick={closeModal}>
@@ -194,7 +209,7 @@ function Users() {
             </tr>
           </TableHeader>
           <TableBody>
-            {!users.error && users?.data?.data.map((user: any, i: number) => (
+            {!users.error && users?.data?.data?.map((user: any, i: number) => (
               <TableRow key={i}>
                 <TableCell>
                   <div className="flex items-center text-sm">
