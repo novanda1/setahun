@@ -7,7 +7,7 @@ import PageTitle from '../components/Typography/PageTitle'
 import Layout from '../containers/Layout'
 import Head from 'next/head'
 import { GetServerSideProps } from 'next'
-import { getUserRole } from 'lib/jwt'
+import { getUserRole, updateToken } from 'lib/jwt'
 import { supabase } from 'lib/supabase'
 import { useRouter } from 'next/router'
 
@@ -34,11 +34,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
   const cookies = new Cookies(req, res)
   let role = ''
 
-  const initial = await supabase.auth.api.getUserByCookie(req, res)
-
-  const token = cookies.get('sb-access-token') || initial?.token || query.token as string || ''
+  const token = cookies.get('sb-access-token') || query.token as string || ''
   if (token)
-    role = getUserRole(token) || 'fall'
+    try {
+      role = getUserRole(token)
+    }
+    catch {
+      const newToken = await updateToken(req, res)
+      role = getUserRole(newToken)
+    }
 
 
   return {

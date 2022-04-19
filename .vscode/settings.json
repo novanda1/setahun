@@ -4,7 +4,7 @@
   "editor.formatOnPaste": true,
   "editor.tabSize": 2,
   "[javascript]": {
-    "editor.defaultFormatter": "HookyQR.beautify"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[dotenv]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"

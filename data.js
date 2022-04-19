@@ -1151,6 +1151,81 @@ const data = {
       "DESA/KELURAHAN": "Tertek",
     },
   ],
+  Sheet3: [
+    {
+      Uraian: "01. Ganti Nadzir",
+    },
+    {
+      Uraian:
+        "02. Ganti Nama Pemegang Hak Tanggungan",
+    },
+    {
+      Uraian: "03. Merger Hak Tanggungan",
+    },
+    {
+      Uraian: "04. Pemecahan Bidang",
+    },
+    {
+      Uraian: "05. Pemisahan Bidang",
+    },
+    {
+      Uraian:
+        "06. Pencatatan Perubahan Penggunaan Tanah",
+    },
+    {
+      Uraian: "07. Pendaftaran SK Hak",
+    },
+    {
+      Uraian:
+        "08. Pendaftaran Tanah Pertama Kali Pengakuan/Penegasan Hak",
+    },
+    {
+      Uraian:
+        "09. Pendaftaran Tanah Pertama Kali Wakaf untuk Tanah yang Belum Sertifikat",
+    },
+    {
+      Uraian: "10. Penggabungan Bidang",
+    },
+    {
+      Uraian:
+        "11. Pengukuran dan Pemetaan Kadastral (Peta Bidang)",
+    },
+    {
+      Uraian: "12. Peralihan Hak - Hibah",
+    },
+    {
+      Uraian: "13. Peralihan Hak - Jual Beli",
+    },
+    {
+      Uraian: "14. Peralihan Hak - Lelang",
+    },
+    {
+      Uraian:
+        "15. Peralihan Hak - Pembagian Hak Bersama",
+    },
+    {
+      Uraian: "16. Peralihan Hak - Pewarisan",
+    },
+    {
+      Uraian: "17. Roya",
+    },
+    {
+      Uraian:
+        "18. Sertifikat Pengganti Karena Blanko Lama",
+    },
+    {
+      Uraian:
+        "19. Sertifikat Pengganti Karena Hilang",
+    },
+    {
+      Uraian:
+        "20. Sertifikat Pengganti Karena Rusak",
+    },
+    {
+      Uraian:
+        "21. Wakaf dari Tanah yang Sudah Bersertifikat",
+    },
+  ],
 };
 
 const kecamatan = data.Sheet2.filter(
@@ -1165,11 +1240,13 @@ const desa = data.Sheet2.map((d) => ({
   desa: d["DESA/KELURAHAN"],
 })).map((d) => `${d.kode}: ${d.desa}`);
 
-console.log("desa", desa);
+const uraian = data.Sheet3.map((u) =>
+  u.Uraian.split(".")[1].trim()
+);
 
 writeFile(
-  "desa.txt",
-  JSON.stringify([...new Set(desa)]),
+  "uraian.txt",
+  JSON.stringify([...new Set(uraian)]),
   (err) => {
     if (err) console.log(err);
     else {
@@ -1178,7 +1255,7 @@ writeFile(
         "The written has the following contents:"
       );
       console.log(
-        readFileSync("desa.txt", "utf8")
+        readFileSync("uraian.txt", "utf8")
       );
     }
   }

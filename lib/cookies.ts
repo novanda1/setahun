@@ -248,3 +248,55 @@ export function deleteCookie(
     maxAge: -1,
   });
 }
+
+export function setAuthCookie(
+  req: any,
+  res: any
+) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    res.status(405).end("Method Not Allowed");
+  }
+  const { event, session } = req.body;
+
+  if (!event)
+    throw new Error("Auth event missing!");
+  if (event === "SIGNED_IN") {
+    if (!session)
+      throw new Error("Auth session missing!");
+    setCookies(
+      req,
+      res,
+      [
+        {
+          key: "access-token",
+          value: session.access_token,
+        },
+        {
+          key: "refresh-token",
+          value: session.refresh_token,
+        },
+      ].map((token) => ({
+        name: `${COOKIE_OPTIONS.name}-${token.key}`,
+        value: token.value,
+        domain: COOKIE_OPTIONS.domain,
+        maxAge: COOKIE_OPTIONS.lifetime ?? 0,
+        path: COOKIE_OPTIONS.path,
+        sameSite: COOKIE_OPTIONS.sameSite,
+      }))
+    );
+  }
+  if (event === "SIGNED_OUT") {
+    setCookies(
+      req,
+      res,
+      ["access-token", "refresh-token"].map(
+        (key) => ({
+          name: `${COOKIE_OPTIONS.name}-${key}`,
+          value: "",
+          maxAge: -1,
+        })
+      )
+    );
+  }
+}

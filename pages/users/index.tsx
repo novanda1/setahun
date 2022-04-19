@@ -20,7 +20,7 @@ import useCreateUser from 'hooks/useCreateUser';
 import useUsers from 'hooks/useUsers';
 import { EditIcon, TrashIcon } from 'icons';
 import produce from 'immer';
-import { getUserRole } from 'lib/jwt';
+import { getUserRole, updateToken } from 'lib/jwt';
 import { CreateUserDTO } from 'lib/types/User';
 import { GetServerSideProps } from "next";
 import Head from 'next/head';
@@ -70,7 +70,7 @@ function Users({ role }: any) {
   }
 
   const openModal = () => {
-    setIsModalOpen(true)
+    push('/users/create')
   }
 
   const onInputChange = useCallback((e) => {
@@ -258,12 +258,20 @@ function Users({ role }: any) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
   const cookies = new Cookies(req, res)
-  const token = cookies.get('sb-access-token')
   let role = ''
+
+  const token = cookies.get('sb-access-token') || query.token as string || ''
   if (token)
-    role = getUserRole(token)
+    try {
+      role = getUserRole(token)
+    }
+    catch {
+      const newToken = await updateToken(req, res)
+      role = getUserRole(newToken)
+    }
+
 
   return {
     props: {
