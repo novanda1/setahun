@@ -58,7 +58,7 @@ function Users({ role }: any) {
           </TableHeader>
           <TableBody>
             {!users.error && users?.data?.data?.map((user: any, i: number) => (
-              <TableRow key={i}>
+              <TableRow key={user.id}>
                 <TableCell>
                   <div className="flex items-center text-sm">
                     {/* <Avatar className="hidden mr-3 md:block" src={user.avatar} alt="User avatar" /> */}
@@ -76,7 +76,7 @@ function Users({ role }: any) {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-4">
-                    <Button layout="link" size="small" aria-label="Edit">
+                    <Button onClick={() => push('/users/edit?id=' + user.id)} layout="link" size="small" aria-label="Edit">
                       <EditIcon className="w-5 h-5" aria-hidden="true" />
                     </Button>
                     <Button layout="link" size="small" aria-label="Delete">
