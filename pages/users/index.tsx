@@ -62,7 +62,8 @@ function Users({ role }: any) {
   const createUser = useCreateUser(createUserInput)
 
   const onPageChange = (p: number) => {
-    push('/users/?page=' + p)
+    if (query?.page || p > 1)
+      push('/users/?page=' + p)
   }
 
   const closeModal = () => {
