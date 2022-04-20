@@ -8,14 +8,14 @@ import supabase from "../supabase";
 export const createUserHandler = async (
   req: NextApiRequest,
   res: NextApiResponse<any>,
-  input: CreateUserDTO
+  { passwordConfirm, ...input }: CreateUserDTO
 ) => {
   const { data, error, user } = await supabase.auth.api.createUser({
     ...input,
     email_confirm: true,
   });
 
-  if (data) {
+  if (data && !error) {
     res.status(201).json({ data, user });
     return;
   } else {

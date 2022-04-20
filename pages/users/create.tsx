@@ -1,206 +1,224 @@
-import { Button, HelperText, Input, Label } from "@roketid/windmill-react-ui"
-import { validate } from "class-validator"
-import PageTitle from "components/Typography/PageTitle"
-import Layout from "containers/Layout"
-import Cookies from "cookies"
-import { Formik } from "formik"
-import produce from "immer"
-import { getUserRole, updateToken } from "lib/jwt"
-import { CreateUserDTO } from "lib/types/User"
-import { GetServerSideProps } from "next"
-import { useCallback, useState } from "react"
+import { Button, HelperText, Input, Label } from "@roketid/windmill-react-ui";
+import createValidator from "class-validator-formik";
+import PageTitle from "components/Typography/PageTitle";
+import Layout from "containers/Layout";
+import Cookies from "cookies";
+import { Formik } from "formik";
+import useCreateUser from "hooks/useCreateUser";
+import { getUserRole, updateToken } from "lib/jwt";
+import { CreateUserDTO, UserMetaData } from "lib/types/User";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 const CreateUser: React.FC<any> = ({ role }) => {
-  const [createUserInput, setCreateUserInput] = useState<CreateUserDTO>(
-    {
-      email: '',
-      password: '',
-      passwordConfirm: '',
-      user_metadata:
-      {
-        fullname: '',
-        nip: 0,
-        unit: ''
-      }
-    }
-  )
-  const onInputChange = useCallback((e) => {
-    setCreateUserInput(
-      produce((draft: any) => {
-        const obj = e.target.name.split('.')
-        if (obj.length === 2)
-          draft[obj[0]][obj[1]] = e.target.value
-        else
-          draft[obj[0]] = e.target.value
-      })
-    )
-  }, [])
+  const initialValues = new CreateUserDTO()
+  initialValues.user_metadata = { fullname: "", nip: 0, unit: "" }
 
-  return <Layout role={role}>
-    <div className="max-w-4xl">
-      <PageTitle>Tambah User</PageTitle>
-      <Formik
-        initialValues={new CreateUserDTO()}
-        validate={values => {
-          // if (!values.email) {
-          //   errors.email = 'Email wajib diisi';
-          // } else if (
-          //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-          // ) {
-          //   errors.email = 'Email salah';
-          // }
+  const [errorMessage, setErrorMessage] = useState("")
 
-          // if (!values.password) {
-          //   errors.password = 'Password wajib diisi'
-          // }
+  const createUser = useCreateUser()
+  const { push } = useRouter()
 
-          // Object.keys(errors).forEach((key: string) => !errors[key as keyof LoginError] && delete errors[key as keyof LoginError])
+  return (
+    <Layout role={role}>
+      <div className="w-full max-w-3xl mx-auto">
+        <PageTitle>Tambah User </PageTitle>
+        <Formik
+          initialValues={initialValues}
+          validate={(values) => {
+            const errors = createValidator(CreateUserDTO)(values);
+            const userMetadata = createValidator(UserMetaData)(values.user_metadata)
 
-          // return errors;
-
-          let errors: any = new CreateUserDTO();
-
-          validate(values).then((ers: any) => {
-            console.log('errors', ers)
-            // errors[ers.property] = ers.constrains[Object.keys(obj)[0]];
-          })
-
-          // console.log('errors', errors)
-
-          errors.password = 'asd'
-
-          return errors
-
-        }}
-        onSubmit={async (values, { setSubmitting }) => {
-          // setSubmitting(true)
-          // const { error } = await supabase.auth.signIn(values)
-          // if (error && error.message === "Invalid login credentials") SetAuthError("Email atau password salah")
-          // setSubmitting(false)
-        }}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-        }) => (
-          <form onSubmit={handleSubmit} className="pb-7">
-            {JSON.stringify(errors)}
-            <Label className='mt-4'>
-              <span>Email</span>
-              <Input
-                name="email"
-                value={createUserInput.email}
-                onChange={onInputChange}
-                type="email"
-                className="mt-1"
-                placeholder="sherlyayu@gmail.com" />
-            </Label>
-            {errors.email && touched.email && (
-              <HelperText valid={false}>{errors.email}</HelperText>
-            )}
-
-            <Label className='mt-4'>
-              <span>Password</span>
-              <Input
-                name="password"
-                value={createUserInput.password}
-                onChange={onInputChange}
-                type="password"
-                className="mt-1"
-                placeholder="rahasia" />
-            </Label>
-            {errors.passwordConfirm && touched.passwordConfirm && (
-              <HelperText valid={false}>{errors.passwordConfirm}</HelperText>
-            )}
-
-            <Label className='mt-4'>
-              <span>Konfirmasi Password</span>
-              <Input type="password" className="mt-1" placeholder="rahasia" />
-            </Label>
-            {errors.password && touched.password && (
-              <HelperText valid={false}>{errors.password}</HelperText>
-            )}
-
-            <Label className='mt-4'>
-              <span>Nama Lengkap</span>
-              <Input
-                value={createUserInput.user_metadata.fullname}
-                name='user_metadata.fullname'
-                onChange={onInputChange}
-                className="mt-1"
-                placeholder="Sherly Ayu" />
-            </Label>
-            {errors.user_metadata?.fullname && touched.user_metadata?.fullname && (
-              <HelperText valid={false}>{errors.user_metadata?.fullname}</HelperText>
-            )}
-
-            <Label className='mt-4'>
-              <span>NIP</span>
-              <Input
-                value={createUserInput.user_metadata.nip || ''}
-                name="user_metadata.nip"
-                onChange={onInputChange}
-                type="number"
-                className="mt-1"
-                placeholder="123123123123" />
-            </Label>
-            {errors.user_metadata?.nip && touched.user_metadata?.nip && (
-              <HelperText valid={false}>{errors.user_metadata?.nip}</HelperText>
-            )}
-
-            <Label className='mt-4'>
-              <span>Unit</span>
-              <Input
-                name="user_metadata.unit"
-                value={createUserInput.user_metadata.unit}
-                onChange={onInputChange}
-                type="text"
-                className="mt-1"
-                placeholder="Logistik" />
-            </Label>
-            {errors.user_metadata?.unit && touched.user_metadata?.unit && (
-              <HelperText valid={false}>{errors.user_metadata?.unit}</HelperText>
-            )}
-
-            <Button type='submit' className='mt-10 w-max ml-auto' disabled={isSubmitting} block>
-              {isSubmitting ? "Memproses..." : "Tambah"}
-            </Button>
-            {
-              // authError &&
-              // <HelperText className='text-center block mt-2' valid={false}>{authError}</HelperText>
+            if (!errors.passwordConfirm) {
+              if (values.password !== values.passwordConfirm) {
+                errors.passwordConfirm = "Pasword tidak sama"
+              }
             }
-          </form>
-        )}
-      </Formik>
-    </div>
 
-  </Layout>
-}
-export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
-  const cookies = new Cookies(req, res)
-  let role = ''
+            if (Object.keys(userMetadata).length)
+              errors.user_metadata = userMetadata
 
-  const token = cookies.get('sb-access-token') || query.token as string || ''
+            return errors
+          }}
+          onSubmit={(values, { setSubmitting }) => {
+            setSubmitting(true);
+
+            createUser.mutate(values, {
+              onSettled: (data) => {
+                const { status, message, error }: { status?: string, message?: string, error?: { message?: string } } = data
+                if (status && !status?.toString()?.startsWith('2', 0)) {
+                  message ? setErrorMessage(message) : null
+                  error?.message ? setErrorMessage(error?.message) : null
+                } else {
+                  setErrorMessage('')
+                  push('/users')
+                }
+                setSubmitting(false)
+              }
+            })
+          }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+            handleChange,
+          }) => (
+            <form onSubmit={handleSubmit} className="pb-7">
+              <Label>
+                <span>Email</span>
+                <Input
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className="mt-1 focus:border-blue-400 focus:ring-blue-300"
+                  type="email"
+                  name="email"
+                  value={values.email}
+                  placeholder="john@doe.com"
+                />
+              </Label>
+              {errors.email && touched.email && (
+                <HelperText valid={false}>{errors.email}</HelperText>
+              )}
+
+              <Label className="mt-4">
+                <span>Password</span>
+                <Input
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className="mt-1 focus:border-blue-400 focus:ring-blue-300"
+                  type="password"
+                  name="password"
+                  value={values.password}
+                  placeholder="***************"
+                />
+              </Label>
+              {errors.password && touched.password && (
+                <HelperText valid={false}>{errors.password}</HelperText>
+              )}
+
+              <Label className="mt-4">
+                <span>Konfirmasi Password</span>
+                <Input
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  type="password"
+                  name="passwordConfirm"
+                  value={values.passwordConfirm}
+                  className="mt-1"
+                  placeholder="rahasia"
+                />
+              </Label>
+              {errors.passwordConfirm && touched.passwordConfirm && (
+                <HelperText valid={false}>{errors.passwordConfirm}</HelperText>
+              )}
+
+              <Label className="mt-4">
+                <span>Nama Lengkap</span>
+                <Input
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.user_metadata.fullname || ""}
+                  name="user_metadata.fullname"
+                  className="mt-1"
+                  placeholder="Sherly Ayu"
+                />
+              </Label>
+              {errors.user_metadata?.fullname &&
+                touched.user_metadata?.fullname && (
+                  <HelperText valid={false}>
+                    {errors.user_metadata.fullname}
+                  </HelperText>
+                )}
+
+              <Label className="mt-4">
+                <span>NIP</span>
+                <Input
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.user_metadata.nip || ""}
+                  name="user_metadata.nip"
+                  type="number"
+                  className="mt-1"
+                  placeholder="123123123123"
+                />
+              </Label>
+              {errors.user_metadata?.nip &&
+                touched.user_metadata?.nip && (
+                  <HelperText valid={false}>
+                    {errors.user_metadata.nip}
+                  </HelperText>
+                )}
+
+              <Label className="mt-4">
+                <span>Unit</span>
+                <Input
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  name="user_metadata.unit"
+                  value={values.user_metadata.unit || ""}
+                  type="text"
+                  className="mt-1"
+                  placeholder="Logistik"
+                />
+              </Label>
+              {errors.user_metadata?.unit &&
+                touched.user_metadata?.unit && (
+                  <HelperText valid={false}>
+                    {errors.user_metadata.unit}
+                  </HelperText>
+                )}
+
+
+
+              <div className="mt-10 flex flex-col md:flex-row justify-between items-center">
+                <HelperText valid={false}>
+                  {errorMessage}
+                </HelperText>
+                <Button
+                  type="submit"
+                  className="mt-3 md:mt-0 w-max"
+                  disabled={isSubmitting}
+                  block
+                >
+                  {isSubmitting ? "Memproses..." : "Tambah User"}
+                  {isSubmitting}
+                </Button>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </div>
+    </Layout>
+  );
+};
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  res,
+  query,
+}) => {
+  const cookies = new Cookies(req, res);
+  let role = "";
+
+  const token = cookies.get("sb-access-token") || (query.token as string) || "";
   if (token)
     try {
-      role = getUserRole(token)
+      role = getUserRole(token);
+    } catch {
+      const newToken = await updateToken(req, res);
+      role = getUserRole(newToken);
     }
-    catch {
-      const newToken = await updateToken(req, res)
-      role = getUserRole(newToken)
-    }
-
 
   return {
     props: {
-      role: role
-    }
-  }
-}
+      role: role,
+    },
+  };
+};
 
-export default CreateUser
+export default CreateUser;
+

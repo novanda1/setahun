@@ -3,48 +3,38 @@ import {
   IsInt,
   IsNotEmpty,
   IsOptional,
-  IsPhoneNumber,
   IsString,
-  Matches,
   MaxLength,
-  Min,
   MinLength,
 } from "class-validator";
+
 export class UserMetaData {
-  @MinLength(6)
-  @MaxLength(20)
+  @IsNotEmpty({ message: "Wajib Diisi" })
   fullname: string;
 
-  @MinLength(6)
-  @MaxLength(20)
+  @IsNotEmpty({ message: "Wajib Diisi" })
   nip: number;
 
-  @MinLength(6)
-  @MaxLength(20)
+  @IsNotEmpty({ message: "Wajib Diisi" })
   unit: string;
 }
 
 export class CreateUserDTO {
-  @IsEmail()
-  @IsNotEmpty()
+  @IsEmail({}, { message: "Email tidak valid" })
+  @IsNotEmpty({ message: "Wajib Diisi" })
   email: string;
 
   @IsString()
-  @MinLength(6)
-  @MaxLength(20)
-  @Matches(
-    /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-    { message: "password too weak" }
-  )
+  @MaxLength(20, { message: "Maksimal 20 huruf" })
+  @MinLength(6, { message: "Minimal 6 huruf" })
   password: string;
 
   @IsString()
-  @MinLength(4)
-  @MaxLength(20)
-  @Matches("password")
+  @MaxLength(20, { message: "Maksimal 20 huruf" })
+  @MinLength(6, { message: "Minimal 6 huruf" })
   passwordConfirm: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: "Wajib Diisi" })
   user_metadata: UserMetaData;
 }
 
@@ -58,4 +48,14 @@ export class UpdateUserDTO {
 
   @IsOptional()
   unit: string;
+}
+
+export class LoginDTO {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(6, { message: "Minimal 6 huruf" })
+  @MaxLength(20, { message: "Maksimal 20 huruf" })
+  password: string;
 }

@@ -10,10 +10,10 @@ const createUser = async (user: CreateUserDTO) => {
   return response.json();
 };
 
-export default function useCreateUser(user: CreateUserDTO) {
+export default function useCreateUser() {
   const queryClient = useQueryClient();
   return useMutation<any, unknown, CreateUserDTO, unknown>(
-    () => createUser(user),
+    (input) => createUser(input),
     {
       onSuccess: async () => {
         await queryClient.invalidateQueries("users");
