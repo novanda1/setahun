@@ -11,7 +11,7 @@ import '../styles/nprogress.css';
 
 const queryClient = new QueryClient()
 function MyApp({ Component, pageProps }: AppProps) {
-  // suppress useLayoutEffect warnings when running outside a browser
+  // suppress useBrowserLayoutEffect warnings when running outside a browser
   if (typeof window === undefined) React.useLayoutEffect = React.useEffect;
   const [authenticatedState, setAuthenticatedState] = useState<'not-authenticated' | 'authenticated'>("not-authenticated")
   const { push } = useRouter()

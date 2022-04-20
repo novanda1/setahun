@@ -31,23 +31,15 @@ function Dashboard({ role }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
-  const cookies = new Cookies(req, res)
-  let role = ''
+  // const cookies = new Cookies(req, res)
 
-  const token = cookies.get('sb-access-token') || query.token as string || ''
-  if (token)
-    try {
-      role = getUserRole(token)
-    }
-    catch {
-      const newToken = await updateToken(req, res)
-      role = getUserRole(newToken)
-    }
+  // const token = cookies.get('sb-access-token') || query.token as string || ''
+  // let role = getUserRole(token)
 
 
   return {
     props: {
-      role: role
+      role: 'role'
     }
   }
 }

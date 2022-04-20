@@ -37,10 +37,8 @@ const CreateUser: React.FC<any> = ({ role }) => {
   }, [])
 
   return <Layout role={role}>
-    <PageTitle>Tambah User</PageTitle>
-
-    <div className="">
-
+    <div className="max-w-4xl">
+      <PageTitle>Tambah User</PageTitle>
       <Formik
         initialValues={new CreateUserDTO()}
         validate={values => {
@@ -60,11 +58,11 @@ const CreateUser: React.FC<any> = ({ role }) => {
 
           // return errors;
 
-          let errors: CreateUserDTO = new CreateUserDTO();
+          let errors: any = new CreateUserDTO();
 
-          validate(values).then(ers => {
+          validate(values).then((ers: any) => {
             console.log('errors', ers)
-            // errors = ers
+            // errors[ers.property] = ers.constrains[Object.keys(obj)[0]];
           })
 
           // console.log('errors', errors)
