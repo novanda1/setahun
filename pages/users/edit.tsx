@@ -1,23 +1,27 @@
 import { Button, HelperText, Input, Label } from "@roketid/windmill-react-ui";
+import { plainToClass } from "class-transformer";
 import createValidator from "class-validator-formik";
 import PageTitle from "components/Typography/PageTitle";
 import Layout from "containers/Layout";
 import Cookies from "cookies";
 import { Formik } from "formik";
-import useCreateUser from "hooks/useCreateUser";
+import useEditUser from "hooks/useEditUser";
+import { getUser } from "hooks/useUsers";
 import { getUserRole, updateToken } from "lib/jwt";
-import { CreateUserDTO, UserMetaData } from "lib/types/User";
+import { UpdateUserDTO } from "lib/types/User";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const CreateUser: React.FC<any> = ({ role }) => {
-  const initialValues = new CreateUserDTO()
-  initialValues.user_metadata = { fullname: "", nip: 0, unit: "" }
+const EditUser: React.FC<any> = ({ role, user }) => {
+  let initialValues;
+  if (user)
+    initialValues = plainToClass(UpdateUserDTO, user)
+  else initialValues = new UpdateUserDTO()
 
   const [errorMessage, setErrorMessage] = useState("")
 
-  const createUser = useCreateUser()
+  const editUser = useEditUser()
   const { push } = useRouter()
 
   return (
@@ -27,35 +31,22 @@ const CreateUser: React.FC<any> = ({ role }) => {
         <Formik
           initialValues={initialValues}
           validate={(values) => {
-            const errors = createValidator(CreateUserDTO)(values);
-            const userMetadata = createValidator(UserMetaData)(values.user_metadata)
-
-            if (!errors.passwordConfirm) {
-              if (values.password !== values.passwordConfirm) {
-                errors.passwordConfirm = "Pasword tidak sama"
-              }
-            }
-
-            if (Object.keys(userMetadata).length)
-              errors.user_metadata = userMetadata
+            const errors = createValidator(UpdateUserDTO)(values);
 
             return errors
           }}
           onSubmit={(values, { setSubmitting }) => {
             setSubmitting(true);
 
-            createUser.mutate(values, {
-              onSettled: (data) => {
-                const { status, message, error }: { status?: string, message?: string, error?: { message?: string } } = data
-                if (status && !status?.toString()?.startsWith('2', 0)) {
-                  message ? setErrorMessage(message) : null
-                  error?.message ? setErrorMessage(error?.message) : null
-                } else {
-                  setErrorMessage('')
-                  push('/users')
-                }
+            editUser.mutate(values, {
+              onError: (err) => {
+                console.log('err', err)
                 setSubmitting(false)
-              }
+              },
+              onSettled(data, error, variables, context) {
+                console.log('data,error,variables,context', data, error, variables, context)
+                setSubmitting(false)
+              },
             })
           }}
         >
@@ -67,39 +58,24 @@ const CreateUser: React.FC<any> = ({ role }) => {
             handleSubmit,
             isSubmitting,
             handleChange,
+            setFieldValue
           }) => (
             <form onSubmit={handleSubmit} className="pb-7">
-              <Label>
-                <span>Email</span>
-                <Input
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="mt-1 focus:border-blue-400 focus:ring-blue-300"
-                  type="email"
-                  name="email"
-                  value={values.email}
-                  placeholder="john@doe.com"
-                />
-              </Label>
-              {errors.email && touched.email && (
-                <HelperText valid={false}>{errors.email}</HelperText>
-              )}
-
               <Label className="mt-4">
                 <span>Nama Lengkap</span>
                 <Input
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.user_metadata.fullname || ""}
-                  name="user_metadata.fullname"
+                  value={values.fullname || ""}
+                  name="fullname"
                   className="mt-1"
                   placeholder="Sherly Ayu"
                 />
               </Label>
-              {errors.user_metadata?.fullname &&
-                touched.user_metadata?.fullname && (
+              {errors.fullname &&
+                touched.fullname && (
                   <HelperText valid={false}>
-                    {errors.user_metadata.fullname}
+                    {errors.fullname}
                   </HelperText>
                 )}
 
@@ -108,17 +84,17 @@ const CreateUser: React.FC<any> = ({ role }) => {
                 <Input
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.user_metadata.nip || ""}
-                  name="user_metadata.nip"
+                  value={values.nip || ""}
+                  name="nip"
                   type="number"
                   className="mt-1"
                   placeholder="123123123123"
                 />
               </Label>
-              {errors.user_metadata?.nip &&
-                touched.user_metadata?.nip && (
+              {errors.nip &&
+                touched.nip && (
                   <HelperText valid={false}>
-                    {errors.user_metadata.nip}
+                    {errors.nip}
                   </HelperText>
                 )}
 
@@ -127,31 +103,44 @@ const CreateUser: React.FC<any> = ({ role }) => {
                 <Input
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  name="user_metadata.unit"
-                  value={values.user_metadata.unit || ""}
+                  name="unit"
+                  value={values.unit || ""}
                   type="text"
                   className="mt-1"
                   placeholder="Logistik"
                 />
               </Label>
-              {errors.user_metadata?.unit &&
-                touched.user_metadata?.unit && (
+              {errors.unit &&
+                touched.unit && (
                   <HelperText valid={false}>
-                    {errors.user_metadata.unit}
+                    {errors.unit}
                   </HelperText>
                 )}
 
               <div className="mt-4">
                 {/* TODO: Check if this label is accessible, or fallback */}
                 {/* <span className="text-sm text-gray-700 dark:text-gray-400">Account Type</span> */}
-                <Label>Tipe User</Label>
-                <div className="mt-2">
+                <Label id="tipe-user">Tipe User</Label>
+                <div className="mt-2" role="group" aria-labelledby="tipe-user">
                   <Label radio>
-                    <Input type="radio" value="read-only" name="accountType" />
+                    <Input
+                      type="radio"
+                      value="read-only"
+                      name="role"
+                      checked={values.role === "read-only"}
+                      onChange={() => setFieldValue('role', 'read-only')}
+                    />
                     <span className="ml-2">Read only</span>
                   </Label>
                   <Label radio>
-                    <Input className="ml-6" type="radio" value="moderator" name="accountType" />
+                    <Input
+                      className="ml-6"
+                      type="radio"
+                      value="moderator"
+                      name="role"
+                      checked={values.role === "moderator"}
+                      onChange={() => setFieldValue('role', 'moderator')}
+                    />
                     <span className="ml-2">Moderator</span>
                   </Label>
                 </div>
@@ -167,7 +156,7 @@ const CreateUser: React.FC<any> = ({ role }) => {
                   disabled={isSubmitting}
                   block
                 >
-                  {isSubmitting ? "Memproses..." : "Tambah User"}
+                  {isSubmitting ? "Memproses..." : "Ubah User"}
                   {isSubmitting}
                 </Button>
               </div>
@@ -183,6 +172,14 @@ export const getServerSideProps: GetServerSideProps = async ({
   res,
   query,
 }) => {
+  let user
+  try {
+    const data = await getUser(req, query.id as string)
+    user = data
+  } catch (error) {
+    console.log("error:", error)
+  }
+
   const cookies = new Cookies(req, res);
   let role = "";
 
@@ -197,10 +194,10 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   return {
     props: {
-      role: role,
+      role,
+      user
     },
   };
 };
 
-export default CreateUser;
-
+export default EditUser;
