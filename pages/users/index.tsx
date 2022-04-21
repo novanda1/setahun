@@ -2,17 +2,16 @@ import {
   Badge,
   Button, Pagination, Table, TableBody, TableCell, TableContainer, TableFooter, TableHeader, TableRow
 } from '@roketid/windmill-react-ui';
-import Cookies from 'cookies';
 import useUsers from 'hooks/useUsers';
 import { EditIcon, TrashIcon } from 'icons';
-import { getUserRole, updateToken } from 'lib/jwt';
+import { getRoleByRequest } from 'lib/api/utils';
 import { GetServerSideProps } from "next";
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import PageTitle from '../../components/Typography/PageTitle';
 import Layout from '../../containers/Layout';
 
-function Users({ role }: any) {
+const Users = ({ role }: any) => {
   const { push, query } = useRouter()
   const resultsPerPage = 10
 
@@ -105,20 +104,8 @@ function Users({ role }: any) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
-  const cookies = new Cookies(req, res)
-  let role = ''
-
-  const token = cookies.get('sb-access-token') || query.token as string || ''
-  if (token)
-    try {
-      role = getUserRole(token)
-    }
-    catch {
-      const newToken = await updateToken(req, res)
-      role = getUserRole(newToken)
-    }
-
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const role = await getRoleByRequest(context)
 
   return {
     props: {

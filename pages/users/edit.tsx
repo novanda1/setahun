@@ -7,6 +7,7 @@ import Cookies from "cookies";
 import { Formik } from "formik";
 import useEditUser from "hooks/useEditUser";
 import { getUser } from "hooks/useUsers";
+import { getRoleByRequest, getUserByRequest } from "lib/api/utils";
 import { getUserRole, updateToken } from "lib/jwt";
 import { UpdateUserDTO } from "lib/types/User";
 import { GetServerSideProps } from "next";
@@ -167,30 +168,9 @@ const EditUser: React.FC<any> = ({ role, user }) => {
     </Layout>
   );
 };
-export const getServerSideProps: GetServerSideProps = async ({
-  req,
-  res,
-  query,
-}) => {
-  let user
-  try {
-    const data = await getUser(req, query.id as string)
-    user = data
-  } catch (error) {
-    console.log("error:", error)
-  }
-
-  const cookies = new Cookies(req, res);
-  let role = "";
-
-  const token = cookies.get("sb-access-token") || (query.token as string) || "";
-  if (token)
-    try {
-      role = getUserRole(token);
-    } catch {
-      const newToken = await updateToken(req, res);
-      role = getUserRole(newToken);
-    }
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const user = await getUserByRequest(context)
+  const role = await getRoleByRequest(context)
 
   return {
     props: {

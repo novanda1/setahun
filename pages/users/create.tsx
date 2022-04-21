@@ -2,10 +2,9 @@ import { Button, HelperText, Input, Label } from "@roketid/windmill-react-ui";
 import createValidator from "class-validator-formik";
 import PageTitle from "components/Typography/PageTitle";
 import Layout from "containers/Layout";
-import Cookies from "cookies";
 import { Formik } from "formik";
 import useCreateUser from "hooks/useCreateUser";
-import { getUserRole, updateToken } from "lib/jwt";
+import { getRoleByRequest } from "lib/api/utils";
 import { CreateUserDTO, UserMetaData } from "lib/types/User";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -196,22 +195,8 @@ const CreateUser: React.FC<any> = ({ role }) => {
     </Layout>
   );
 };
-export const getServerSideProps: GetServerSideProps = async ({
-  req,
-  res,
-  query,
-}) => {
-  const cookies = new Cookies(req, res);
-  let role = "";
-
-  const token = cookies.get("sb-access-token") || (query.token as string) || "";
-  if (token)
-    try {
-      role = getUserRole(token);
-    } catch {
-      const newToken = await updateToken(req, res);
-      role = getUserRole(newToken);
-    }
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const role = await getRoleByRequest(context)
 
   return {
     props: {
