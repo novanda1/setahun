@@ -20,7 +20,16 @@ export const getUser = async (req: any, id: string) => {
   supabase.auth.setAuth(user.token as string);
   const response = await supabase
     .from("users")
-    .select("*")
+    .select(
+      `
+      fullname,
+      nip,
+      unit,
+      user_roles (
+        role
+      )
+    `
+    )
     .eq("id", id)
     .single();
 
@@ -28,7 +37,10 @@ export const getUser = async (req: any, id: string) => {
     throw new Error("Error fetch users");
   }
 
-  return response;
+  response.data.role = response.data.user_roles[0].role;
+  delete response.data.user_roles;
+
+  return response.data;
 };
 
 const getUsers = async (query: string) => {

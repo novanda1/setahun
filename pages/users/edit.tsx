@@ -29,6 +29,7 @@ const EditUser: React.FC<any> = ({ role, user }) => {
     <Layout role={role}>
       <div className="w-full max-w-3xl mx-auto">
         <PageTitle>Ubah User</PageTitle>
+        {JSON.stringify(user)}
         <Formik
           initialValues={initialValues}
           validate={(values) => {
