@@ -38,16 +38,9 @@ export class CreateUserDTO {
   user_metadata: UserMetaData;
 }
 
-export class UpdateUserDTO {
-  @IsOptional()
-  fullname: string;
-
-  @IsOptional()
-  @IsInt()
-  nip: number;
-
-  @IsOptional()
-  unit: string;
+export class UpdateUserDTO extends UserMetaData {
+  id?: string;
+  role?: "read-only" | "moderator";
 }
 
 export class LoginDTO {
