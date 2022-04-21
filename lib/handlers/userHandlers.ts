@@ -112,3 +112,43 @@ export const deleteUserHandler = async (
     res.status(404).json(error);
   }
 };
+
+export const getUserByIdHandler = async (
+  req: NextApiRequest,
+  res: NextApiResponse<any>
+) => {
+  const { query } = req;
+  const id: string = query?.id as string;
+
+  const { data, error } = await supabase
+    .from("users")
+    .select(
+      `
+      id,
+      fullname,
+      nip,
+      unit,
+      user_roles(
+        role
+      )
+    `,
+      { count: "exact" }
+    )
+    .eq("id", id)
+    .single();
+
+  if (data && !error) {
+    const role = data.user_roles[0].role;
+    data.role = role;
+    delete data.user_roles;
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Cache-Control", "max-age=180000");
+    res.end(JSON.stringify(data));
+  } else {
+    res.statusCode = 500;
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Cache-Control", "max-age=180000");
+    res.end(JSON.stringify(error));
+  }
+};
