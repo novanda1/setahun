@@ -10,4 +10,14 @@ module.exports = {
 
     return config;
   },
+
+  async rewrites() {
+    return [
+      {
+        source: "/server/:path*",
+        destination:
+          "https://benjcxrorlscnklwljhp.supabase.co/:path*",
+      },
+    ];
+  },
 };
