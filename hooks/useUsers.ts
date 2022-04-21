@@ -13,6 +13,19 @@ const serialize = (obj: any) => {
   return "";
 };
 
+export const getUser = async (id: string) => {
+  const origin = process.env.NEXT_PUBLIC_URL as string;
+  const response = await fetch(`${origin}/api/users/${id}`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error fetch users");
+  }
+
+  return response.json();
+};
+
 const getUsers = async (query: string) => {
   const response = await fetch(`/api/users?${query}`);
 
