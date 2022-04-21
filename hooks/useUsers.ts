@@ -1,6 +1,13 @@
 import { supabase } from "lib/supabase";
 import absoluteUrl from "next-absolute-url";
 import { useQuery } from "react-query";
+import { getPagination } from "utils/getPagination";
+
+type FilterType = {
+  query?: string;
+  page: number;
+  perPage: number;
+};
 
 const serialize = (obj: any) => {
   if (obj) {
@@ -55,37 +62,54 @@ export const getUser = async (
   return response.data;
 };
 
-const getUsers = async (query: string) => {
-  const response = await fetch(
-    `/api/users?${query}`
+const getUsers = async ({
+  page,
+  perPage,
+  query,
+}: FilterType) => {
+  const { from, to } = getPagination(
+    page - 1,
+    perPage
   );
+  const { data, count } = await supabase
+    .from("users")
+    .select(
+      `
+      id,
+      fullname,
+      nip,
+      unit,
+      user_roles(
+        role
+      )
+    `,
+      { count: "exact" }
+    )
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
-  if (!response.ok) {
-    throw new Error("Error fetch users");
+  if (data) {
+    return {
+      data,
+      count,
+      page: +page,
+    };
+  } else {
+    return;
   }
-
-  return response.json();
 };
 
-const useUsers = (
-  filter?:
-    | {
-        query?: string;
-        page?: number;
-        perPage?: number;
-      }
-    | any
-) => {
+const useUsers = (filter: FilterType) => {
   if (filter) {
     Object.keys(filter).map(
       (k: string) =>
-        !filter[k] && delete filter[k]
+        !filter[k as keyof FilterType] &&
+        delete filter[k as keyof FilterType]
     );
   }
-  const query = serialize(filter);
   return useQuery(
-    ["users", query],
-    () => getUsers(query),
+    ["users", filter],
+    () => getUsers(filter),
     {
       keepPreviousData: true,
       refetchOnWindowFocus: false,
