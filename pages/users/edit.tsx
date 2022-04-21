@@ -29,7 +29,6 @@ const EditUser: React.FC<any> = ({ role, user }) => {
     <Layout role={role}>
       <div className="w-full max-w-3xl mx-auto">
         <PageTitle>Ubah User</PageTitle>
-        {JSON.stringify(user)}
         <Formik
           initialValues={initialValues}
           validate={(values) => {
@@ -130,6 +129,7 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                       name="role"
                       checked={values.role === "read-only"}
                       onChange={() => setFieldValue('role', 'read-only')}
+                      disabled={values.role === "admin"}
                     />
                     <span className="ml-2">Read only</span>
                   </Label>
@@ -141,9 +141,22 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                       name="role"
                       checked={values.role === "moderator"}
                       onChange={() => setFieldValue('role', 'moderator')}
+                      disabled={values.role === "admin"}
                     />
                     <span className="ml-2">Moderator</span>
                   </Label>
+                  {values.role === "admin" && (
+                    <Label radio>
+                      <Input
+                        className="ml-6"
+                        type="radio"
+                        value="moderator"
+                        name="role"
+                        checked={values.role === "admin"}
+                      />
+                      <span className="ml-2">Admin</span>
+                    </Label>
+                  )}
                 </div>
               </div>
 

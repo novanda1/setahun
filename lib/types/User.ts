@@ -38,7 +38,7 @@ export class CreateUserDTO {
 
 export class UpdateUserDTO extends UserMetaData {
   id?: string;
-  role?: "read-only" | "moderator";
+  role?: "read-only" | "moderator" | "admin";
 }
 
 export class LoginDTO {
