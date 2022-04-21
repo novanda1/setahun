@@ -1,6 +1,9 @@
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import supabase from "lib/api/supabase";
+import { changeUserRole } from "lib/services/userRoleServices";
+import { updateUser } from "lib/services/userServices";
+import { ResponseValue } from "lib/types/response";
 import { CreateUserDTO, UpdateUserDTO } from "lib/types/User";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getPagination } from "utils/getPagination";
@@ -63,35 +66,37 @@ export const getUsersHandler = async (
 
 export const updateUserHandler = async (
   req: NextApiRequest,
-  res: NextApiResponse<any>,
-  id: string
+  res: NextApiResponse<any>
 ) => {
-  const input: UpdateUserDTO = plainToClass(UpdateUserDTO, req.body);
+  const id = req.query.id as string;
+  const input: UpdateUserDTO = plainToClass(
+    UpdateUserDTO,
+    JSON.parse(req.body)
+  );
 
-  const errors = await validate(input).then((errors) => {
-    if (errors.length > 0) {
-      return errors;
-    } else {
-      return;
+  input.id = id;
+
+  try {
+    const { token } = await supabase.auth.api.getUserByCookie(req, res);
+    if (token) {
+      await changeUserRole(token, input);
+      await updateUser(token, input);
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Cache-Control", "max-age=180000");
+      const response = new ResponseValue(
+        "ok",
+        "Update user successfully",
+        null
+      );
+      res.end(JSON.stringify(response));
     }
-  });
-
-  if (errors && errors?.length > 0) {
-    res.status(404).json({ errors });
-    return;
-  }
-
-  const { data, error } = await supabase
-    .from("users")
-    .update(input)
-    .eq("user_id", id)
-    .single();
-
-  if (data && !error) {
-    res.status(201).json(data);
-    return;
-  } else {
-    res.status(404).json(error);
+  } catch (error) {
+    res.statusCode = 500;
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Cache-Control", "max-age=180000");
+    const response = new ResponseValue("error", "Update user failed", error);
+    res.end(JSON.stringify(response));
   }
 };
 
