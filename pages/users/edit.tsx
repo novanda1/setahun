@@ -46,6 +46,7 @@ const EditUser: React.FC<any> = ({ role, user }) => {
               },
               onSettled(data, error, variables, context) {
                 setSubmitting(false)
+                push('/users')
               },
             })
           }}
