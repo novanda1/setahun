@@ -5,9 +5,15 @@ import { useQuery } from "react-query";
 const serialize = (obj: any) => {
   if (obj) {
     const str: string[] = [];
-    Object.keys(obj).forEach((p) => !p && delete obj[p]);
+    Object.keys(obj).forEach(
+      (p) => !p && delete obj[p]
+    );
     Object.keys(obj).forEach((p) =>
-      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]))
+      str.push(
+        encodeURIComponent(p) +
+          "=" +
+          encodeURIComponent(obj[p])
+      )
     );
     return str.join("&");
   }
@@ -15,13 +21,18 @@ const serialize = (obj: any) => {
   return "";
 };
 
-export const getUser = async (req: any, id: string) => {
-  const user = await supabase.auth.api.getUserByCookie(req);
+export const getUser = async (
+  req: any,
+  id: string
+) => {
+  const user =
+    await supabase.auth.api.getUserByCookie(req);
   supabase.auth.setAuth(user.token as string);
   const response = await supabase
     .from("users")
     .select(
       `
+      id,
       fullname,
       nip,
       unit,
@@ -37,14 +48,17 @@ export const getUser = async (req: any, id: string) => {
     throw new Error("Error fetch users");
   }
 
-  response.data.role = response.data.user_roles[0].role;
+  response.data.role =
+    response.data.user_roles[0].role;
   delete response.data.user_roles;
 
   return response.data;
 };
 
 const getUsers = async (query: string) => {
-  const response = await fetch(`/api/users?${query}`);
+  const response = await fetch(
+    `/api/users?${query}`
+  );
 
   if (!response.ok) {
     throw new Error("Error fetch users");
@@ -54,17 +68,30 @@ const getUsers = async (query: string) => {
 };
 
 const useUsers = (
-  filter?: { query?: string; page?: number; perPage?: number } | any
+  filter?:
+    | {
+        query?: string;
+        page?: number;
+        perPage?: number;
+      }
+    | any
 ) => {
   if (filter) {
-    Object.keys(filter).map((k: string) => !filter[k] && delete filter[k]);
+    Object.keys(filter).map(
+      (k: string) =>
+        !filter[k] && delete filter[k]
+    );
   }
   const query = serialize(filter);
-  return useQuery(["users", query], () => getUsers(query), {
-    keepPreviousData: true,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60,
-  });
+  return useQuery(
+    ["users", query],
+    () => getUsers(query),
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60,
+    }
+  );
 };
 
 export default useUsers;
