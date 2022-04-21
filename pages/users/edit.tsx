@@ -1,4 +1,4 @@
-import { Button, HelperText, Input, Label } from "@roketid/windmill-react-ui";
+import { Button, HelperText, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "@roketid/windmill-react-ui";
 import { plainToClass } from "class-transformer";
 import createValidator from "class-validator-formik";
 import PageTitle from "components/Typography/PageTitle";
@@ -11,6 +11,7 @@ import { getRoleByRequest, getUserByRequest } from "lib/api/utils";
 import { getUserRole, updateToken } from "lib/jwt";
 import { UpdateUserDTO } from "lib/types/User";
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -27,6 +28,10 @@ const EditUser: React.FC<any> = ({ role, user }) => {
 
   return (
     <Layout role={role}>
+      <Head>
+        <title>Edit {user.fullname} - Setahun</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="w-full max-w-3xl mx-auto">
         <PageTitle>Ubah User</PageTitle>
         <Formik

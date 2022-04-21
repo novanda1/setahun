@@ -50,3 +50,7 @@ export class LoginDTO {
   @MaxLength(20, { message: "Maksimal 20 huruf" })
   password: string;
 }
+
+export class DeleteUserDTO {
+  id: string;
+}
