@@ -10,9 +10,8 @@ import {
   Tooltip
 } from 'chart.js'
 import { EditIcon, TrashIcon } from 'icons'
-import withAuth from 'lib/withAuth'
 import Head from 'next/head'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import response, { ITableData } from 'utils/demo/tableData'
 import PageTitle from '../../components/Typography/PageTitle'
 import Layout from '../../containers/Layout'

@@ -29,11 +29,12 @@ export default async function handler(
     return input;
   };
 
-  for (let i = 0; i < 10; i++) {
-    const { data, error } = await supabase.auth.api.createUser({
-      ...dynamicInput(i),
-      email_confirm: true,
-    });
-  }
-  res.status(200).json({ ok: "ok" });
+  if (process.env.NODE_ENV === "development")
+    for (let i = 0; i < 10; i++) {
+      const { data, error } = await supabase.auth.api.createUser({
+        ...dynamicInput(i),
+        email_confirm: true,
+      });
+    }
+  res.status(200).json({ ok: process.env.NODE_ENV });
 }

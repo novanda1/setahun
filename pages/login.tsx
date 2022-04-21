@@ -3,8 +3,7 @@ import { Formik } from 'formik'
 import { supabase } from 'lib/supabase'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 
 type LoginError = { email: string, password: string }
 

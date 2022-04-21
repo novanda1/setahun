@@ -1,5 +1,4 @@
 import { plainToClass } from "class-transformer";
-import { validate } from "class-validator";
 import supabase from "lib/api/supabase";
 import { changeUserRole } from "lib/services/userRoleServices";
 import { updateUser } from "lib/services/userServices";
