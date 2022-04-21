@@ -1,3 +1,4 @@
+import absoluteUrl from "next-absolute-url";
 import { useQuery } from "react-query";
 
 const serialize = (obj: any) => {
@@ -14,7 +15,7 @@ const serialize = (obj: any) => {
 };
 
 export const getUser = async (req: any, id: string) => {
-  const origin = process.env.NEXT_PUBLIC_URL as string;
+  const { origin } = absoluteUrl(req);
   const response = await fetch(`${origin}/api/users/${id}`, {
     method: "GET",
   });
