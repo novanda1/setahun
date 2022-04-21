@@ -1,3 +1,4 @@
+import { supabase } from "lib/supabase";
 import absoluteUrl from "next-absolute-url";
 import { useQuery } from "react-query";
 
@@ -15,16 +16,19 @@ const serialize = (obj: any) => {
 };
 
 export const getUser = async (req: any, id: string) => {
-  const { origin } = absoluteUrl(req);
-  const response = await fetch(`${origin}/api/users/${id}`, {
-    method: "GET",
-  });
+  const user = await supabase.auth.api.getUserByCookie(req);
+  supabase.auth.setAuth(user.token as string);
+  const response = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-  if (!response.ok) {
+  if (response.error) {
     throw new Error("Error fetch users");
   }
 
-  return response.json();
+  return response;
 };
 
 const getUsers = async (query: string) => {

@@ -9,8 +9,6 @@ export const changeUserRole = async (token: string, input: UpdateUserDTO) => {
     .update({ role })
     .match({ user_id: id });
 
-  console.log("response", response);
-
   if (response.error) throw response.error;
   return response;
 };

@@ -1,8 +1,8 @@
 import supabase from "lib/api/supabase";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(req: NextRequest) {
-  const user = await supabase.auth.api.getUserByCookie(req);
+export async function middleware(req: NextRequest, res: NextResponse) {
+  const user = await supabase.auth.api.getUserByCookie(req, res);
 
   if (user?.token && user.user?.id) {
     supabase.auth.setAuth(user.token);

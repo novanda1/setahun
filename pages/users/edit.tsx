@@ -41,11 +41,9 @@ const EditUser: React.FC<any> = ({ role, user }) => {
 
             editUser.mutate(values, {
               onError: (err) => {
-                console.log('err', err)
                 setSubmitting(false)
               },
               onSettled(data, error, variables, context) {
-                console.log('data,error,variables,context', data, error, variables, context)
                 setSubmitting(false)
               },
             })

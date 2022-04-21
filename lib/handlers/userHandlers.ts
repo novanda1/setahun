@@ -124,10 +124,13 @@ export const getUserByIdHandler = async (
   const { query } = req;
   const id: string = query?.id as string;
 
-  const { data, error } = await supabase
-    .from("users")
-    .select(
-      `
+  const { token } = await supabase.auth.api.getUserByCookie(req, res);
+
+  if (token) {
+    const { data, error } = await supabase
+      .from("users")
+      .select(
+        `
       id,
       fullname,
       nip,
@@ -136,23 +139,29 @@ export const getUserByIdHandler = async (
         role
       )
     `,
-      { count: "exact" }
-    )
-    .eq("id", id)
-    .single();
+        { count: "exact" }
+      )
+      .eq("id", id)
+      .single();
 
-  if (data && !error) {
-    const role = data.user_roles[0].role;
-    data.role = role;
-    delete data.user_roles;
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
-    res.setHeader("Cache-Control", "max-age=180000");
-    res.end(JSON.stringify(data));
+    if (data && !error) {
+      const role = data.user_roles[0].role;
+      data.role = role;
+      delete data.user_roles;
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Cache-Control", "max-age=180000");
+      res.end(JSON.stringify(data));
+    } else {
+      res.statusCode = 500;
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Cache-Control", "max-age=180000");
+      res.end(JSON.stringify(error));
+    }
   } else {
-    res.statusCode = 500;
+    res.statusCode = 400;
     res.setHeader("Content-Type", "application/json");
     res.setHeader("Cache-Control", "max-age=180000");
-    res.end(JSON.stringify(error));
+    res.end(JSON.stringify({ error: { message: "unauthorized" } }));
   }
 };
