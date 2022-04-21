@@ -1,9 +1,9 @@
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
+import supabase from "lib/api/supabase";
 import { CreateUserDTO, UpdateUserDTO } from "lib/types/User";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getPagination } from "utils/getPagination";
-import supabase from "../supabase";
 
 export const createUserHandler = async (
   req: NextApiRequest,
