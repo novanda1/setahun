@@ -4,20 +4,21 @@ import { supabase } from "./supabase";
 
 // Gets the display name of a JSX component for dev tools
 function getDisplayName(Component: React.ComponentType<any>) {
-  return Component.displayName || Component.name || 'Unknown';
+  return Component.displayName || Component.name || "Unknown";
 }
 
 const WithAuth: React.FC<any> = ({ children }) => {
-  const { replace } = useRouter()
-  const user = supabase.auth.user()
+  const { replace } = useRouter();
+  const user = supabase.auth.user();
 
   useEffect(() => {
-    if (!user) replace("/login")
-  }, [replace, user])
+    if (!user) replace("/login");
+  }, [replace, user]);
 
-  if (!user) return <>Wait for auth...</>
+  if (!user) return <>Waiting for authentication...</>;
 
   return <>{children}</>;
-}
+};
 
-export default WithAuth
+export default WithAuth;
+

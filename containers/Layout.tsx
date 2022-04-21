@@ -1,39 +1,42 @@
-import Header from 'components/Header'
-import Sidebar from 'components/Sidebar'
-import { CreateCertifiedModalProvider } from 'context/CreateSertifModalContext'
-import { MeProvider } from 'context/MeContext'
-import SidebarContext, { SidebarProvider } from 'context/SidebarContext'
-import WithAuth from 'lib/withAuth'
-import { useContext } from 'react'
-import Main from './Main'
+import Header from "components/Header";
+import Sidebar from "components/Sidebar";
+import { CreateCertifiedModalProvider } from "context/CreateSertifModalContext";
+import { MeProvider } from "context/MeContext";
+import SidebarContext, { SidebarProvider } from "context/SidebarContext";
+import WithAuth from "lib/withAuth";
+import { useContext } from "react";
+import Main from "./Main";
 
 interface ILayout {
-  children: React.ReactNode
-  role?: string
+  children: React.ReactNode;
+  role?: string;
 }
 
 function Layout({ children, role }: ILayout) {
-  const { isSidebarOpen } = useContext(SidebarContext)
+  const { isSidebarOpen } = useContext(SidebarContext);
 
-  return <WithAuth>
+  return (
     <SidebarProvider>
       <CreateCertifiedModalProvider>
         <MeProvider role={role}>
           <div
-            className={`flex h-screen bg-gray-50 dark:bg-gray-900 ${isSidebarOpen && 'overflow-hidden'}`}
+            className={`flex h-screen bg-gray-50 dark:bg-gray-900 ${
+              isSidebarOpen && "overflow-hidden"
+            }`}
           >
-            <Sidebar />
-            <div className="flex flex-col flex-1 w-full">
-              <Header />
-              <Main>
-                {children}
-              </Main>
-            </div>
+            <WithAuth>
+              <Sidebar />
+              <div className="flex flex-col flex-1 w-full">
+                <Header />
+                <Main>{children}</Main>
+              </div>
+            </WithAuth>
           </div>
         </MeProvider>
       </CreateCertifiedModalProvider>
     </SidebarProvider>
-  </WithAuth>
+  );
 }
 
-export default Layout
+export default Layout;
+
