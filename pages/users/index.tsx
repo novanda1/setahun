@@ -65,20 +65,20 @@ const Users = ({ role }: any) => {
         <ModalBody>Yakin menghapus {deleteState?.fullname}</ModalBody>
         <ModalFooter>
           <div className="hidden sm:block">
-            <Button layout="outline" onClick={toggleDeleteModal}>
+            <Button layout="outline" onClick={toggleDeleteModal} disabled={deleteUser.isLoading}>
               Batal
             </Button>
           </div>
           <div className="hidden sm:block">
-            <Button onClick={onDeleteUser} className='bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300'>Hapus</Button>
+            <Button disabled={deleteUser.isLoading} onClick={onDeleteUser} className='bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300'>Hapus</Button>
           </div>
           <div className="block w-full sm:hidden">
-            <Button block size="large" layout="outline" onClick={toggleDeleteModal}>
+            <Button block size="large" layout="outline" onClick={toggleDeleteModal} disabled={deleteUser.isLoading}>
               Batal
             </Button>
           </div>
           <div className="block w-full sm:hidden">
-            <Button onClick={onDeleteUser} className='bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300' block size="large">
+            <Button disabled={deleteUser.isLoading} onClick={onDeleteUser} className='bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300' block size="large">
               Hapus
             </Button>
           </div>
@@ -103,7 +103,7 @@ const Users = ({ role }: any) => {
           <TableBody>
             {!users.error
               && users?.data?.data
-                // ?.filter(user => user.id !== supabase.auth.user()?.id)
+                ?.filter(user => user.id !== supabase.auth.user()?.id)
                 ?.map((user: any, i: number) => (
                   <TableRow key={user.id}>
                     <TableCell>

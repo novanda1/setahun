@@ -25,7 +25,7 @@ export default async function handler(
     });
 
     if (errors && errors?.length > 0) {
-      res.status(200).json({ errors });
+      res.status(400).json({ errors });
       return;
     }
 
@@ -38,8 +38,9 @@ export default async function handler(
     createUserHandler(req, res, input);
     return;
   } else {
-    // GET
-    getUsersHandler(req, res);
-    return;
+    res.statusCode = 405;
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Cache-Control", "max-age=180000");
+    res.end(JSON.stringify({ error: { message: "method not allowed" } }));
   }
 }
