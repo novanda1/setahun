@@ -6,15 +6,13 @@ const data = {
       "Sertifikat Belum Diambil": "NO HAK",
     },
     {
-      "Sertifikat Belum Diambil":
-        "Sertifikat Sudah Diambil",
+      "Sertifikat Belum Diambil": "Sertifikat Sudah Diambil",
     },
     {
       "Sertifikat Belum Diambil": "NO HAK",
     },
     {
-      "Sertifikat Belum Diambil":
-        "no bisa sama dengan desa lain",
+      "Sertifikat Belum Diambil": "no bisa sama dengan desa lain",
     },
     {
       "Sertifikat Belum Diambil":
@@ -1156,8 +1154,7 @@ const data = {
       Uraian: "01. Ganti Nadzir",
     },
     {
-      Uraian:
-        "02. Ganti Nama Pemegang Hak Tanggungan",
+      Uraian: "02. Ganti Nama Pemegang Hak Tanggungan",
     },
     {
       Uraian: "03. Merger Hak Tanggungan",
@@ -1169,15 +1166,13 @@ const data = {
       Uraian: "05. Pemisahan Bidang",
     },
     {
-      Uraian:
-        "06. Pencatatan Perubahan Penggunaan Tanah",
+      Uraian: "06. Pencatatan Perubahan Penggunaan Tanah",
     },
     {
       Uraian: "07. Pendaftaran SK Hak",
     },
     {
-      Uraian:
-        "08. Pendaftaran Tanah Pertama Kali Pengakuan/Penegasan Hak",
+      Uraian: "08. Pendaftaran Tanah Pertama Kali Pengakuan/Penegasan Hak",
     },
     {
       Uraian:
@@ -1187,8 +1182,7 @@ const data = {
       Uraian: "10. Penggabungan Bidang",
     },
     {
-      Uraian:
-        "11. Pengukuran dan Pemetaan Kadastral (Peta Bidang)",
+      Uraian: "11. Pengukuran dan Pemetaan Kadastral (Peta Bidang)",
     },
     {
       Uraian: "12. Peralihan Hak - Hibah",
@@ -1200,8 +1194,7 @@ const data = {
       Uraian: "14. Peralihan Hak - Lelang",
     },
     {
-      Uraian:
-        "15. Peralihan Hak - Pembagian Hak Bersama",
+      Uraian: "15. Peralihan Hak - Pembagian Hak Bersama",
     },
     {
       Uraian: "16. Peralihan Hak - Pewarisan",
@@ -1210,53 +1203,66 @@ const data = {
       Uraian: "17. Roya",
     },
     {
-      Uraian:
-        "18. Sertifikat Pengganti Karena Blanko Lama",
+      Uraian: "18. Sertifikat Pengganti Karena Blanko Lama",
     },
     {
-      Uraian:
-        "19. Sertifikat Pengganti Karena Hilang",
+      Uraian: "19. Sertifikat Pengganti Karena Hilang",
     },
     {
-      Uraian:
-        "20. Sertifikat Pengganti Karena Rusak",
+      Uraian: "20. Sertifikat Pengganti Karena Rusak",
     },
     {
-      Uraian:
-        "21. Wakaf dari Tanah yang Sudah Bersertifikat",
+      Uraian: "21. Wakaf dari Tanah yang Sudah Bersertifikat",
     },
   ],
 };
 
-const kecamatan = data.Sheet2.filter(
-  (s) => s.KECAMATAN
-).map((k) => ({
-  kecamatan: k.KECAMATAN,
-  kode: k.KODE.replaceAll(".", ""),
-}));
+// const kecamatan = data.Sheet2.filter((s) => s.KECAMATAN).map((k) => ({
+//   kecamatan: k.KECAMATAN,
+//   kode: k.KODE.replaceAll(".", ""),
+// }));
 
-const desa = data.Sheet2.map((d) => ({
-  kode: d.KODE_1,
-  desa: d["DESA/KELURAHAN"],
-})).map((d) => `${d.kode}: ${d.desa}`);
+// const desa = data.Sheet2.map((d) => ({
+//   kode: d.KODE_1,
+//   desa: d["DESA/KELURAHAN"],
+// })).map((d) => `${d.kode}: ${d.desa}`);
 
-const uraian = data.Sheet3.map((u) =>
-  u.Uraian.split(".")[1].trim()
-);
+// const duplicate = desa.filter((e, i, a) => a.indexOf(e) !== i);
+// console.log("duplicate", duplicate);
+// const uraian = data.Sheet3.map((u) => u.Uraian.split(".")[1].trim());
 
-writeFile(
-  "uraian.txt",
-  JSON.stringify([...new Set(uraian)]),
-  (err) => {
-    if (err) console.log(err);
-    else {
-      console.log("File written successfully\n");
-      console.log(
-        "The written has the following contents:"
-      );
-      console.log(
-        readFileSync("uraian.txt", "utf8")
-      );
-    }
-  }
-);
+// const kecamatanDesa = [];
+// const desaDanKecamatan = data.Sheet2.map((d) => {
+//   const col = {
+//     kode: d.KODE_1,
+//     nama: d["DESA/KELURAHAN"],
+//   };
+
+//   if (d.KODE) {
+//     const row = {
+//       kode: d.KODE?.includes(".") ? d.KODE.replace(".", "") : d.KODE,
+//       nama: d.KECAMATAN,
+//       desa: [],
+//     };
+//     row.desa.push(col);
+//     kecamatanDesa.push(row);
+//   } else {
+//     const index = kecamatanDesa.findIndex(
+//       (r) => r.kode === d.KODE_1.split(".")[0]
+//     );
+//     kecamatanDesa[index]?.desa?.push(col);
+//   }
+// });
+
+// writeFile(
+//   "kecamatanDesa.json",
+//   JSON.stringify([...new Set(kecamatanDesa)]),
+//   (err) => {
+//     if (err) console.log(err);
+//     else {
+//       console.log("File written successfully\n");
+//       console.log("The written has the following contents:");
+//       console.log(readFileSync("kecamatanDesa.txt", "utf8"));
+//     }
+//   }
+// );

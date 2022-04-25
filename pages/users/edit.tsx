@@ -27,12 +27,13 @@ const EditUser: React.FC<any> = ({ role, user }) => {
   useEffect(() => {
     async function logout() {
       await supabase.auth.signOut()
+      push('/login')
     }
 
     if (!user) {
       logout()
     }
-  }, [user])
+  }, [user, push])
 
   return (
     <Layout role={role}>

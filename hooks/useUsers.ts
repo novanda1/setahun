@@ -12,15 +12,9 @@ type FilterType = {
 const serialize = (obj: any) => {
   if (obj) {
     const str: string[] = [];
-    Object.keys(obj).forEach(
-      (p) => !p && delete obj[p]
-    );
+    Object.keys(obj).forEach((p) => !p && delete obj[p]);
     Object.keys(obj).forEach((p) =>
-      str.push(
-        encodeURIComponent(p) +
-          "=" +
-          encodeURIComponent(obj[p])
-      )
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]))
     );
     return str.join("&");
   }
@@ -28,12 +22,8 @@ const serialize = (obj: any) => {
   return "";
 };
 
-export const getUser = async (
-  req: any,
-  id: string
-) => {
-  const user =
-    await supabase.auth.api.getUserByCookie(req);
+export const getUser = async (req: any, id: string) => {
+  const user = await supabase.auth.api.getUserByCookie(req);
   supabase.auth.setAuth(user.token as string);
   const response = await supabase
     .from("users")
@@ -55,22 +45,14 @@ export const getUser = async (
     throw new Error("Error fetch users");
   }
 
-  response.data.role =
-    response.data.user_roles[0].role;
+  response.data.role = response.data.user_roles[0].role;
   delete response.data.user_roles;
 
   return response.data;
 };
 
-const getUsers = async ({
-  page,
-  perPage,
-  query,
-}: FilterType) => {
-  const { from, to } = getPagination(
-    page - 1,
-    perPage
-  );
+const getUsers = async ({ page, perPage, query }: FilterType) => {
+  const { from, to } = getPagination(page - 1, perPage);
   const { data, count } = await supabase
     .from("users")
     .select(
@@ -103,19 +85,14 @@ const useUsers = (filter: FilterType) => {
   if (filter) {
     Object.keys(filter).map(
       (k: string) =>
-        !filter[k as keyof FilterType] &&
-        delete filter[k as keyof FilterType]
+        !filter[k as keyof FilterType] && delete filter[k as keyof FilterType]
     );
   }
-  return useQuery(
-    ["users", filter],
-    () => getUsers(filter),
-    {
-      keepPreviousData: true,
-      refetchOnWindowFocus: false,
-      staleTime: 1000 * 60,
-    }
-  );
+  return useQuery(["users", filter], () => getUsers(filter), {
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60,
+  });
 };
 
 export default useUsers;
