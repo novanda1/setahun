@@ -1,19 +1,17 @@
-import { Button, HelperText, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "@roketid/windmill-react-ui";
+import { Button, HelperText, Input, Label } from "@roketid/windmill-react-ui";
 import { plainToClass } from "class-transformer";
 import createValidator from "class-validator-formik";
 import PageTitle from "components/Typography/PageTitle";
 import Layout from "containers/Layout";
-import Cookies from "cookies";
 import { Formik } from "formik";
 import useEditUser from "hooks/useEditUser";
-import { getUser } from "hooks/useUsers";
 import { getRoleByRequest, getUserByRequest } from "lib/api/utils";
-import { getUserRole, updateToken } from "lib/jwt";
+import { supabase } from "lib/supabase";
 import { UpdateUserDTO } from "lib/types/User";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const EditUser: React.FC<any> = ({ role, user }) => {
   let initialValues;
@@ -25,6 +23,16 @@ const EditUser: React.FC<any> = ({ role, user }) => {
 
   const editUser = useEditUser()
   const { push } = useRouter()
+
+  useEffect(() => {
+    async function logout() {
+      await supabase.auth.signOut()
+    }
+
+    if (!user) {
+      logout()
+    }
+  }, [user])
 
   return (
     <Layout role={role}>
@@ -187,7 +195,7 @@ const EditUser: React.FC<any> = ({ role, user }) => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const user = await getUserByRequest(context)
+  const user = await getUserByRequest(context) || null
   const role = await getRoleByRequest(context)
 
   return {
