@@ -49,3 +49,34 @@ export const getUserByRequest = async ({
 
   return user;
 };
+
+export const getSertifikatDetail = async (req: any, id: string) => {
+  const user = await supabase.auth.api.getUserByCookie(req);
+  supabase.auth.setAuth(user.token as string);
+  const response = await supabase
+    .from("sertifikat")
+    .select(`*`)
+    .eq("id", id)
+    .single();
+
+  if (response.error) {
+    throw new Error("Error fetch sertifikat");
+  }
+
+  return response.data;
+};
+
+export const getSertifikatDetailByRequest = async ({
+  req,
+  query,
+}: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>): Promise<any> => {
+  let sertifikat;
+  try {
+    const data = await getSertifikatDetail(req, query.id as string);
+    sertifikat = data;
+  } catch (error) {
+    console.log("error:", error);
+  }
+
+  return sertifikat;
+};

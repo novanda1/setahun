@@ -10,8 +10,8 @@ import { getRoleByRequest } from 'lib/api/utils'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import PageTitle from '../../components/Typography/PageTitle'
-import Layout from '../../containers/Layout'
+import PageTitle from '../../../components/Typography/PageTitle'
+import Layout from '../../../containers/Layout'
 
 function SudahDiambil({ role }: any) {
   const { push, query } = useRouter()
@@ -24,6 +24,11 @@ function SudahDiambil({ role }: any) {
   const onPageChange = (p: number) => {
     if (query?.page || p > 1)
       push('/users/?page=' + p)
+  }
+
+  // table
+  const onClickRow = (id: string) => {
+    push('/sertifikat/sudah-diambil/' + id + '/edit')
   }
 
   return (
@@ -47,7 +52,11 @@ function SudahDiambil({ role }: any) {
           </TableHeader>
           <TableBody>
             {sertifikat.data?.data.map((sertifikat) => (
-              <TableRow key={sertifikat.id}>
+              <TableRow
+                key={sertifikat.id}
+                className="hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                onClick={() => onClickRow(sertifikat.id)}
+              >
                 <TableCell>
                   <div className="flex items-center text-sm">
                     <div>
@@ -67,11 +76,13 @@ function SudahDiambil({ role }: any) {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-4">
-                    <Button layout="link" size="small" aria-label="Edit">
-                      <EditIcon className="w-5 h-5" aria-hidden="true" />
+                    <Button layout="outline" size="small" aria-label="Edit">
+                      {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
+                      Ubah
                     </Button>
-                    <Button layout="link" size="small" aria-label="Delete">
-                      <TrashIcon className="w-5 h-5" aria-hidden="true" />
+                    <Button layout="outline" size="small" aria-label="Delete">
+                      {/* <TrashIcon className="w-5 h-5" aria-hidden="true" /> */}
+                      Hapus
                     </Button>
                   </div>
                 </TableCell>
