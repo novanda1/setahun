@@ -4,50 +4,33 @@ import {
   Button,
   Pagination, Table, TableBody, TableCell, TableContainer, TableFooter, TableHeader, TableRow
 } from '@roketid/windmill-react-ui'
-import {
-  ArcElement,
-  CategoryScale, Chart, Legend, LinearScale, LineElement, PointElement, Title,
-  Tooltip
-} from 'chart.js'
 import { EditIcon, TrashIcon } from 'icons'
+import { getRoleByRequest } from 'lib/api/utils'
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import response, { ITableData } from 'utils/demo/tableData'
 import PageTitle from '../../components/Typography/PageTitle'
 import Layout from '../../containers/Layout'
+import { useRouter } from 'next/router';
+import { useSertifikat } from 'hooks/useSertifikat'
 
-function BelumDiambil() {
-  Chart.register(
-    ArcElement,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-  )
 
-  const [page, setPage] = useState(1)
-  const [data, setData] = useState<ITableData[]>([])
+const BelumDiambil = ({ role }: any) => {
+  const { push, query } = useRouter()
 
   // pagination setup
-  const resultsPerPage = 10
-  const totalResults = response.length
+  const perPage = 10
+  const sertifikat = useSertifikat({ diambil: false, page: +query?.page! || 1, perPage })
 
   // pagination change control
-  function onPageChange(p: number) {
-    setPage(p)
+  const onPageChange = (p: number) => {
+    if (query?.page || p > 1)
+      push('/users/?page=' + p)
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setData(response.slice((page - 1) * resultsPerPage, page * resultsPerPage))
-  }, [page])
-
   return (
-    <Layout>
+    <Layout role={role}>
       <Head>
         <title>Sertifikat Belum Diambil - Setahun</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -58,33 +41,32 @@ function BelumDiambil() {
         <Table>
           <TableHeader>
             <tr>
-              <TableCell>Client</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Nama/Uraian</TableCell>
+              <TableCell>No Berkas</TableCell>
+              <TableCell>Tahun Berkas</TableCell>
               <TableCell>Date</TableCell>
               <TableCell>Actions</TableCell>
             </tr>
           </TableHeader>
           <TableBody>
-            {data.map((user, i) => (
-              <TableRow key={i}>
+            {sertifikat.data?.data.map((sertifikat) => (
+              <TableRow key={sertifikat.id}>
                 <TableCell>
                   <div className="flex items-center text-sm">
-                    <Avatar className="hidden mr-3 md:block" src={user.avatar} alt="User avatar" />
                     <div>
-                      <p className="font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">{user.job}</p>
+                      <p className="font-semibold">{sertifikat.nama_pemegang_hak}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">{sertifikat.uraian_pekerjaan}</p>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm">$ {user.amount}</span>
+                  <span className="text-sm">{sertifikat.no_berkas}</span>
                 </TableCell>
                 <TableCell>
-                  <Badge type={user.status}>{user.status}</Badge>
+                  <span className="text-sm">{sertifikat.tahun_berkas}</span>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm">{new Date(user.date).toLocaleDateString()}</span>
+                  <span className="text-sm">{new Date(sertifikat.created_at).toLocaleDateString()}</span>
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-4">
@@ -102,8 +84,8 @@ function BelumDiambil() {
         </Table>
         <TableFooter>
           <Pagination
-            totalResults={totalResults}
-            resultsPerPage={resultsPerPage}
+            totalResults={sertifikat.data?.count || 0}
+            resultsPerPage={perPage}
             onChange={onPageChange}
             label="Table navigation"
           />
@@ -111,6 +93,17 @@ function BelumDiambil() {
       </TableContainer>
     </Layout>
   )
+}
+
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const role = await getRoleByRequest(context)
+
+  return {
+    props: {
+      role: role
+    }
+  }
 }
 
 export default BelumDiambil
