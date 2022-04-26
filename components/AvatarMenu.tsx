@@ -4,13 +4,20 @@ import {
   OutlineLogoutIcon, OutlinePersonIcon
 } from 'icons'
 import { supabase } from 'lib/supabase'
-import Avatar from 'react-avatar'
+import Avatar, { createAvatarComponent } from 'react-avatar'
+
+const Ava = () => {
+  const user = supabase.auth.user()
+  const MAvatar = Avatar as React.FC<any>
+  return <MAvatar className="align-middle"
+    name={user?.email?.split("@")[0]}
+    size="32" />
+}
 
 const AvatarMenu: React.FC<any> = ({ handleProfileClick, isProfileMenuOpen, setIsProfileMenuOpen }: {
   handleProfileClick: any, isProfileMenuOpen: any, setIsProfileMenuOpen: any
 }) => {
 
-  const user = supabase.auth.user()
   return (
     <li className="relative h-8">
       <button
@@ -20,11 +27,7 @@ const AvatarMenu: React.FC<any> = ({ handleProfileClick, isProfileMenuOpen, setI
         aria-haspopup="true"
       >
         <div className='relative rounded-full overflow-hidden w-8 h-8'>
-          <Avatar
-            className="align-middle"
-            name={user?.email?.split("@")[0]}
-            size="32"
-          />
+          <Ava />
         </div>
       </button>
       <Dropdown
@@ -32,14 +35,14 @@ const AvatarMenu: React.FC<any> = ({ handleProfileClick, isProfileMenuOpen, setI
         isOpen={isProfileMenuOpen}
         onClose={() => setIsProfileMenuOpen(false)}
       >
-        <DropdownItem tag="a" href="#">
+        {/* <DropdownItem tag="a" href="#">
           <OutlinePersonIcon className="w-4 h-4 mr-3" aria-hidden="true" />
           <span>Profile</span>
         </DropdownItem>
         <DropdownItem tag="a" href="#">
           <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
           <span>Settings</span>
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem onClick={async () => {
           await supabase.auth.signOut()
         }}>

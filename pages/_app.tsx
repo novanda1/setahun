@@ -10,7 +10,7 @@ import nProgress from "nprogress";
 import '../styles/nprogress.css';
 
 const queryClient = new QueryClient()
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: any) {
   // suppress useBrowserLayoutEffect warnings when running outside a browser
   if (typeof window === 'undefined') React.useLayoutEffect = React.useEffect;
   const [authenticatedState, setAuthenticatedState] = useState<'not-authenticated' | 'authenticated'>("not-authenticated")

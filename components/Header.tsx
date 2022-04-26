@@ -1,22 +1,12 @@
-import { useContext, useState } from 'react'
+import { Input, WindmillContext } from '@roketid/windmill-react-ui'
 import SidebarContext from 'context/SidebarContext'
 import {
-  SearchIcon,
-  MoonIcon,
-  SunIcon,
-  BellIcon,
-  MenuIcon,
-  OutlinePersonIcon,
-  OutlineCogIcon,
-  OutlineLogoutIcon,
+  MenuIcon, MoonIcon, SearchIcon, SunIcon
 } from 'icons'
-import { Badge, Input, Dropdown, DropdownItem, WindmillContext } from '@roketid/windmill-react-ui'
 import { supabase } from 'lib/supabase'
-import Avatar from 'react-avatar';
 import { useRouter } from 'next/router'
-import dynamic from 'next/dynamic'
-
-const DynamicAvatarMenu = dynamic(() => import('./AvatarMenu'), { ssr: false })
+import { useContext, useState } from 'react'
+import AvatarMenu from './AvatarMenu'
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext)
@@ -78,7 +68,7 @@ function Header() {
           </li>
           {/* <!-- Profile menu --> */}
           {user?.email &&
-            <DynamicAvatarMenu
+            <AvatarMenu
               handleProfileClick={handleProfileClick}
               isProfileMenuOpen={isProfileMenuOpen}
               setIsProfileMenuOpen={setIsProfileMenuOpen}
