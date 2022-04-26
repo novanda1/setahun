@@ -6,6 +6,8 @@ import {
   MinLength,
 } from "class-validator";
 
+export type UserRole = "read-only" | "moderator" | "admin";
+
 export class UserMetaData {
   @IsNotEmpty({ message: "Wajib Diisi" })
   fullname: string;

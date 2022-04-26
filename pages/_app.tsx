@@ -45,8 +45,8 @@ function MyApp({ Component, pageProps }: any) {
       }
 
       if (event === "SIGNED_OUT") {
-        push("/login");
         setAuthenticatedState("not-authenticated");
+        push("/login");
       }
 
       return auth;

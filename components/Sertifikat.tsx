@@ -16,14 +16,19 @@ import {
 import useDeleteSertifikat from "hooks/useDeleteSertifikat";
 import { useSertifikat } from "hooks/useSertifikat";
 import { Sertifikat } from "lib/types/Sertifikat";
+import { UserRole } from "lib/types/User";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
 
 type Props = {
   diambil?: boolean;
+  role?: UserRole;
 };
 
-const SertifikatPage: React.FC<Props> = ({ diambil = false }) => {
+const SertifikatPage: React.FC<Props> = ({
+  diambil = false,
+  role = "read-only",
+}) => {
   const { push, query } = useRouter();
 
   // pagination setup
@@ -44,9 +49,9 @@ const SertifikatPage: React.FC<Props> = ({ diambil = false }) => {
     push("/sertifikat/" + id + "/edit");
   };
 
-  // const onDetailClicked = (id: string) => {
-  //   push("/sertifikat/" + id + "/detail");
-  // };
+  const onDetailClicked = (id: string) => {
+    push("/sertifikat/" + id + "/detail");
+  };
 
   // modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -164,7 +169,7 @@ const SertifikatPage: React.FC<Props> = ({ diambil = false }) => {
                 <TableCell>
                   <div className="flex items-center space-x-4">
                     <Button
-                      onClick={() => onEditClicked(sertifikat.id)}
+                      onClick={() => onDetailClicked(sertifikat.id)}
                       layout="outline"
                       size="small"
                       aria-label="Edit"
@@ -172,27 +177,31 @@ const SertifikatPage: React.FC<Props> = ({ diambil = false }) => {
                       {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
                       Lihat Detail
                     </Button>
-                    <Button
-                      onClick={() => onEditClicked(sertifikat.id)}
-                      layout="outline"
-                      size="small"
-                      aria-label="Edit"
-                    >
-                      {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
-                      Ubah
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        toggleDeleteModal();
-                        setDeleteState(sertifikat);
-                      }}
-                      layout="outline"
-                      size="small"
-                      aria-label="Delete"
-                    >
-                      {/* <TrashIcon className="w-5 h-5" aria-hidden="true" /> */}
-                      Hapus
-                    </Button>
+                    {role === "admin" || role === "moderator" ? (
+                      <>
+                        <Button
+                          onClick={() => onEditClicked(sertifikat.id)}
+                          layout="outline"
+                          size="small"
+                          aria-label="Edit"
+                        >
+                          {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
+                          Ubah
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            toggleDeleteModal();
+                            setDeleteState(sertifikat);
+                          }}
+                          layout="outline"
+                          size="small"
+                          aria-label="Delete"
+                        >
+                          {/* <TrashIcon className="w-5 h-5" aria-hidden="true" /> */}
+                          Hapus
+                        </Button>
+                      </>
+                    ) : null}
                   </div>
                 </TableCell>
               </TableRow>
