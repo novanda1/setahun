@@ -1,9 +1,10 @@
-import { Label, Input, HelperText, Select as WS } from "@roketid/windmill-react-ui";
+import { Button, HelperText, Input, Label } from "@roketid/windmill-react-ui";
+import { plainToClass } from "class-transformer";
 import PageTitle from "components/Typography/PageTitle";
 import Layout from "containers/Layout";
-import { Field, FieldInputProps, Formik } from "formik";
+import { Formik } from "formik";
 import { getRoleByRequest, getSertifikatDetailByRequest } from "lib/api/utils";
-import { EditSertifikatDTO } from "lib/types/Sertifikat";
+import { EditSertifikatDTO, Sertifikat } from "lib/types/Sertifikat";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { CSSProperties } from "react";
@@ -62,10 +63,7 @@ const formatGroupLabel = (data: GroupedOption) => (
 );
 
 const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, sertifikat: any }) => {
-  const initialValues = new EditSertifikatDTO()
-  function onDesaChange(desa: any) {
-    console.log('desa', desa)
-  }
+  const initialValues = plainToClass(EditSertifikatDTO, sertifikat)
 
   return (
     <>
@@ -94,14 +92,14 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
 
               <form onSubmit={handleSubmit} className="pb-7">
                 <Label className="mt-4">
-                  <span>Nama Lengkap</span>
+                  <span>Nama Pemegang Hak</span>
                   <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.nama_pemegang_hak || ""}
                     name="nama_pemegang_hak"
                     className="mt-1"
-                    placeholder="Sherly Ayu"
+                    placeholder="ADIN NURUL UMMAH"
                   />
                 </Label>
                 {errors.nama_pemegang_hak &&
@@ -112,14 +110,14 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                   )}
 
                 <Label className="mt-4">
-                  <span>Nama Lengkap</span>
+                  <span>No Seri</span>
                   <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.no_seri || ""}
-                    name="no.no_seri"
+                    name="no_seri"
                     className="mt-1"
-                    placeholder="Sherly Ayu"
+                    placeholder="ABB619411"
                   />
                 </Label>
                 {errors.no_seri &&
@@ -130,14 +128,14 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                   )}
 
                 <Label className="mt-4">
-                  <span>Nama Lengkap</span>
+                  <span>Uraian Pekerjaan</span>
                   <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.uraian_pekerjaan || ""}
-                    name="no.uraian_pekerjaan"
+                    name="uraian_pekerjaan"
                     className="mt-1"
-                    placeholder="Sherly Ayu"
+                    placeholder="Ganti Nadzir"
                   />
                 </Label>
                 {errors.uraian_pekerjaan &&
@@ -148,14 +146,14 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                   )}
 
                 <Label className="mt-4">
-                  <span>Nama Lengkap</span>
+                  <span>Tanggal DI.208</span>
                   <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.tanggal_di_208 || ""}
-                    name="no.tanggal_di_208"
+                    name="tanggal_di_208"
                     className="mt-1"
-                    placeholder="Sherly Ayu"
+                    type="date"
                   />
                 </Label>
                 {errors.tanggal_di_208 &&
@@ -166,14 +164,14 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                   )}
 
                 <Label className="mt-4">
-                  <span>Nama Lengkap</span>
+                  <span>No DI.301</span>
                   <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.no_di_301 || ""}
-                    name="no.no_di_301"
+                    name="no_di_301"
                     className="mt-1"
-                    placeholder="Sherly Ayu"
+                    placeholder="18461"
                   />
                 </Label>
                 {errors.no_di_301 &&
@@ -184,14 +182,14 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                   )}
 
                 <Label className="mt-4">
-                  <span>Nama Lengkap</span>
+                  <span>No Berkas</span>
                   <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.no_berkas || ""}
-                    name="no.no_berkas"
+                    name="no_berkas"
                     className="mt-1"
-                    placeholder="Sherly Ayu"
+                    placeholder="74047"
                   />
                 </Label>
                 {errors.no_berkas &&
@@ -202,14 +200,14 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                   )}
 
                 <Label className="mt-4">
-                  <span>Nama Lengkap</span>
+                  <span>Luas</span>
                   <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.luas || ""}
-                    name="no.luas"
+                    name="luas"
                     className="mt-1"
-                    placeholder="Sherly Ayu"
+                    placeholder="943"
                   />
                 </Label>
                 {errors.luas &&
@@ -219,13 +217,13 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     </HelperText>
                   )}
 
-
                 <Label className="mt-4">
-                  <span>Kecamatan/Desa</span>
+                  <span>Desa</span>
                   <Select<any, false, GroupedOption>
                     options={groupedOptions}
-                    className={WS.propTypes?.className! as unknown as string || 'asd'}
+                    placeholder="Pilih atau ketik untuk mencari"
                     formatGroupLabel={formatGroupLabel}
+                    defaultValue={{ label: values.daerah.desa, value: values.daerah }}
                     onChange={(daerah) => setFieldValue('daerah', daerah.value)}
                   />
                 </Label>
@@ -236,6 +234,80 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     </HelperText>
                   )}
 
+                <Label className="mt-4">
+                  <span>Nama Penerima</span>
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.nama_penerima || ""}
+                    name="nama_penerima"
+                    className="mt-1"
+                    placeholder="ADIN NURUL UMMAH"
+                  />
+                </Label>
+                {errors.nama_penerima &&
+                  touched.nama_penerima && (
+                    <HelperText valid={false}>
+                      {errors.nama_penerima}
+                    </HelperText>
+                  )}
+
+                <Label className="mt-4">
+                  <span>NIK Penerima</span>
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.nik_penerima || ""}
+                    name="nik_penerima"
+                    className="mt-1"
+                    placeholder="350500000000000"
+                  />
+                </Label>
+                {errors.nik_penerima &&
+                  touched.nik_penerima && (
+                    <HelperText valid={false}>
+                      {errors.nik_penerima}
+                    </HelperText>
+                  )}
+
+                <Label className="mt-4">
+                  <span>Tanggal Pengambilan</span>
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.tanggal_pengambilan || ""}
+                    name="tanggal_pengambilan"
+                    className="mt-1"
+                    type="date"
+                  />
+                </Label>
+                {errors.tanggal_pengambilan &&
+                  touched.tanggal_pengambilan && (
+                    <HelperText valid={false}>
+                      {errors.tanggal_pengambilan}
+                    </HelperText>
+                  )}
+
+                <div className="flex flex-wrap mt-9 pb-11 justify-end gap-3">
+                  <div className="hidden sm:block">
+                    <Button layout="outline" >
+                      Batal
+                    </Button>
+                  </div>
+                  <div className="hidden sm:block">
+                    <Button className='bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300'>Simpan</Button>
+                  </div>
+                  <div className="block w-full sm:hidden">
+                    <Button block size="large" layout="outline">
+                      Batal
+                    </Button>
+                  </div>
+                  <div className="block w-full sm:hidden">
+                    <Button className='bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300' block size="large">
+                      Simpan
+                    </Button>
+                  </div>
+                </div>
               </form>
             )}
           </Formik>

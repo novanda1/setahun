@@ -7,6 +7,7 @@ import {
 import { useSertifikat } from 'hooks/useSertifikat'
 import { EditIcon, TrashIcon } from 'icons'
 import { getRoleByRequest } from 'lib/api/utils'
+import { Sertifikat } from 'lib/types/Sertifikat'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -46,12 +47,12 @@ function SudahDiambil({ role }: any) {
               <TableCell>Nama/Uraian</TableCell>
               <TableCell>No Berkas</TableCell>
               <TableCell>Tahun Berkas</TableCell>
-              <TableCell>Date</TableCell>
+              <TableCell>Tanggal Pengambilan</TableCell>
               <TableCell>Actions</TableCell>
             </tr>
           </TableHeader>
           <TableBody>
-            {sertifikat.data?.data.map((sertifikat) => (
+            {sertifikat.data?.data.map((sertifikat: Sertifikat) => (
               <TableRow
                 key={sertifikat.id}
                 className="hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
@@ -72,7 +73,7 @@ function SudahDiambil({ role }: any) {
                   <span className="text-sm">{sertifikat.tahun_berkas}</span>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm">{new Date(sertifikat.created_at).toLocaleDateString()}</span>
+                  <span className="text-sm">{new Date(sertifikat.tanggal_pengambilan).toLocaleDateString()}</span>
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-4">
