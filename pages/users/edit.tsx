@@ -185,7 +185,6 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                   block
                 >
                   {isSubmitting ? "Memproses..." : "Ubah User"}
-                  {isSubmitting}
                 </Button>
               </div>
             </form>

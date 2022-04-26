@@ -1,12 +1,16 @@
 import { Button, HelperText, Input, Label } from "@roketid/windmill-react-ui";
 import { plainToClass } from "class-transformer";
+import createValidator from "class-validator-formik";
 import PageTitle from "components/Typography/PageTitle";
+import SectionTitle from "components/Typography/SectionTitle";
 import Layout from "containers/Layout";
 import { Formik } from "formik";
+import useEditSertifikat from "hooks/useEditSertifikat";
 import { getRoleByRequest, getSertifikatDetailByRequest } from "lib/api/utils";
 import { EditSertifikatDTO, Sertifikat } from "lib/types/Sertifikat";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { CSSProperties } from "react";
 import Select from "react-select";
 import { daerah } from "utils/daerah";
@@ -63,7 +67,10 @@ const formatGroupLabel = (data: GroupedOption) => (
 );
 
 const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, sertifikat: any }) => {
+  const { push, back } = useRouter()
+
   const initialValues = plainToClass(EditSertifikatDTO, sertifikat)
+  const editSertifikat = useEditSertifikat()
 
   return (
     <>
@@ -76,8 +83,27 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
         <div className="w-full mx-auto">
           <PageTitle>Edit Sertifikat</PageTitle>
 
-          <Formik initialValues={initialValues}
-            onSubmit={() => { }}>
+          <Formik
+            initialValues={initialValues}
+            validate={(values) => {
+              const errors = createValidator(EditSertifikatDTO)(values);
+
+              return errors
+            }}
+            onSubmit={(values, { setSubmitting }) => {
+              setSubmitting(true)
+              editSertifikat.mutate((values), {
+                onError: (error) => {
+                  alert("failed update sertifikat")
+                },
+                onSuccess: () => {
+                  push('/sertifikat/sudah-diambil')
+                },
+                onSettled: () => {
+                  setSubmitting(false)
+                }
+              })
+            }}>
 
             {({
               values,
@@ -87,7 +113,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
               handleSubmit,
               isSubmitting,
               handleChange,
-              setFieldValue
+              setFieldValue,
             }) => (
 
               <form onSubmit={handleSubmit} className="pb-7">
@@ -234,9 +260,48 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     </HelperText>
                   )}
 
+
+                <div className="pt-10"></div>
+                <SectionTitle>Tipe Sertifikat</SectionTitle>
+
+                <div className="mt-4">
+                  {/* TODO: Check if this label is accessible, or fallback */}
+                  {/* <span className="text-sm text-gray-700 dark:text-gray-400">Account Type</span> */}
+                  <div className="mt-2" role="group" aria-labelledby="tipe-user">
+                    <Label radio>
+                      <Input
+                        type="radio"
+                        value="read-only"
+                        name="diambil"
+                        checked={!values.diambil}
+                        onChange={() => {
+                          setFieldValue('nama_penerima', "")
+                          setFieldValue('nik_penerima', "")
+                          setFieldValue('tanggal_pengambilan', "")
+                          setFieldValue('diambil', !values.diambil)
+                        }}
+                      />
+                      <span className="ml-2">Belum Diambil</span>
+                    </Label>
+                    <Label radio>
+                      <Input
+                        className="ml-6"
+                        type="radio"
+                        value="moderator"
+                        name="diambil"
+                        checked={values.diambil}
+                        onChange={() => {
+                          setFieldValue('diambil', !values.diambil)
+                        }} />
+                      <span className="ml-2">Sudah Diambil</span>
+                    </Label>
+                  </div>
+                </div>
+
                 <Label className="mt-4">
                   <span>Nama Penerima</span>
                   <Input
+                    disabled={!values.diambil}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.nama_penerima || ""}
@@ -245,7 +310,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     placeholder="ADIN NURUL UMMAH"
                   />
                 </Label>
-                {errors.nama_penerima &&
+                {values.diambil && errors.nama_penerima &&
                   touched.nama_penerima && (
                     <HelperText valid={false}>
                       {errors.nama_penerima}
@@ -255,6 +320,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                 <Label className="mt-4">
                   <span>NIK Penerima</span>
                   <Input
+                    disabled={!values.diambil}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.nik_penerima || ""}
@@ -263,7 +329,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     placeholder="350500000000000"
                   />
                 </Label>
-                {errors.nik_penerima &&
+                {values.diambil && errors.nik_penerima &&
                   touched.nik_penerima && (
                     <HelperText valid={false}>
                       {errors.nik_penerima}
@@ -273,6 +339,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                 <Label className="mt-4">
                   <span>Tanggal Pengambilan</span>
                   <Input
+                    disabled={!values.diambil}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.tanggal_pengambilan || ""}
@@ -281,7 +348,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     type="date"
                   />
                 </Label>
-                {errors.tanggal_pengambilan &&
+                {values.diambil && errors.tanggal_pengambilan &&
                   touched.tanggal_pengambilan && (
                     <HelperText valid={false}>
                       {errors.tanggal_pengambilan}
@@ -290,21 +357,21 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
 
                 <div className="flex flex-wrap mt-9 pb-11 justify-end gap-3">
                   <div className="hidden sm:block">
-                    <Button layout="outline" >
+                    <Button onClick={back} layout="outline" >
                       Batal
                     </Button>
                   </div>
                   <div className="hidden sm:block">
-                    <Button className='bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300'>Simpan</Button>
+                    <Button type="submit" disabled={isSubmitting || values === initialValues} >{isSubmitting ? "Memproses..." : 'Simpan'}</Button>
                   </div>
                   <div className="block w-full sm:hidden">
-                    <Button block size="large" layout="outline">
+                    <Button onClick={back} block size="large" layout="outline">
                       Batal
                     </Button>
                   </div>
                   <div className="block w-full sm:hidden">
-                    <Button className='bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300' block size="large">
-                      Simpan
+                    <Button type="submit" disabled={isSubmitting || values === initialValues} block size="large">
+                      {isSubmitting ? "Memproses..." : 'Simpan'}
                     </Button>
                   </div>
                 </div>

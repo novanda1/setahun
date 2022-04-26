@@ -5,6 +5,8 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  Max,
+  Min,
 } from "class-validator";
 
 export type Daerah = { kecamatan: string; desa: string };
@@ -91,53 +93,67 @@ export class Sertifikat {
   @IsString()
   nama_penerima: string;
 
-  @IsString()
-  nik_penerima: string;
+  @IsInt()
+  @Max(16, { message: "NIK Salah" })
+  @Min(16, { message: "NIK Salah" })
+  nik_penerima: number;
 
   @IsString()
   tanggal_pengambilan: string;
 }
 
 export class EditSertifikatDTO {
+  @IsUUID()
+  id: string;
+
   @IsNotEmpty()
   daerah: Daerah;
 
   @IsString()
   @IsString()
+  @IsNotEmpty()
   nama_pemegang_hak: string;
 
   @IsString()
   @IsOptional()
   uraian_pekerjaan: UraianPekerjaan;
 
+  @IsNotEmpty()
   @IsString()
   no_seri: string;
 
+  @IsNotEmpty()
   @IsString()
   tanggal_di_208: string;
 
+  @IsNotEmpty()
   @IsInt()
   no_di_301: number;
 
+  @IsNotEmpty()
   @IsInt()
   no_berkas: number;
 
+  @IsNotEmpty()
   @IsInt()
   tahun_berkas: number;
 
+  @IsNotEmpty()
   @IsInt()
   luas: number;
 
+  @IsNotEmpty()
   @IsString()
-  @IsOptional()
-  nama_penerima?: string;
+  nama_penerima: string;
 
-  @IsString()
-  @IsOptional()
-  nik_penerima?: string;
+  @IsNotEmpty()
+  @IsInt()
+  @Max(16, { message: "NIK Salah" })
+  @Min(16, { message: "NIK Salah" })
+  nik_penerima: number;
 
+  @IsNotEmpty()
   @IsString()
-  @IsOptional()
   tanggal_pengambilan?: string;
 
   @IsBoolean()
