@@ -1,7 +1,10 @@
-import { TableContainer, Table, TableHeader, TableCell, TableBody, TableRow, Button, TableFooter, Pagination } from "@roketid/windmill-react-ui"
+import { TableContainer, Table, TableHeader, TableCell, TableBody, TableRow, Button, TableFooter, Pagination, Modal, ModalBody, ModalFooter, ModalHeader } from "@roketid/windmill-react-ui"
 import { useSertifikat } from "hooks/useSertifikat"
 import { useRouter } from "next/router"
 import { Sertifikat } from 'lib/types/Sertifikat'
+import useDeleteUser from "hooks/useDeleteUser"
+import { useState, useCallback } from "react"
+import useDeleteSertifikat from "hooks/useDeleteSertifikat"
 
 type Props = {
   diambil?: boolean;
@@ -29,8 +32,50 @@ const SertifikatPage: React.FC<Props> = ({ diambil = false }) => {
     push('/sertifikat/' + id + '/detail')
   }
 
+  // modal
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+  const [deleteState, setDeleteState] = useState<Sertifikat | null>()
+  const deleteSertifikat = useDeleteSertifikat()
+
+  const toggleDeleteModal = useCallback(() => {
+    setIsDeleteModalOpen(!isDeleteModalOpen)
+    if (deleteState) setDeleteState(null)
+  }, [isDeleteModalOpen, deleteState])
+
+  const onDeleteUser = useCallback(() => {
+    deleteSertifikat.mutate(deleteState?.id as string, {
+      onSuccess() {
+        toggleDeleteModal()
+      }
+    })
+  }, [deleteState, deleteSertifikat, toggleDeleteModal])
+
   return (
     <>
+      <Modal isOpen={isDeleteModalOpen} onClose={toggleDeleteModal}>
+        <ModalHeader>Hapus {deleteState?.nama_pemegang_hak}</ModalHeader>
+        <ModalBody>Yakin menghapus sertifikat dengan nama pemegang hak {deleteState?.nama_pemegang_hak}?</ModalBody>
+        <ModalFooter>
+          <div className="hidden sm:block">
+            <Button layout="outline" onClick={toggleDeleteModal} disabled={deleteSertifikat.isLoading}>
+              Batal
+            </Button>
+          </div>
+          <div className="hidden sm:block">
+            <Button disabled={deleteSertifikat.isLoading} onClick={onDeleteUser} className='bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300'>Hapus</Button>
+          </div>
+          <div className="block w-full sm:hidden">
+            <Button block size="large" layout="outline" onClick={toggleDeleteModal} disabled={deleteSertifikat.isLoading}>
+              Batal
+            </Button>
+          </div>
+          <div className="block w-full sm:hidden">
+            <Button disabled={deleteSertifikat.isLoading} onClick={onDeleteUser} className='bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300' block size="large">
+              Hapus
+            </Button>
+          </div>
+        </ModalFooter>
+      </Modal>
       <TableContainer className="mb-8">
         <Table>
           <TableHeader>
@@ -79,7 +124,14 @@ const SertifikatPage: React.FC<Props> = ({ diambil = false }) => {
                       {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
                       Ubah
                     </Button>
-                    <Button layout="outline" size="small" aria-label="Delete">
+                    <Button
+                      onClick={
+                        () => {
+                          toggleDeleteModal()
+                          setDeleteState(sertifikat)
+                        }
+                      }
+                      layout="outline" size="small" aria-label="Delete">
                       {/* <TrashIcon className="w-5 h-5" aria-hidden="true" /> */}
                       Hapus
                     </Button>

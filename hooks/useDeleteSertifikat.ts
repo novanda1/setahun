@@ -16,7 +16,7 @@ const deleteSertifikat = async (id: string) => {
   }
 };
 
-export default function useEditSertifikat() {
+export default function useDeleteSertifikat() {
   const queryClient = useQueryClient();
   return useMutation<any, unknown, string, unknown>(
     (input) => deleteSertifikat(input),
