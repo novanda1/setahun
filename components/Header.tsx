@@ -2,25 +2,16 @@ import { Input, WindmillContext } from "@roketid/windmill-react-ui";
 import SidebarContext from "context/SidebarContext";
 import { MenuIcon, MoonIcon, SearchIcon, SunIcon } from "icons";
 import { supabase } from "lib/supabase";
-import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import AvatarMenu from "./AvatarMenu";
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
   const { toggleSidebar } = useContext(SidebarContext);
 
-  const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const user = supabase.auth.user();
-
-  const { push } = useRouter();
-
-  function handleNotificationsClick() {
-    setIsNotificationsMenuOpen(!isNotificationsMenuOpen);
-  }
-
   function handleProfileClick() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   }

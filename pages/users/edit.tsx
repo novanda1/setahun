@@ -11,14 +11,14 @@ import { UpdateUserDTO } from "lib/types/User";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 const EditUser: React.FC<any> = ({ role, user }) => {
   let initialValues;
   if (user) initialValues = plainToClass(UpdateUserDTO, user);
   else initialValues = new UpdateUserDTO();
 
-  const [errorMessage, setErrorMessage] = useState("");
+  // const [errorMessage, setErrorMessage] = useState("");
 
   const editUser = useEditUser();
   const { push, back } = useRouter();

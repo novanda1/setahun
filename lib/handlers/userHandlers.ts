@@ -5,7 +5,6 @@ import { updateUser } from "lib/services/userServices";
 import { ResponseValue } from "lib/types/response";
 import { CreateUserDTO, UpdateUserDTO } from "lib/types/User";
 import { NextApiRequest, NextApiResponse } from "next";
-import { NextRequest, NextResponse } from "next/server";
 import { getPagination } from "utils/getPagination";
 
 export const createUserHandler = async (
@@ -203,6 +202,6 @@ export const deleteUserByIdHandler = async (
     res.statusCode = 202;
     res.setHeader("Content-Type", "application/json");
     res.setHeader("Cache-Control", "max-age=180000");
-    res.end(JSON.stringify(response));
+    res.end(JSON.stringify(value));
   }
 };

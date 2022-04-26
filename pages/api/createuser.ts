@@ -1,4 +1,4 @@
-import { ApiError, createClient, User } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import { CreateUserDTO } from "lib/types/User";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -6,10 +6,6 @@ const supabase = createClient(
   "https://benjcxrorlscnklwljhp.supabase.co",
   process.env.SUPABASE_ROLE_KEY as string
 );
-type Data = {
-  data: User | null;
-  error: ApiError | null;
-};
 
 export default async function handler(
   req: NextApiRequest,

@@ -1,10 +1,9 @@
 import {
-  TableBody,
-  TableRow,
-  TableCell,
   Button,
   Table,
-  TableHeader,
+  TableBody,
+  TableCell,
+  TableRow,
 } from "@roketid/windmill-react-ui";
 import PageTitle from "components/Typography/PageTitle";
 import Layout from "containers/Layout";
@@ -13,6 +12,7 @@ import { Sertifikat } from "lib/types/Sertifikat";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import React from "react";
 
 const SertifikatDetail: React.FC<any> = ({
   role,
@@ -21,7 +21,7 @@ const SertifikatDetail: React.FC<any> = ({
   role: string;
   sertifikat: Sertifikat;
 }) => {
-  const { push, back } = useRouter();
+  const { back } = useRouter();
 
   return (
     <>

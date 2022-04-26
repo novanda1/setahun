@@ -1,8 +1,12 @@
 import { supabase } from "lib/supabase";
 import { UpdateUserDTO } from "lib/types/User";
 
-export const updateUser = async (token: string, input: UpdateUserDTO) => {
-  const { id, role, ...user } = input;
+export const updateUser = async (
+  token: string,
+  input: UpdateUserDTO
+): Promise<any> => {
+  const { id, ...user } = input;
+  delete user.role;
   supabase.auth.setAuth(token);
   const response = await supabase
     .from("users")

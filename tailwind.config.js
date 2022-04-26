@@ -1,7 +1,12 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 const windmill = require("@roketid/windmill-react-ui/config");
-const { lightBlue, warmGray, trueGray, coolGray, blueGray, ...colors } =
-  defaultTheme.colors;
+const colors = defaultTheme.colors;
+
+delete colors.lightBlue;
+delete colors.warmGray;
+delete colors.trueGray;
+delete colors.coolGray;
+delete colors.blueGray;
 
 module.exports = windmill({
   content: [

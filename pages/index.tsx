@@ -1,11 +1,10 @@
 import "es6-shim";
-import "reflect-metadata";
-
 import { getRoleByRequest } from "lib/api/utils";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import "reflect-metadata";
 import PageTitle from "../components/Typography/PageTitle";
 import Layout from "../containers/Layout";
 

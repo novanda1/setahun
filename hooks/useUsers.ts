@@ -1,5 +1,4 @@
 import { supabase } from "lib/supabase";
-import absoluteUrl from "next-absolute-url";
 import { useQuery } from "react-query";
 import { getPagination } from "utils/getPagination";
 
@@ -9,18 +8,18 @@ type FilterType = {
   perPage: number;
 };
 
-const serialize = (obj: any) => {
-  if (obj) {
-    const str: string[] = [];
-    Object.keys(obj).forEach((p) => !p && delete obj[p]);
-    Object.keys(obj).forEach((p) =>
-      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]))
-    );
-    return str.join("&");
-  }
+// const serialize = (obj: any) => {
+//   if (obj) {
+//     const str: string[] = [];
+//     Object.keys(obj).forEach((p) => !p && delete obj[p]);
+//     Object.keys(obj).forEach((p) =>
+//       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]))
+//     );
+//     return str.join("&");
+//   }
 
-  return "";
-};
+//   return "";
+// };
 
 export const getUser = async (req: any, id: string) => {
   const user = await supabase.auth.api.getUserByCookie(req);

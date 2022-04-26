@@ -1,24 +1,23 @@
 import {
-  TableContainer,
-  Table,
-  TableHeader,
-  TableCell,
-  TableBody,
-  TableRow,
   Button,
-  TableFooter,
-  Pagination,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHeader,
+  TableRow,
 } from "@roketid/windmill-react-ui";
-import { useSertifikat } from "hooks/useSertifikat";
-import { useRouter } from "next/router";
-import { Sertifikat } from "lib/types/Sertifikat";
-import useDeleteUser from "hooks/useDeleteUser";
-import { useState, useCallback } from "react";
 import useDeleteSertifikat from "hooks/useDeleteSertifikat";
+import { useSertifikat } from "hooks/useSertifikat";
+import { Sertifikat } from "lib/types/Sertifikat";
+import { useRouter } from "next/router";
+import React, { useCallback, useState } from "react";
 
 type Props = {
   diambil?: boolean;
@@ -45,9 +44,9 @@ const SertifikatPage: React.FC<Props> = ({ diambil = false }) => {
     push("/sertifikat/" + id + "/edit");
   };
 
-  const onDetailClicked = (id: string) => {
-    push("/sertifikat/" + id + "/detail");
-  };
+  // const onDetailClicked = (id: string) => {
+  //   push("/sertifikat/" + id + "/detail");
+  // };
 
   // modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);

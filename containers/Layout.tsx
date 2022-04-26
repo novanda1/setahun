@@ -6,7 +6,7 @@ import SidebarContext, { SidebarProvider } from "context/SidebarContext";
 import WithAuth from "lib/withAuth";
 import { useContext } from "react";
 import Main from "./Main";
-
+import React from "react";
 interface ILayout {
   children: React.ReactNode;
   role?: string;

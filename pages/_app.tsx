@@ -1,19 +1,18 @@
 import { Windmill } from "@roketid/windmill-react-ui";
 import { supabase } from "lib/supabase";
 import theme from "lib/theme";
-import type { AppProps } from "next/app";
 import Router, { useRouter } from "next/router";
+import nProgress from "nprogress";
 import React, { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "../styles/globals.css";
-import nProgress from "nprogress";
 import "../styles/nprogress.css";
 
 const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }: any) {
   // suppress useBrowserLayoutEffect warnings when running outside a browser
   if (typeof window === "undefined") React.useLayoutEffect = React.useEffect;
-  const [authenticatedState, setAuthenticatedState] = useState<
+  const [, setAuthenticatedState] = useState<
     "not-authenticated" | "authenticated"
   >("not-authenticated");
   const { push } = useRouter();

@@ -8,7 +8,7 @@ import { getRoleByRequest } from "lib/api/utils";
 import { CreateUserDTO, UserMetaData } from "lib/types/User";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const CreateUser: React.FC<any> = ({ role }) => {
   const initialValues = new CreateUserDTO();

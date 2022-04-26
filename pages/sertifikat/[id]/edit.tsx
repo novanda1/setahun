@@ -22,7 +22,7 @@ import {
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { CSSProperties } from "react";
+import React, { CSSProperties } from "react";
 import Select from "react-select";
 import { daerah } from "utils/daerah";
 
@@ -84,7 +84,7 @@ const EditSertifikat: React.FC<any> = ({
   role: string;
   sertifikat: any;
 }) => {
-  const { push, back } = useRouter();
+  const { back } = useRouter();
 
   const initialValues = plainToClass(EditSertifikatDTO, sertifikat);
   const editSertifikat = useEditSertifikat();

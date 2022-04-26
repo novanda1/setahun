@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { supabase } from "./supabase";
+import React from "react";
 
 const WithAuth: React.FC<any> = ({ children }) => {
   const { replace } = useRouter();

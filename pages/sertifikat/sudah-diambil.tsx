@@ -2,6 +2,7 @@ import SertifikatPage from "components/Sertifikat";
 import { getRoleByRequest } from "lib/api/utils";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
+import React from "react";
 import PageTitle from "../../components/Typography/PageTitle";
 import Layout from "../../containers/Layout";
 

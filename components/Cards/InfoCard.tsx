@@ -1,5 +1,5 @@
-import { ReactSVGElement } from "react";
 import { Card, CardBody } from "@roketid/windmill-react-ui";
+import React, { ReactSVGElement } from "react";
 
 interface IInfoCard {
   title: string;

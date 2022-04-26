@@ -6,23 +6,17 @@ import {
   Select as WSelect,
 } from "@roketid/windmill-react-ui";
 import createValidator from "class-validator-formik";
-import { Ret } from "class-validator-formik/dist/convertError";
 import PageTitle from "components/Typography/PageTitle";
 import SectionTitle from "components/Typography/SectionTitle";
 import Layout from "containers/Layout";
 import { Formik } from "formik";
 import useCreateSertifikat from "hooks/useCreateSertifikat";
 import { getRoleByRequest } from "lib/api/utils";
-import {
-  CreateSertifikatDTO,
-  EditSertifikatBelumDiambilDTO,
-  EditSertifikatDTO,
-  uraianPekerjaan,
-} from "lib/types/Sertifikat";
+import { CreateSertifikatDTO, uraianPekerjaan } from "lib/types/Sertifikat";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { CSSProperties } from "react";
+import React, { CSSProperties } from "react";
 import Select from "react-select";
 import { daerah } from "utils/daerah";
 
@@ -78,7 +72,7 @@ const formatGroupLabel = (data: GroupedOption) => (
 );
 
 const CreateSertifikat: React.FC<any> = ({ role }: { role: string }) => {
-  const { push, back } = useRouter();
+  const { back } = useRouter();
 
   const initialValues = new CreateSertifikatDTO();
   const createSertifikat = useCreateSertifikat();
@@ -100,11 +94,11 @@ const CreateSertifikat: React.FC<any> = ({ role }: { role: string }) => {
           <Formik
             initialValues={initialValues}
             validate={(values) => {
-              let errors: Ret;
               if (!values.diambil) {
                 values.diambil = false;
               }
-              errors = createValidator(CreateSertifikatDTO)(values);
+
+              const errors = createValidator(CreateSertifikatDTO)(values);
 
               console.log("errors", errors);
 

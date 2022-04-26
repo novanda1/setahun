@@ -16,13 +16,12 @@ import {
 } from "@roketid/windmill-react-ui";
 import useDeleteUser from "hooks/useDeleteUser";
 import useUsers from "hooks/useUsers";
-import { EditIcon, TrashIcon } from "icons";
 import { getRoleByRequest } from "lib/api/utils";
 import { supabase } from "lib/supabase";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import PageTitle from "../../components/Typography/PageTitle";
 import Layout from "../../containers/Layout";
 

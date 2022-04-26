@@ -1,12 +1,10 @@
 import { Button } from "@roketid/windmill-react-ui";
-import CreateCertifiedModalContext from "context/CreateSertifModalContext";
 import MeContext from "context/MeContext";
-import SidebarContext from "context/SidebarContext";
 import * as Icons from "icons";
 import { IIcon } from "icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import routes, { IRoute, routeIsActive } from "routes/sidebar";
 import SidebarSubmenu from "./SidebarSubmenu";
 
@@ -27,10 +25,6 @@ function SidebarContent({ linkClicked }: ISidebarContent) {
 
   const { pathname } = useRouter();
   const appName = process.env.NEXT_PUBLIC_APP_NAME;
-  const { toggleCreateCertifiedModal, isCreateCertifiedModalOpen } = useContext(
-    CreateCertifiedModalContext
-  );
-  const { closeSidebar } = useContext(SidebarContext);
 
   const openModal = () => {
     push("/sertifikat/create");

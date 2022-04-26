@@ -1,7 +1,7 @@
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import { isNipRegistered } from "lib/api/utils";
-import { createUserHandler, getUsersHandler } from "lib/handlers/userHandlers";
+import { createUserHandler } from "lib/handlers/userHandlers";
 import { CreateUserDTO } from "lib/types/User";
 import { NextApiRequest, NextApiResponse } from "next";
 

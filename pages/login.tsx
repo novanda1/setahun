@@ -9,7 +9,7 @@ import { Formik } from "formik";
 import { supabase } from "lib/supabase";
 import Head from "next/head";
 import Image from "next/image";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 
 type LoginError = { email: string; password: string };
 
@@ -17,7 +17,6 @@ function LoginPage() {
   const { mode } = useContext(WindmillContext);
   const imgSource =
     mode === "dark" ? "/assets/img/login.jpg" : "/assets/img/login.jpg";
-  const user = supabase.auth.user();
   const [authError, SetAuthError] = useState<string>("");
 
   return (

@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 
 interface MeContext {
   role: string;
@@ -11,7 +11,7 @@ export const MeProvider: React.FC<{ role?: string }> = ({
   children,
   role: r = "",
 }) => {
-  const [role, setRole] = useState(r);
+  const [role] = useState(r);
 
   return <MeContext.Provider value={{ role }}>{children}</MeContext.Provider>;
 };

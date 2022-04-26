@@ -15,9 +15,6 @@ type Cookie = {
   sameSite?: string;
 };
 
-/**
- * Serialize data into a cookie header.
- */
 function serialize(
   name: string,
   val: string,
@@ -118,9 +115,6 @@ function serialize(
   return str;
 }
 
-/**
- * Based on the environment and the request we know if a secure cookie can be set.
- */
 function isSecureEnvironment(req: any) {
   if (!req || !req.headers || !req.headers.host) {
     throw new Error('The "host" request header is not available');
@@ -139,9 +133,6 @@ function isSecureEnvironment(req: any) {
   return true;
 }
 
-/**
- * Serialize a cookie to a string.
- */
 function serializeCookie(cookie: Cookie, secure: boolean) {
   return serialize(cookie.name, cookie.value, {
     maxAge: cookie.maxAge,
@@ -154,9 +145,6 @@ function serializeCookie(cookie: Cookie, secure: boolean) {
   });
 }
 
-/**
- * Get Cookie Header strings.
- */
 export function getCookieString(
   req: any,
   res: any,
@@ -176,16 +164,10 @@ export function getCookieString(
   return strCookies;
 }
 
-/**
- * Set one or more cookies.
- */
 export function setCookies(req: any, res: any, cookies: Array<Cookie>) {
   res.setHeader("Set-Cookie", getCookieString(req, res, cookies));
 }
 
-/**
- * Set one or more cookies.
- */
 export function setCookie(req: any, res: any, cookie: Cookie) {
   setCookies(req, res, [cookie]);
 }

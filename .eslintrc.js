@@ -14,6 +14,10 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint"],
   rules: {
+    camelcase: "off",
+    "@typescript-eslint/camelcase": "off",
+    "new-cap": "off",
+    "react/prop-types": "off",
     "require-jsdoc": [
       "error",
       {
@@ -29,7 +33,7 @@ module.exports = {
   },
   settings: {
     react: {
-      version: "latest",
+      version: "detect",
     },
   },
 };

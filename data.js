@@ -1231,38 +1231,38 @@ const data = {
 // console.log("duplicate", duplicate);
 // const uraian = data.Sheet3.map((u) => u.Uraian.split(".")[1].trim());
 
-// const kecamatanDesa = [];
-// const desaDanKecamatan = data.Sheet2.map((d) => {
-//   const col = {
-//     kode: d.KODE_1,
-//     nama: d["DESA/KELURAHAN"],
-//   };
+const kecamatanDesa = [];
+data.Sheet2.map((d) => {
+  const col = {
+    kode: d.KODE_1,
+    nama: d["DESA/KELURAHAN"],
+  };
 
-//   if (d.KODE) {
-//     const row = {
-//       kode: d.KODE?.includes(".") ? d.KODE.replace(".", "") : d.KODE,
-//       nama: d.KECAMATAN,
-//       desa: [],
-//     };
-//     row.desa.push(col);
-//     kecamatanDesa.push(row);
-//   } else {
-//     const index = kecamatanDesa.findIndex(
-//       (r) => r.kode === d.KODE_1.split(".")[0]
-//     );
-//     kecamatanDesa[index]?.desa?.push(col);
-//   }
-// });
+  if (d.KODE) {
+    const row = {
+      kode: d.KODE?.includes(".") ? d.KODE.replace(".", "") : d.KODE,
+      nama: d.KECAMATAN,
+      desa: [],
+    };
+    row.desa.push(col);
+    kecamatanDesa.push(row);
+  } else {
+    const index = kecamatanDesa.findIndex(
+      (r) => r.kode === d.KODE_1.split(".")[0]
+    );
+    kecamatanDesa[index]?.desa?.push(col);
+  }
+});
 
-// writeFile(
-//   "kecamatanDesa.json",
-//   JSON.stringify([...new Set(kecamatanDesa)]),
-//   (err) => {
-//     if (err) console.log(err);
-//     else {
-//       console.log("File written successfully\n");
-//       console.log("The written has the following contents:");
-//       console.log(readFileSync("kecamatanDesa.txt", "utf8"));
-//     }
-//   }
-// );
+writeFile(
+  "kecamatanDesa.json",
+  JSON.stringify([...new Set(kecamatanDesa)]),
+  (err) => {
+    if (err) console.log(err);
+    else {
+      console.log("File written successfully\n");
+      console.log("The written has the following contents:");
+      console.log(readFileSync("kecamatanDesa.txt", "utf8"));
+    }
+  }
+);

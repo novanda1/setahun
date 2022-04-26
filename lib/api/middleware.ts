@@ -1,6 +1,6 @@
 import { supabase } from "lib/supabase";
 import { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 export const loggedInMiddleware = async (
   req: NextApiRequest,

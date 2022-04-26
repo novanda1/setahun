@@ -1,11 +1,10 @@
-import React, { useState, useContext } from "react";
+import { Transition } from "@roketid/windmill-react-ui";
+import * as Icons from "icons";
+import { DropdownIcon, IIcon } from "icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { DropdownIcon, IIcon } from "icons";
-import * as Icons from "icons";
-import { Transition } from "@roketid/windmill-react-ui";
+import React, { useState } from "react";
 import { IRoute, routeIsActive } from "routes/sidebar";
-import SidebarContext from "context/SidebarContext";
 
 function Icon({ icon, ...props }: IIcon) {
   // @ts-ignore
@@ -20,7 +19,6 @@ interface ISidebarSubmenu {
 
 function SidebarSubmenu({ route, linkClicked }: ISidebarSubmenu) {
   const { pathname } = useRouter();
-  const { saveScroll } = useContext(SidebarContext);
 
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(
     route.routes

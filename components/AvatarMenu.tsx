@@ -1,7 +1,8 @@
+import React from "react";
 import { Dropdown, DropdownItem } from "@roketid/windmill-react-ui";
-import { OutlineCogIcon, OutlineLogoutIcon, OutlinePersonIcon } from "icons";
+import { OutlineLogoutIcon } from "icons";
 import { supabase } from "lib/supabase";
-import Avatar, { createAvatarComponent } from "react-avatar";
+import Avatar from "react-avatar";
 
 const Ava = () => {
   const user = supabase.auth.user();
