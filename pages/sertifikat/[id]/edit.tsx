@@ -1,13 +1,14 @@
-import { Button, HelperText, Input, Label } from "@roketid/windmill-react-ui";
+import { Button, HelperText, Input, Label, Select as WSelect } from "@roketid/windmill-react-ui";
 import { plainToClass } from "class-transformer";
 import createValidator from "class-validator-formik";
+import { Ret } from "class-validator-formik/dist/convertError";
 import PageTitle from "components/Typography/PageTitle";
 import SectionTitle from "components/Typography/SectionTitle";
 import Layout from "containers/Layout";
 import { Formik } from "formik";
 import useEditSertifikat from "hooks/useEditSertifikat";
 import { getRoleByRequest, getSertifikatDetailByRequest } from "lib/api/utils";
-import { EditSertifikatDTO, Sertifikat } from "lib/types/Sertifikat";
+import { EditSertifikatBelumDiambilDTO, EditSertifikatDTO, uraianPekerjaan } from "lib/types/Sertifikat";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -86,7 +87,17 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
           <Formik
             initialValues={initialValues}
             validate={(values) => {
-              const errors = createValidator(EditSertifikatDTO)(values);
+              let errors: Ret;
+              if (!values.diambil) {
+                delete values.tanggal_pengambilan;
+                delete values?.nama_penerima;
+                delete values?.nik_penerima
+                errors = createValidator(EditSertifikatBelumDiambilDTO)(values);
+              } else {
+                errors = createValidator(EditSertifikatDTO)(values)
+              }
+
+              console.log('errors', errors)
 
               return errors
             }}
@@ -155,14 +166,18 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
 
                 <Label className="mt-4">
                   <span>Uraian Pekerjaan</span>
-                  <Input
+                  <WSelect
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.uraian_pekerjaan || ""}
                     name="uraian_pekerjaan"
                     className="mt-1"
                     placeholder="Ganti Nadzir"
-                  />
+                  >
+                    {uraianPekerjaan.map(val => (
+                      <option key={val}>{val}</option>
+                    ))}
+                  </WSelect>
                 </Label>
                 {errors.uraian_pekerjaan &&
                   touched.uraian_pekerjaan && (
@@ -198,6 +213,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     name="no_di_301"
                     className="mt-1"
                     placeholder="18461"
+                    type="number"
                   />
                 </Label>
                 {errors.no_di_301 &&
@@ -216,6 +232,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     name="no_berkas"
                     className="mt-1"
                     placeholder="74047"
+                    type="number"
                   />
                 </Label>
                 {errors.no_berkas &&
@@ -234,6 +251,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     name="luas"
                     className="mt-1"
                     placeholder="943"
+                    type="number"
                   />
                 </Label>
                 {errors.luas &&
@@ -244,7 +262,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                   )}
 
                 <Label className="mt-4">
-                  <span>Desa</span>
+                  <span>Desa/Kelurahan</span>
                   <Select<any, false, GroupedOption>
                     options={groupedOptions}
                     placeholder="Pilih atau ketik untuk mencari"
@@ -275,9 +293,6 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                         name="diambil"
                         checked={!values.diambil}
                         onChange={() => {
-                          setFieldValue('nama_penerima', "")
-                          setFieldValue('nik_penerima', "")
-                          setFieldValue('tanggal_pengambilan', "")
                           setFieldValue('diambil', !values.diambil)
                         }}
                       />
@@ -304,7 +319,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     disabled={!values.diambil}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.nama_penerima || ""}
+                    value={values.diambil ? values.nama_penerima || "" : ""}
                     name="nama_penerima"
                     className="mt-1"
                     placeholder="ADIN NURUL UMMAH"
@@ -323,10 +338,11 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     disabled={!values.diambil}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.nik_penerima || ""}
+                    value={values.diambil ? values.nik_penerima || "" : ""}
                     name="nik_penerima"
                     className="mt-1"
                     placeholder="350500000000000"
+                    type="number"
                   />
                 </Label>
                 {values.diambil && errors.nik_penerima &&
@@ -342,7 +358,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     disabled={!values.diambil}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.tanggal_pengambilan || ""}
+                    value={values.diambil ? values.tanggal_pengambilan || "" : ""}
                     name="tanggal_pengambilan"
                     className="mt-1"
                     type="date"

@@ -29,7 +29,7 @@ const getSertifikat = async ({ page, perPage, diambil }: FilterType) => {
 };
 
 export const useSertifikat = (filter: FilterType) => {
-  return useQuery(["users", filter], () => getSertifikat(filter), {
+  return useQuery(["sertifikat", filter], () => getSertifikat(filter), {
     keepPreviousData: true,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60,

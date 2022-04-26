@@ -1,11 +1,8 @@
 import {
-  Avatar,
-  Badge,
   Button,
   Pagination, Table, TableBody, TableCell, TableContainer, TableFooter, TableHeader, TableRow
 } from '@roketid/windmill-react-ui'
 import { useSertifikat } from 'hooks/useSertifikat'
-import { EditIcon, TrashIcon } from 'icons'
 import { getRoleByRequest } from 'lib/api/utils'
 import { Sertifikat } from 'lib/types/Sertifikat'
 import { GetServerSideProps } from 'next'
@@ -28,8 +25,8 @@ function SudahDiambil({ role }: any) {
   }
 
   // table
-  const onClickRow = (id: string) => {
-    push('/sertifikat/sudah-diambil/' + id + '/edit')
+  const onEditClicked = (id: string) => {
+    push('/sertifikat/' + id + '/edit')
   }
 
   return (
@@ -56,7 +53,6 @@ function SudahDiambil({ role }: any) {
               <TableRow
                 key={sertifikat.id}
                 className="hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-                onClick={() => onClickRow(sertifikat.id)}
               >
                 <TableCell>
                   <div className="flex items-center text-sm">
@@ -77,7 +73,9 @@ function SudahDiambil({ role }: any) {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-4">
-                    <Button layout="outline" size="small" aria-label="Edit">
+                    <Button
+                      onClick={() => onEditClicked(sertifikat.id)}
+                      layout="outline" size="small" aria-label="Edit">
                       {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
                       Ubah
                     </Button>

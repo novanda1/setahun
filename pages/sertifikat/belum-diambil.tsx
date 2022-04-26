@@ -1,19 +1,14 @@
 import {
-  Avatar,
-  Badge,
   Button,
   Pagination, Table, TableBody, TableCell, TableContainer, TableFooter, TableHeader, TableRow
 } from '@roketid/windmill-react-ui'
-import { EditIcon, TrashIcon } from 'icons'
+import { useSertifikat } from 'hooks/useSertifikat'
 import { getRoleByRequest } from 'lib/api/utils'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
-import response, { ITableData } from 'utils/demo/tableData'
+import { useRouter } from 'next/router'
 import PageTitle from '../../components/Typography/PageTitle'
 import Layout from '../../containers/Layout'
-import { useRouter } from 'next/router';
-import { useSertifikat } from 'hooks/useSertifikat'
 
 
 const BelumDiambil = ({ role }: any) => {
@@ -28,6 +23,12 @@ const BelumDiambil = ({ role }: any) => {
     if (query?.page || p > 1)
       push('/users/?page=' + p)
   }
+
+  // table
+  const onEditClicked = (id: string) => {
+    push('/sertifikat/' + id + '/edit')
+  }
+
 
   return (
     <Layout role={role}>
@@ -70,11 +71,15 @@ const BelumDiambil = ({ role }: any) => {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-4">
-                    <Button layout="link" size="small" aria-label="Edit">
-                      <EditIcon className="w-5 h-5" aria-hidden="true" />
+                    <Button
+                      onClick={() => onEditClicked(sertifikat.id)}
+                      layout="outline" size="small" aria-label="Edit">
+                      {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
+                      Ubah
                     </Button>
-                    <Button layout="link" size="small" aria-label="Delete">
-                      <TrashIcon className="w-5 h-5" aria-hidden="true" />
+                    <Button layout="outline" size="small" aria-label="Delete">
+                      {/* <TrashIcon className="w-5 h-5" aria-hidden="true" /> */}
+                      Hapus
                     </Button>
                   </div>
                 </TableCell>
