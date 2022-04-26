@@ -123,14 +123,16 @@ const Users = ({ role }: any) => {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-4">
-                        <Button onClick={() => push('/users/edit?id=' + user.id)} layout="link" size="small" aria-label="Edit">
-                          <EditIcon className="w-5 h-5" aria-hidden="true" />
+                        <Button onClick={() => push('/users/edit?id=' + user.id)} layout="outline" size="small" aria-label="Edit">
+                          {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
+                          Ubah
                         </Button>
                         <Button onClick={() => {
                           toggleDeleteModal()
                           setDeleteState(user)
-                        }} layout="link" size="small" aria-label="Delete">
-                          <TrashIcon className="w-5 h-5" aria-hidden="true" />
+                        }} layout="outline" size="small" aria-label="Delete">
+                          {/* <TrashIcon className="w-5 h-5" aria-hidden="true" /> */}
+                          Hapus
                         </Button>
                       </div>
                     </TableCell>

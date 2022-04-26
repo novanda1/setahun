@@ -373,7 +373,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
 
                 <div className="flex flex-wrap mt-9 pb-11 justify-end gap-3">
                   <div className="hidden sm:block">
-                    <Button onClick={back} layout="outline" >
+                    <Button type="button" onClick={back} layout="outline" >
                       Batal
                     </Button>
                   </div>
@@ -381,7 +381,7 @@ const SudahDiambilEdit: React.FC<any> = ({ role, sertifikat }: { role: string, s
                     <Button type="submit" disabled={isSubmitting || values === initialValues} >{isSubmitting ? "Memproses..." : 'Simpan'}</Button>
                   </div>
                   <div className="block w-full sm:hidden">
-                    <Button onClick={back} block size="large" layout="outline">
+                    <Button type="button" onClick={back} block size="large" layout="outline">
                       Batal
                     </Button>
                   </div>

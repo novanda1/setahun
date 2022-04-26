@@ -22,7 +22,7 @@ const EditUser: React.FC<any> = ({ role, user }) => {
   const [errorMessage, setErrorMessage] = useState("")
 
   const editUser = useEditUser()
-  const { push } = useRouter()
+  const { push, back } = useRouter()
 
   useEffect(() => {
     async function logout() {
@@ -41,7 +41,7 @@ const EditUser: React.FC<any> = ({ role, user }) => {
         <title>Edit {user.fullname} - Setahun</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className="w-full max-w-3xl mx-auto">
+      <div className="w-full mx-auto">
         <PageTitle>Ubah User</PageTitle>
         <Formik
           initialValues={initialValues}
@@ -174,18 +174,25 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                 </div>
               </div>
 
-              <div className="mt-10 flex flex-col md:flex-row justify-between items-center">
-                <HelperText valid={false}>
-                  {errorMessage}
-                </HelperText>
-                <Button
-                  type="submit"
-                  className="mt-3 md:mt-0 w-max"
-                  disabled={isSubmitting}
-                  block
-                >
-                  {isSubmitting ? "Memproses..." : "Ubah User"}
-                </Button>
+              <div className="flex flex-wrap mt-10 pb-11 justify-end gap-3">
+                <div className="hidden sm:block">
+                  <Button type="button" onClick={back} layout="outline" >
+                    Batal
+                  </Button>
+                </div>
+                <div className="hidden sm:block">
+                  <Button type="submit" disabled={isSubmitting} >{isSubmitting ? "Memproses..." : 'Simpan'}</Button>
+                </div>
+                <div className="block w-full sm:hidden">
+                  <Button type="button" onClick={back} block size="large" layout="outline">
+                    Batal
+                  </Button>
+                </div>
+                <div className="block w-full sm:hidden">
+                  <Button type="submit" disabled={isSubmitting} block size="large">
+                    {isSubmitting ? "Memproses..." : 'Simpan'}
+                  </Button>
+                </div>
               </div>
             </form>
           )}
