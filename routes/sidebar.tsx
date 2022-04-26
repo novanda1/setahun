@@ -5,35 +5,37 @@
  */
 
 interface IRoute {
-  path?: string
-  icon?: string
-  name: string
-  routes?: IRoute[]
-  checkActive?(pathname: String, route: IRoute): boolean
-  exact?: boolean
+  path?: string;
+  icon?: string;
+  name: string;
+  routes?: IRoute[];
+  checkActive?(pathname: String, route: IRoute): boolean;
+  exact?: boolean;
 }
 
 export function routeIsActive(pathname: String, route: IRoute): boolean {
   if (route.checkActive) {
-    return route.checkActive(pathname, route)
+    return route.checkActive(pathname, route);
   }
 
   return route?.exact
     ? pathname == route?.path
-    : (route?.path ? pathname.indexOf(route.path) === 0 : false)
+    : route?.path
+    ? pathname.indexOf(route.path) === 0
+    : false;
 }
 
 const routes: IRoute[] = [
   {
-    path: '/', // the url
-    icon: 'HomeIcon', // the component being exported from icons/index.js
-    name: 'Dashboard', // name that appear in Sidebar
+    path: "/", // the url
+    icon: "HomeIcon", // the component being exported from icons/index.js
+    name: "Dashboard", // name that appear in Sidebar
     exact: true,
   },
   {
-    path: '/users',
-    icon: 'CardsIcon',
-    name: 'User',
+    path: "/users",
+    icon: "CardsIcon",
+    name: "User",
   },
   // {
   //   path: '/example/cards',
@@ -61,21 +63,21 @@ const routes: IRoute[] = [
   //   name: 'Tables',
   // },
   {
-    icon: 'PagesIcon',
-    name: 'Sertifikat',
+    icon: "PagesIcon",
+    name: "Sertifikat",
     routes: [
       // submenu
       {
-        path: '/sertifikat/belum-diambil',
-        name: 'Belum Diambil',
+        path: "/sertifikat/belum-diambil",
+        name: "Belum Diambil",
       },
       {
-        path: '/sertifikat/sudah-diambil',
-        name: 'Sudah Diambil',
+        path: "/sertifikat/sudah-diambil",
+        name: "Sudah Diambil",
       },
     ],
   },
-]
+];
 
-export type { IRoute }
-export default routes
+export type { IRoute };
+export default routes;

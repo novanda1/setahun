@@ -1,30 +1,28 @@
-import { Input, WindmillContext } from '@roketid/windmill-react-ui'
-import SidebarContext from 'context/SidebarContext'
-import {
-  MenuIcon, MoonIcon, SearchIcon, SunIcon
-} from 'icons'
-import { supabase } from 'lib/supabase'
-import { useRouter } from 'next/router'
-import { useContext, useState } from 'react'
-import AvatarMenu from './AvatarMenu'
+import { Input, WindmillContext } from "@roketid/windmill-react-ui";
+import SidebarContext from "context/SidebarContext";
+import { MenuIcon, MoonIcon, SearchIcon, SunIcon } from "icons";
+import { supabase } from "lib/supabase";
+import { useRouter } from "next/router";
+import { useContext, useState } from "react";
+import AvatarMenu from "./AvatarMenu";
 
 function Header() {
-  const { mode, toggleMode } = useContext(WindmillContext)
-  const { toggleSidebar } = useContext(SidebarContext)
+  const { mode, toggleMode } = useContext(WindmillContext);
+  const { toggleSidebar } = useContext(SidebarContext);
 
-  const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false)
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+  const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
-  const user = supabase.auth.user()
+  const user = supabase.auth.user();
 
-  const { push } = useRouter()
+  const { push } = useRouter();
 
   function handleNotificationsClick() {
-    setIsNotificationsMenuOpen(!isNotificationsMenuOpen)
+    setIsNotificationsMenuOpen(!isNotificationsMenuOpen);
   }
 
   function handleProfileClick() {
-    setIsProfileMenuOpen(!isProfileMenuOpen)
+    setIsProfileMenuOpen(!isProfileMenuOpen);
   }
 
   return (
@@ -59,7 +57,7 @@ function Header() {
               onClick={toggleMode}
               aria-label="Toggle color mode"
             >
-              {mode === 'dark' ? (
+              {mode === "dark" ? (
                 <SunIcon className="w-5 h-5" aria-hidden="true" />
               ) : (
                 <MoonIcon className="w-5 h-5" aria-hidden="true" />
@@ -67,17 +65,17 @@ function Header() {
             </button>
           </li>
           {/* <!-- Profile menu --> */}
-          {user?.email &&
+          {user?.email && (
             <AvatarMenu
               handleProfileClick={handleProfileClick}
               isProfileMenuOpen={isProfileMenuOpen}
               setIsProfileMenuOpen={setIsProfileMenuOpen}
             />
-          }
+          )}
         </ul>
       </div>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;

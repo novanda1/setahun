@@ -1,14 +1,14 @@
-import React, { useContext, useRef } from 'react'
-import SidebarContext from 'context/SidebarContext'
-import SidebarContent from './SidebarContent'
+import React, { useContext, useRef } from "react";
+import SidebarContext from "context/SidebarContext";
+import SidebarContent from "./SidebarContent";
 
 function DesktopSidebar() {
-  const sidebarRef = useRef(null)
-  const { saveScroll } = useContext(SidebarContext)
+  const sidebarRef = useRef(null);
+  const { saveScroll } = useContext(SidebarContext);
 
   const linkClickedHandler = () => {
-    saveScroll(sidebarRef.current)
-  }
+    saveScroll(sidebarRef.current);
+  };
 
   return (
     <aside
@@ -18,7 +18,7 @@ function DesktopSidebar() {
     >
       <SidebarContent linkClicked={linkClickedHandler} />
     </aside>
-  )
+  );
 }
 
-export default DesktopSidebar
+export default DesktopSidebar;

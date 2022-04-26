@@ -1,16 +1,16 @@
-import React, { useContext, useRef } from 'react'
-import { Transition, Backdrop } from '@roketid/windmill-react-ui'
-import SidebarContext from 'context/SidebarContext'
-import SidebarContent from './SidebarContent'
-
+import React, { useContext, useRef } from "react";
+import { Transition, Backdrop } from "@roketid/windmill-react-ui";
+import SidebarContext from "context/SidebarContext";
+import SidebarContent from "./SidebarContent";
 
 function MobileSidebar() {
-  const sidebarRef = useRef(null)
-  const { isSidebarOpen, closeSidebar, saveScroll } = useContext(SidebarContext)
+  const sidebarRef = useRef(null);
+  const { isSidebarOpen, closeSidebar, saveScroll } =
+    useContext(SidebarContext);
 
   const linkClickedHandler = () => {
-    saveScroll(sidebarRef.current)
-  }
+    saveScroll(sidebarRef.current);
+  };
 
   return (
     <>
@@ -46,7 +46,7 @@ function MobileSidebar() {
         </>
       </Transition>
     </>
-  )
+  );
 }
 
-export default MobileSidebar
+export default MobileSidebar;

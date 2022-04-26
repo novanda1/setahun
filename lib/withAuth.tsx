@@ -16,4 +16,3 @@ const WithAuth: React.FC<any> = ({ children }) => {
 };
 
 export default WithAuth;
-

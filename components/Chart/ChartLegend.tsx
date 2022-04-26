@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react";
 
-import {ILegends} from 'utils/demo/chartsData'
+import { ILegends } from "utils/demo/chartsData";
 
-interface IChartLegend{
-  legends: ILegends[]
+interface IChartLegend {
+  legends: ILegends[];
 }
 
 function ChartLegend({ legends }: IChartLegend) {
@@ -11,12 +11,14 @@ function ChartLegend({ legends }: IChartLegend) {
     <div className="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
       {legends.map((legend) => (
         <div className="flex items-center" key={legend.title}>
-          <span className={`inline-block w-3 h-3 mr-1 ${legend.color} rounded-full`}></span>
+          <span
+            className={`inline-block w-3 h-3 mr-1 ${legend.color} rounded-full`}
+          ></span>
           <span>{legend.title}</span>
         </div>
       ))}
     </div>
-  )
+  );
 }
 
-export default ChartLegend
+export default ChartLegend;

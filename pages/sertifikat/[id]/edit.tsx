@@ -1,4 +1,10 @@
-import { Button, HelperText, Input, Label, Select as WSelect } from "@roketid/windmill-react-ui";
+import {
+  Button,
+  HelperText,
+  Input,
+  Label,
+  Select as WSelect,
+} from "@roketid/windmill-react-ui";
 import { plainToClass } from "class-transformer";
 import createValidator from "class-validator-formik";
 import { Ret } from "class-validator-formik/dist/convertError";
@@ -8,7 +14,11 @@ import Layout from "containers/Layout";
 import { Formik } from "formik";
 import useEditSertifikat from "hooks/useEditSertifikat";
 import { getRoleByRequest, getSertifikatDetailByRequest } from "lib/api/utils";
-import { EditSertifikatBelumDiambilDTO, EditSertifikatDTO, uraianPekerjaan } from "lib/types/Sertifikat";
+import {
+  EditSertifikatBelumDiambilDTO,
+  EditSertifikatDTO,
+  uraianPekerjaan,
+} from "lib/types/Sertifikat";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -17,48 +27,48 @@ import Select from "react-select";
 import { daerah } from "utils/daerah";
 
 const groupStyles: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
 };
 const groupBadgeStyles: CSSProperties = {
-  borderRadius: '2em',
-  display: 'inline-block',
+  borderRadius: "2em",
+  display: "inline-block",
   fontSize: 12,
-  fontWeight: 'normal',
-  lineHeight: '1',
+  fontWeight: "normal",
+  lineHeight: "1",
   minWidth: 1,
-  padding: '0.16666666666667em 0.5em',
-  textAlign: 'center',
+  padding: "0.16666666666667em 0.5em",
+  textAlign: "center",
 };
 
 interface Option {
-  label: string,
+  label: string;
   value: {
-    kecamatan: string,
-    desa: string
-  }
+    kecamatan: string;
+    desa: string;
+  };
 }
 
 interface GroupedOption {
   label: string;
-  options: Option[]
+  options: Option[];
 }
 
-const groupedOptions: GroupedOption[] = daerah.map(d => {
-  const options = d.desa.map(ds => ({
+const groupedOptions: GroupedOption[] = daerah.map((d) => {
+  const options = d.desa.map((ds) => ({
     value: {
       desa: ds.nama,
-      kecamatan: d.nama
+      kecamatan: d.nama,
     },
-    label: ds.nama
-  }))
+    label: ds.nama,
+  }));
 
   return {
     label: d.nama,
-    options
-  }
-})
+    options,
+  };
+});
 
 const formatGroupLabel = (data: GroupedOption) => (
   <div style={groupStyles}>
@@ -67,18 +77,29 @@ const formatGroupLabel = (data: GroupedOption) => (
   </div>
 );
 
-const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, sertifikat: any }) => {
-  const { push, back } = useRouter()
+const EditSertifikat: React.FC<any> = ({
+  role,
+  sertifikat,
+}: {
+  role: string;
+  sertifikat: any;
+}) => {
+  const { push, back } = useRouter();
 
-  const initialValues = plainToClass(EditSertifikatDTO, sertifikat)
-  const editSertifikat = useEditSertifikat()
+  const initialValues = plainToClass(EditSertifikatDTO, sertifikat);
+  const editSertifikat = useEditSertifikat();
 
   return (
     <>
       <Layout role={role}>
         <Head>
-          <title>Edit Sertifikat {sertifikat.nama_pemegang_hak} - Setahun</title>
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+          <title>
+            Edit Sertifikat {sertifikat.nama_pemegang_hak} - Setahun
+          </title>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
         </Head>
 
         <div className="w-full mx-auto">
@@ -91,29 +112,29 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
               if (!values.diambil) {
                 delete values.tanggal_pengambilan;
                 delete values?.nama_penerima;
-                delete values?.nik_penerima
+                delete values?.nik_penerima;
                 errors = createValidator(EditSertifikatBelumDiambilDTO)(values);
               } else {
-                errors = createValidator(EditSertifikatDTO)(values)
+                errors = createValidator(EditSertifikatDTO)(values);
               }
 
-              return errors
+              return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
-              setSubmitting(true)
-              editSertifikat.mutate((values), {
+              setSubmitting(true);
+              editSertifikat.mutate(values, {
                 onError: (error) => {
-                  alert("failed update sertifikat")
+                  alert("failed update sertifikat");
                 },
                 onSuccess: () => {
-                  back()
+                  back();
                 },
                 onSettled: () => {
-                  setSubmitting(false)
-                }
-              })
-            }}>
-
+                  setSubmitting(false);
+                },
+              });
+            }}
+          >
             {({
               values,
               errors,
@@ -124,7 +145,6 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
               handleChange,
               setFieldValue,
             }) => (
-
               <form onSubmit={handleSubmit} className="pb-7">
                 <Label className="mt-4">
                   <span>Nama Pemegang Hak</span>
@@ -137,12 +157,11 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     placeholder="ADIN NURUL UMMAH"
                   />
                 </Label>
-                {errors.nama_pemegang_hak &&
-                  touched.nama_pemegang_hak && (
-                    <HelperText valid={false}>
-                      {errors.nama_pemegang_hak}
-                    </HelperText>
-                  )}
+                {errors.nama_pemegang_hak && touched.nama_pemegang_hak && (
+                  <HelperText valid={false}>
+                    {errors.nama_pemegang_hak}
+                  </HelperText>
+                )}
 
                 <Label className="mt-4">
                   <span>No Seri</span>
@@ -155,12 +174,9 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     placeholder="ABB619411"
                   />
                 </Label>
-                {errors.no_seri &&
-                  touched.no_seri && (
-                    <HelperText valid={false}>
-                      {errors.no_seri}
-                    </HelperText>
-                  )}
+                {errors.no_seri && touched.no_seri && (
+                  <HelperText valid={false}>{errors.no_seri}</HelperText>
+                )}
 
                 <Label className="mt-4">
                   <span>Uraian Pekerjaan</span>
@@ -172,17 +188,16 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     className="mt-1"
                     placeholder="Ganti Nadzir"
                   >
-                    {uraianPekerjaan.map(val => (
+                    {uraianPekerjaan.map((val) => (
                       <option key={val}>{val}</option>
                     ))}
                   </WSelect>
                 </Label>
-                {errors.uraian_pekerjaan &&
-                  touched.uraian_pekerjaan && (
-                    <HelperText valid={false}>
-                      {errors.uraian_pekerjaan}
-                    </HelperText>
-                  )}
+                {errors.uraian_pekerjaan && touched.uraian_pekerjaan && (
+                  <HelperText valid={false}>
+                    {errors.uraian_pekerjaan}
+                  </HelperText>
+                )}
 
                 <Label className="mt-4">
                   <span>Tanggal DI.208</span>
@@ -195,12 +210,9 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     type="date"
                   />
                 </Label>
-                {errors.tanggal_di_208 &&
-                  touched.tanggal_di_208 && (
-                    <HelperText valid={false}>
-                      {errors.tanggal_di_208}
-                    </HelperText>
-                  )}
+                {errors.tanggal_di_208 && touched.tanggal_di_208 && (
+                  <HelperText valid={false}>{errors.tanggal_di_208}</HelperText>
+                )}
 
                 <Label className="mt-4">
                   <span>No DI.301</span>
@@ -214,12 +226,9 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     type="number"
                   />
                 </Label>
-                {errors.no_di_301 &&
-                  touched.no_di_301 && (
-                    <HelperText valid={false}>
-                      {errors.no_di_301}
-                    </HelperText>
-                  )}
+                {errors.no_di_301 && touched.no_di_301 && (
+                  <HelperText valid={false}>{errors.no_di_301}</HelperText>
+                )}
 
                 <Label className="mt-4">
                   <span>No Berkas</span>
@@ -233,12 +242,9 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     type="number"
                   />
                 </Label>
-                {errors.no_berkas &&
-                  touched.no_berkas && (
-                    <HelperText valid={false}>
-                      {errors.no_berkas}
-                    </HelperText>
-                  )}
+                {errors.no_berkas && touched.no_berkas && (
+                  <HelperText valid={false}>{errors.no_berkas}</HelperText>
+                )}
 
                 <Label className="mt-4">
                   <span>Tahun Berkas</span>
@@ -252,12 +258,9 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     type="number"
                   />
                 </Label>
-                {errors.tahun_berkas &&
-                  touched.tahun_berkas && (
-                    <HelperText valid={false}>
-                      {errors.tahun_berkas}
-                    </HelperText>
-                  )}
+                {errors.tahun_berkas && touched.tahun_berkas && (
+                  <HelperText valid={false}>{errors.tahun_berkas}</HelperText>
+                )}
 
                 <Label className="mt-4">
                   <span>Luas</span>
@@ -271,12 +274,9 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     type="number"
                   />
                 </Label>
-                {errors.luas &&
-                  touched.luas && (
-                    <HelperText valid={false}>
-                      {errors.luas}
-                    </HelperText>
-                  )}
+                {errors.luas && touched.luas && (
+                  <HelperText valid={false}>{errors.luas}</HelperText>
+                )}
 
                 <Label className="mt-4">
                   <span>Desa/Kelurahan</span>
@@ -284,17 +284,16 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     options={groupedOptions}
                     placeholder="Pilih atau ketik untuk mencari"
                     formatGroupLabel={formatGroupLabel}
-                    defaultValue={{ label: values.daerah.desa, value: values.daerah }}
-                    onChange={(daerah) => setFieldValue('daerah', daerah.value)}
+                    defaultValue={{
+                      label: values.daerah.desa,
+                      value: values.daerah,
+                    }}
+                    onChange={(daerah) => setFieldValue("daerah", daerah.value)}
                   />
                 </Label>
-                {errors.daerah &&
-                  touched.daerah && (
-                    <HelperText valid={false}>
-                      {errors.daerah}
-                    </HelperText>
-                  )}
-
+                {errors.daerah && touched.daerah && (
+                  <HelperText valid={false}>{errors.daerah}</HelperText>
+                )}
 
                 <div className="pt-10"></div>
                 <SectionTitle>Tipe Sertifikat</SectionTitle>
@@ -302,7 +301,11 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                 <div className="mt-4">
                   {/* TODO: Check if this label is accessible, or fallback */}
                   {/* <span className="text-sm text-gray-700 dark:text-gray-400">Account Type</span> */}
-                  <div className="mt-2" role="group" aria-labelledby="tipe-user">
+                  <div
+                    className="mt-2"
+                    role="group"
+                    aria-labelledby="tipe-user"
+                  >
                     <Label radio>
                       <Input
                         type="radio"
@@ -310,7 +313,7 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                         name="diambil"
                         checked={!values.diambil}
                         onChange={() => {
-                          setFieldValue('diambil', !values.diambil)
+                          setFieldValue("diambil", !values.diambil);
                         }}
                       />
                       <span className="ml-2">Belum Diambil</span>
@@ -323,8 +326,9 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                         name="diambil"
                         checked={values.diambil}
                         onChange={() => {
-                          setFieldValue('diambil', !values.diambil)
-                        }} />
+                          setFieldValue("diambil", !values.diambil);
+                        }}
+                      />
                       <span className="ml-2">Sudah Diambil</span>
                     </Label>
                   </div>
@@ -342,7 +346,8 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     placeholder="ADIN NURUL UMMAH"
                   />
                 </Label>
-                {values.diambil && errors.nama_penerima &&
+                {values.diambil &&
+                  errors.nama_penerima &&
                   touched.nama_penerima && (
                     <HelperText valid={false}>
                       {errors.nama_penerima}
@@ -362,11 +367,10 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     type="number"
                   />
                 </Label>
-                {values.diambil && errors.nik_penerima &&
+                {values.diambil &&
+                  errors.nik_penerima &&
                   touched.nik_penerima && (
-                    <HelperText valid={false}>
-                      {errors.nik_penerima}
-                    </HelperText>
+                    <HelperText valid={false}>{errors.nik_penerima}</HelperText>
                   )}
 
                 <Label className="mt-4">
@@ -375,13 +379,16 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     disabled={!values.diambil}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.diambil ? values.tanggal_pengambilan || "" : ""}
+                    value={
+                      values.diambil ? values.tanggal_pengambilan || "" : ""
+                    }
                     name="tanggal_pengambilan"
                     className="mt-1"
                     type="date"
                   />
                 </Label>
-                {values.diambil && errors.tanggal_pengambilan &&
+                {values.diambil &&
+                  errors.tanggal_pengambilan &&
                   touched.tanggal_pengambilan && (
                     <HelperText valid={false}>
                       {errors.tanggal_pengambilan}
@@ -390,21 +397,37 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
 
                 <div className="flex flex-wrap mt-9 pb-11 justify-end gap-3">
                   <div className="hidden sm:block">
-                    <Button type="button" onClick={back} layout="outline" >
+                    <Button type="button" onClick={back} layout="outline">
                       Batal
                     </Button>
                   </div>
                   <div className="hidden sm:block">
-                    <Button type="submit" disabled={isSubmitting || values === initialValues} >{isSubmitting ? "Memproses..." : 'Simpan'}</Button>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting || values === initialValues}
+                    >
+                      {isSubmitting ? "Memproses..." : "Simpan"}
+                    </Button>
                   </div>
                   <div className="block w-full sm:hidden">
-                    <Button type="button" onClick={back} block size="large" layout="outline">
+                    <Button
+                      type="button"
+                      onClick={back}
+                      block
+                      size="large"
+                      layout="outline"
+                    >
                       Batal
                     </Button>
                   </div>
                   <div className="block w-full sm:hidden">
-                    <Button type="submit" disabled={isSubmitting || values === initialValues} block size="large">
-                      {isSubmitting ? "Memproses..." : 'Simpan'}
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting || values === initialValues}
+                      block
+                      size="large"
+                    >
+                      {isSubmitting ? "Memproses..." : "Simpan"}
                     </Button>
                   </div>
                 </div>
@@ -414,19 +437,19 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
         </div>
       </Layout>
     </>
-  )
-}
+  );
+};
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const sertifikat = await getSertifikatDetailByRequest(context) || null
-  const role = await getRoleByRequest(context)
+  const sertifikat = (await getSertifikatDetailByRequest(context)) || null;
+  const role = await getRoleByRequest(context);
 
   return {
     props: {
       role,
-      sertifikat
+      sertifikat,
     },
   };
 };
 
-export default EditSertifikat
+export default EditSertifikat;

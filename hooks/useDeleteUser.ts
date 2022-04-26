@@ -1,6 +1,4 @@
-import { getUserRole } from "lib/jwt";
 import { supabase } from "lib/supabase";
-import sudoSupabase from "lib/api/supabase";
 import { ResponseValue } from "lib/types/response";
 import { DeleteUserDTO } from "lib/types/User";
 import { useMutation, useQueryClient } from "react-query";
@@ -25,14 +23,8 @@ const deleteUser = async (user: DeleteUserDTO): Promise<ResponseValue> => {
     const authUser = await deleteAuthUser(user);
 
     if (!authUser.error) {
-      const deleteUserRoles = await supabase
-        .from("user_roles")
-        .delete()
-        .match({ user_id: user.id });
-      const deleteUsers = await supabase
-        .from("users")
-        .delete()
-        .match({ id: user.id });
+      await supabase.from("user_roles").delete().match({ user_id: user.id });
+      await supabase.from("users").delete().match({ id: user.id });
 
       response = new ResponseValue("ok", "Delete user successfully");
     }

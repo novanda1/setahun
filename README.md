@@ -8,9 +8,9 @@
 See the [Original Project by @estevanmaito](https://github.com/estevanmaito/windmill-dashboard-react/)
 
 With help from other contributors :
+
 - [Typescript version by @neutralboy](https://github.com/neutralboy/windmill-dashboard-react-ts)
 - [Nextjs version by @Aldhanekaa](https://github.com/Aldhanekaa/windmill-dashboard-nextjs)
-
 
 🚀 [See it live](https://windmill-dashboard-nextjs-typescript.vercel.app/example)
 
@@ -42,6 +42,7 @@ All components and containers are saved in folder [example](example)
 ### Routing
 
 Change default redirecting when hit the `/` or `home` in file [next.config.js](next.config.js)
+
 ```js
   async redirects() {
     return [
@@ -93,6 +94,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Getting Started
 
 First, install dependencies :
+
 ```bash
 npm install
 # or

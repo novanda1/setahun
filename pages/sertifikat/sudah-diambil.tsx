@@ -1,9 +1,9 @@
-import SertifikatPage from 'components/Sertifikat'
-import { getRoleByRequest } from 'lib/api/utils'
-import { GetServerSideProps } from 'next'
-import Head from 'next/head'
-import PageTitle from '../../components/Typography/PageTitle'
-import Layout from '../../containers/Layout'
+import SertifikatPage from "components/Sertifikat";
+import { getRoleByRequest } from "lib/api/utils";
+import { GetServerSideProps } from "next";
+import Head from "next/head";
+import PageTitle from "../../components/Typography/PageTitle";
+import Layout from "../../containers/Layout";
 
 function SudahDiambil({ role }: any) {
   return (
@@ -16,17 +16,17 @@ function SudahDiambil({ role }: any) {
 
       <SertifikatPage diambil />
     </Layout>
-  )
+  );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const role = await getRoleByRequest(context)
+  const role = await getRoleByRequest(context);
 
   return {
     props: {
-      role: role
-    }
-  }
-}
+      role: role,
+    },
+  };
+};
 
-export default SudahDiambil
+export default SudahDiambil;

@@ -1,39 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 interface ICreateCertifiedModalContext {
-  isCreateCertifiedModalOpen: boolean
-  closeCreateCertifiedModal: () => void
-  toggleCreateCertifiedModal: () => void
+  isCreateCertifiedModalOpen: boolean;
+  closeCreateCertifiedModal: () => void;
+  toggleCreateCertifiedModal: () => void;
 }
 
-const CreateCertifiedModalContext = React.createContext<ICreateCertifiedModalContext>(
-  {
+const CreateCertifiedModalContext =
+  React.createContext<ICreateCertifiedModalContext>({
     isCreateCertifiedModalOpen: false,
-    closeCreateCertifiedModal: () => { },
-    toggleCreateCertifiedModal: () => { },
-  }
-);
+    closeCreateCertifiedModal: () => {},
+    toggleCreateCertifiedModal: () => {},
+  });
 
-interface ICreateCertifiedModalProvider { children: React.ReactNode }
+interface ICreateCertifiedModalProvider {
+  children: React.ReactNode;
+}
 
-export const CreateCertifiedModalProvider = ({ children }: ICreateCertifiedModalProvider) => {
-  const [isCreateCertifiedModalOpen, setIsCreateCertifiedModalOpen] = useState(false)
+export const CreateCertifiedModalProvider = ({
+  children,
+}: ICreateCertifiedModalProvider) => {
+  const [isCreateCertifiedModalOpen, setIsCreateCertifiedModalOpen] =
+    useState(false);
 
   function toggleCreateCertifiedModal() {
-    setIsCreateCertifiedModalOpen(!isCreateCertifiedModalOpen)
+    setIsCreateCertifiedModalOpen(!isCreateCertifiedModalOpen);
   }
 
   function closeCreateCertifiedModal() {
-    setIsCreateCertifiedModalOpen(false)
+    setIsCreateCertifiedModalOpen(false);
   }
 
   const context = {
     isCreateCertifiedModalOpen,
     toggleCreateCertifiedModal,
     closeCreateCertifiedModal,
-  }
+  };
 
-  return <CreateCertifiedModalContext.Provider value={context}>{children}</CreateCertifiedModalContext.Provider>
-}
+  return (
+    <CreateCertifiedModalContext.Provider value={context}>
+      {children}
+    </CreateCertifiedModalContext.Provider>
+  );
+};
 
-export default CreateCertifiedModalContext
+export default CreateCertifiedModalContext;

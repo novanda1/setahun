@@ -15,25 +15,24 @@ import { useEffect, useState } from "react";
 
 const EditUser: React.FC<any> = ({ role, user }) => {
   let initialValues;
-  if (user)
-    initialValues = plainToClass(UpdateUserDTO, user)
-  else initialValues = new UpdateUserDTO()
+  if (user) initialValues = plainToClass(UpdateUserDTO, user);
+  else initialValues = new UpdateUserDTO();
 
-  const [errorMessage, setErrorMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const editUser = useEditUser()
-  const { push, back } = useRouter()
+  const editUser = useEditUser();
+  const { push, back } = useRouter();
 
   useEffect(() => {
     async function logout() {
-      await supabase.auth.signOut()
-      push('/login')
+      await supabase.auth.signOut();
+      push("/login");
     }
 
     if (!user) {
-      logout()
+      logout();
     }
-  }, [user, push])
+  }, [user, push]);
 
   return (
     <Layout role={role}>
@@ -48,20 +47,20 @@ const EditUser: React.FC<any> = ({ role, user }) => {
           validate={(values) => {
             const errors = createValidator(UpdateUserDTO)(values);
 
-            return errors
+            return errors;
           }}
           onSubmit={(values, { setSubmitting }) => {
             setSubmitting(true);
 
             editUser.mutate(values, {
               onError: (err) => {
-                setSubmitting(false)
+                setSubmitting(false);
               },
               onSettled(data, error, variables, context) {
-                setSubmitting(false)
-                push('/users')
+                setSubmitting(false);
+                push("/users");
               },
-            })
+            });
           }}
         >
           {({
@@ -72,7 +71,7 @@ const EditUser: React.FC<any> = ({ role, user }) => {
             handleSubmit,
             isSubmitting,
             handleChange,
-            setFieldValue
+            setFieldValue,
           }) => (
             <form onSubmit={handleSubmit} className="pb-7">
               <Label className="mt-4">
@@ -86,12 +85,9 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                   placeholder="Sherly Ayu"
                 />
               </Label>
-              {errors.fullname &&
-                touched.fullname && (
-                  <HelperText valid={false}>
-                    {errors.fullname}
-                  </HelperText>
-                )}
+              {errors.fullname && touched.fullname && (
+                <HelperText valid={false}>{errors.fullname}</HelperText>
+              )}
 
               <Label className="mt-4">
                 <span>NIP</span>
@@ -105,12 +101,9 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                   placeholder="123123123123"
                 />
               </Label>
-              {errors.nip &&
-                touched.nip && (
-                  <HelperText valid={false}>
-                    {errors.nip}
-                  </HelperText>
-                )}
+              {errors.nip && touched.nip && (
+                <HelperText valid={false}>{errors.nip}</HelperText>
+              )}
 
               <Label className="mt-4">
                 <span>Unit</span>
@@ -124,12 +117,9 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                   placeholder="Logistik"
                 />
               </Label>
-              {errors.unit &&
-                touched.unit && (
-                  <HelperText valid={false}>
-                    {errors.unit}
-                  </HelperText>
-                )}
+              {errors.unit && touched.unit && (
+                <HelperText valid={false}>{errors.unit}</HelperText>
+              )}
 
               <div className="mt-4">
                 {/* TODO: Check if this label is accessible, or fallback */}
@@ -142,7 +132,7 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                       value="read-only"
                       name="role"
                       checked={values.role === "read-only"}
-                      onChange={() => setFieldValue('role', 'read-only')}
+                      onChange={() => setFieldValue("role", "read-only")}
                       disabled={values.role === "admin"}
                     />
                     <span className="ml-2">Read only</span>
@@ -154,7 +144,7 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                       value="moderator"
                       name="role"
                       checked={values.role === "moderator"}
-                      onChange={() => setFieldValue('role', 'moderator')}
+                      onChange={() => setFieldValue("role", "moderator")}
                       disabled={values.role === "admin"}
                     />
                     <span className="ml-2">Moderator</span>
@@ -176,21 +166,34 @@ const EditUser: React.FC<any> = ({ role, user }) => {
 
               <div className="flex flex-wrap mt-10 pb-11 justify-end gap-3">
                 <div className="hidden sm:block">
-                  <Button type="button" onClick={back} layout="outline" >
+                  <Button type="button" onClick={back} layout="outline">
                     Batal
                   </Button>
                 </div>
                 <div className="hidden sm:block">
-                  <Button type="submit" disabled={isSubmitting} >{isSubmitting ? "Memproses..." : 'Simpan'}</Button>
+                  <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Memproses..." : "Simpan"}
+                  </Button>
                 </div>
                 <div className="block w-full sm:hidden">
-                  <Button type="button" onClick={back} block size="large" layout="outline">
+                  <Button
+                    type="button"
+                    onClick={back}
+                    block
+                    size="large"
+                    layout="outline"
+                  >
                     Batal
                   </Button>
                 </div>
                 <div className="block w-full sm:hidden">
-                  <Button type="submit" disabled={isSubmitting} block size="large">
-                    {isSubmitting ? "Memproses..." : 'Simpan'}
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    block
+                    size="large"
+                  >
+                    {isSubmitting ? "Memproses..." : "Simpan"}
                   </Button>
                 </div>
               </div>
@@ -202,17 +205,20 @@ const EditUser: React.FC<any> = ({ role, user }) => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const user = await getUserByRequest(context) || null
-  const role = await getRoleByRequest(context)
+  const user = (await getUserByRequest(context)) || null;
+  const role = await getRoleByRequest(context);
 
-  const cookies = await supabase.auth.api.getUserByCookie(context.req, context.res)
+  const cookies = await supabase.auth.api.getUserByCookie(
+    context.req,
+    context.res
+  );
 
-  if (!user && cookies.token) await supabase.auth.api.signOut(cookies.token)
+  if (!user && cookies.token) await supabase.auth.api.signOut(cookies.token);
 
   return {
     props: {
       role,
-      user
+      user,
     },
   };
 };

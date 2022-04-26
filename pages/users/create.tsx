@@ -11,13 +11,13 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 const CreateUser: React.FC<any> = ({ role }) => {
-  const initialValues = new CreateUserDTO()
-  initialValues.user_metadata = { fullname: "", nip: 0, unit: "" }
+  const initialValues = new CreateUserDTO();
+  initialValues.user_metadata = { fullname: "", nip: 0, unit: "" };
 
-  const [errorMessage, setErrorMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const createUser = useCreateUser()
-  const { push } = useRouter()
+  const createUser = useCreateUser();
+  const { push } = useRouter();
 
   return (
     <Layout role={role}>
@@ -27,35 +27,45 @@ const CreateUser: React.FC<any> = ({ role }) => {
           initialValues={initialValues}
           validate={(values) => {
             const errors = createValidator(CreateUserDTO)(values);
-            const userMetadata = createValidator(UserMetaData)(values.user_metadata)
+            const userMetadata = createValidator(UserMetaData)(
+              values.user_metadata
+            );
 
             if (!errors.passwordConfirm) {
               if (values.password !== values.passwordConfirm) {
-                errors.passwordConfirm = "Pasword tidak sama"
+                errors.passwordConfirm = "Pasword tidak sama";
               }
             }
 
             if (Object.keys(userMetadata).length)
-              errors.user_metadata = userMetadata
+              errors.user_metadata = userMetadata;
 
-            return errors
+            return errors;
           }}
           onSubmit={(values, { setSubmitting }) => {
             setSubmitting(true);
 
             createUser.mutate(values, {
               onSettled: (data) => {
-                const { status, message, error }: { status?: string, message?: string, error?: { message?: string } } = data
-                if (status && !status?.toString()?.startsWith('2', 0)) {
-                  message ? setErrorMessage(message) : null
-                  error?.message ? setErrorMessage(error?.message) : null
+                const {
+                  status,
+                  message,
+                  error,
+                }: {
+                  status?: string;
+                  message?: string;
+                  error?: { message?: string };
+                } = data;
+                if (status && !status?.toString()?.startsWith("2", 0)) {
+                  message ? setErrorMessage(message) : null;
+                  error?.message ? setErrorMessage(error?.message) : null;
                 } else {
-                  setErrorMessage('')
-                  push('/users')
+                  setErrorMessage("");
+                  push("/users");
                 }
-                setSubmitting(false)
-              }
-            })
+                setSubmitting(false);
+              },
+            });
           }}
         >
           {({
@@ -146,12 +156,11 @@ const CreateUser: React.FC<any> = ({ role }) => {
                   placeholder="123123123123"
                 />
               </Label>
-              {errors.user_metadata?.nip &&
-                touched.user_metadata?.nip && (
-                  <HelperText valid={false}>
-                    {errors.user_metadata.nip}
-                  </HelperText>
-                )}
+              {errors.user_metadata?.nip && touched.user_metadata?.nip && (
+                <HelperText valid={false}>
+                  {errors.user_metadata.nip}
+                </HelperText>
+              )}
 
               <Label className="mt-4">
                 <span>Unit</span>
@@ -165,19 +174,14 @@ const CreateUser: React.FC<any> = ({ role }) => {
                   placeholder="Logistik"
                 />
               </Label>
-              {errors.user_metadata?.unit &&
-                touched.user_metadata?.unit && (
-                  <HelperText valid={false}>
-                    {errors.user_metadata.unit}
-                  </HelperText>
-                )}
-
-
+              {errors.user_metadata?.unit && touched.user_metadata?.unit && (
+                <HelperText valid={false}>
+                  {errors.user_metadata.unit}
+                </HelperText>
+              )}
 
               <div className="mt-10 flex flex-col md:flex-row justify-between items-center">
-                <HelperText valid={false}>
-                  {errorMessage}
-                </HelperText>
+                <HelperText valid={false}>{errorMessage}</HelperText>
                 <Button
                   type="submit"
                   className="mt-3 md:mt-0 w-max"
@@ -196,7 +200,7 @@ const CreateUser: React.FC<any> = ({ role }) => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const role = await getRoleByRequest(context)
+  const role = await getRoleByRequest(context);
 
   return {
     props: {
@@ -206,4 +210,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default CreateUser;
-

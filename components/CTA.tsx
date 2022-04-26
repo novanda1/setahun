@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 function CTA() {
   return (
@@ -13,10 +13,11 @@ function CTA() {
         <span>Star this project on GitHub</span>
       </div>
       <span>
-        View more <span dangerouslySetInnerHTML={{ __html: '&RightArrow;' }}></span>
+        View more{" "}
+        <span dangerouslySetInnerHTML={{ __html: "&RightArrow;" }}></span>
       </span>
     </a>
-  )
+  );
 }
 
-export default CTA
+export default CTA;

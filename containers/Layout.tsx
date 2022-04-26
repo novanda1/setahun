@@ -39,4 +39,3 @@ function Layout({ children, role }: ILayout) {
 }
 
 export default Layout;
-

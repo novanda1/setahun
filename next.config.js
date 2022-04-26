@@ -15,8 +15,7 @@ module.exports = {
     return [
       {
         source: "/server/:path*",
-        destination:
-          "https://benjcxrorlscnklwljhp.supabase.co/:path*",
+        destination: "https://benjcxrorlscnklwljhp.supabase.co/:path*",
       },
     ];
   },
