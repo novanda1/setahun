@@ -1,14 +1,13 @@
 import { Button, HelperText, Input, Label, Select as WSelect } from "@roketid/windmill-react-ui";
-import { plainToClass } from "class-transformer";
 import createValidator from "class-validator-formik";
 import { Ret } from "class-validator-formik/dist/convertError";
 import PageTitle from "components/Typography/PageTitle";
 import SectionTitle from "components/Typography/SectionTitle";
 import Layout from "containers/Layout";
 import { Formik } from "formik";
-import useEditSertifikat from "hooks/useEditSertifikat";
-import { getRoleByRequest, getSertifikatDetailByRequest } from "lib/api/utils";
-import { EditSertifikatBelumDiambilDTO, EditSertifikatDTO, uraianPekerjaan } from "lib/types/Sertifikat";
+import useCreateSertifikat from "hooks/useCreateSertifikat";
+import { getRoleByRequest } from "lib/api/utils";
+import { CreateSertifikatDTO, EditSertifikatBelumDiambilDTO, EditSertifikatDTO, uraianPekerjaan } from "lib/types/Sertifikat";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -67,41 +66,39 @@ const formatGroupLabel = (data: GroupedOption) => (
   </div>
 );
 
-const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, sertifikat: any }) => {
+const CreateSertifikat: React.FC<any> = ({ role }: { role: string }) => {
   const { push, back } = useRouter()
 
-  const initialValues = plainToClass(EditSertifikatDTO, sertifikat)
-  const editSertifikat = useEditSertifikat()
+  const initialValues = new CreateSertifikatDTO()
+  const createSertifikat = useCreateSertifikat()
 
   return (
     <>
       <Layout role={role}>
         <Head>
-          <title>Edit Sertifikat {sertifikat.nama_pemegang_hak} - Setahun</title>
+          <title>Tambah Sertifikat - Setahun</title>
           <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         </Head>
 
         <div className="w-full mx-auto">
-          <PageTitle>Edit Sertifikat</PageTitle>
+          <PageTitle>Tambah Sertifikat</PageTitle>
 
           <Formik
             initialValues={initialValues}
             validate={(values) => {
               let errors: Ret;
               if (!values.diambil) {
-                delete values.tanggal_pengambilan;
-                delete values?.nama_penerima;
-                delete values?.nik_penerima
-                errors = createValidator(EditSertifikatBelumDiambilDTO)(values);
-              } else {
-                errors = createValidator(EditSertifikatDTO)(values)
+                values.diambil = false
               }
+              errors = createValidator(CreateSertifikatDTO)(values)
+
+              console.log('errors', errors)
 
               return errors
             }}
             onSubmit={(values, { setSubmitting }) => {
               setSubmitting(true)
-              editSertifikat.mutate((values), {
+              createSertifikat.mutate((values), {
                 onError: (error) => {
                   alert("failed update sertifikat")
                 },
@@ -284,8 +281,8 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     options={groupedOptions}
                     placeholder="Pilih atau ketik untuk mencari"
                     formatGroupLabel={formatGroupLabel}
-                    defaultValue={{ label: values.daerah.desa, value: values.daerah }}
-                    onChange={(daerah) => setFieldValue('daerah', daerah.value)}
+                    defaultValue={values.daerah?.desa && { label: values.daerah.desa, value: values.daerah }}
+                    onChange={(daerah: Option) => setFieldValue('daerah', daerah.value)}
                   />
                 </Label>
                 {errors.daerah &&
@@ -395,7 +392,7 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                     </Button>
                   </div>
                   <div className="hidden sm:block">
-                    <Button type="submit" disabled={isSubmitting || values === initialValues} >{isSubmitting ? "Memproses..." : 'Simpan'}</Button>
+                    <Button type="submit" disabled={isSubmitting || values === initialValues} >{isSubmitting ? "Memproses..." : 'Tambah'}</Button>
                   </div>
                   <div className="block w-full sm:hidden">
                     <Button type="button" onClick={back} block size="large" layout="outline">
@@ -404,7 +401,7 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
                   </div>
                   <div className="block w-full sm:hidden">
                     <Button type="submit" disabled={isSubmitting || values === initialValues} block size="large">
-                      {isSubmitting ? "Memproses..." : 'Simpan'}
+                      {isSubmitting ? "Memproses..." : 'Tambah'}
                     </Button>
                   </div>
                 </div>
@@ -418,15 +415,13 @@ const EditSertifikat: React.FC<any> = ({ role, sertifikat }: { role: string, ser
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const sertifikat = await getSertifikatDetailByRequest(context) || null
   const role = await getRoleByRequest(context)
 
   return {
     props: {
       role,
-      sertifikat
     },
   };
 };
 
-export default EditSertifikat
+export default CreateSertifikat

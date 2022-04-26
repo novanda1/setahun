@@ -8,8 +8,8 @@ import { Sertifikat } from 'lib/types/Sertifikat'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import PageTitle from '../../../components/Typography/PageTitle'
-import Layout from '../../../containers/Layout'
+import PageTitle from '../../components/Typography/PageTitle'
+import Layout from '../../containers/Layout'
 
 function SudahDiambil({ role }: any) {
   const { push, query } = useRouter()

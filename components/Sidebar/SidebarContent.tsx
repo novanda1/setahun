@@ -23,6 +23,7 @@ interface ISidebarContent {
 function SidebarContent({ linkClicked }: ISidebarContent) {
   const [filteredRoutes, setFilteredRoutes] = useState<IRoute[]>([]) // auth middleware
   const { role } = useContext(MeContext)
+  const { push } = useRouter()
 
   const { pathname } = useRouter();
   const appName = process.env.NEXT_PUBLIC_APP_NAME
@@ -30,8 +31,7 @@ function SidebarContent({ linkClicked }: ISidebarContent) {
   const { closeSidebar } = useContext(SidebarContext)
 
   const openModal = () => {
-    closeSidebar()
-    toggleCreateCertifiedModal()
+    push('/sertifikat/create')
   }
 
   useEffect(() => {

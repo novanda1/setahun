@@ -272,4 +272,16 @@ export class CreateSertifikatDTO {
   @IsNotEmpty()
   @IsInt()
   luas: number;
+
+  @IsBoolean()
+  diambil: boolean;
+
+  @IsOptional()
+  nama_penerima?: string;
+
+  @IsOptional()
+  nik_penerima?: number;
+
+  @IsOptional()
+  tanggal_pengambilan?: string;
 }
