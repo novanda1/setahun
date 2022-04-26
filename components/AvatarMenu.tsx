@@ -44,7 +44,10 @@ const AvatarMenu: React.FC<any> = ({ handleProfileClick, isProfileMenuOpen, setI
           <span>Settings</span>
         </DropdownItem> */}
         <DropdownItem onClick={async () => {
+          const user = supabase.auth.session()
           await supabase.auth.signOut()
+          if (user?.access_token)
+            await supabase.auth.api.signOut(user?.access_token)
         }}>
           <OutlineLogoutIcon className="w-4 h-4 mr-3" aria-hidden="true" />
           <span>Log out</span>

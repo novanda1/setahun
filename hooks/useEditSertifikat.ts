@@ -24,7 +24,6 @@ export default function useEditSertifikat() {
     {
       onSuccess: async () => {
         await queryClient.invalidateQueries("sertifikat");
-        await queryClient.prefetchQuery("sertifikat");
       },
     }
   );

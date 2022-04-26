@@ -29,6 +29,9 @@ const BelumDiambil = ({ role }: any) => {
     push('/sertifikat/' + id + '/edit')
   }
 
+  const onDetailClicked = (id: string) => {
+    push('/sertifikat/' + id + '/detail')
+  }
 
   return (
     <Layout role={role}>
@@ -36,6 +39,7 @@ const BelumDiambil = ({ role }: any) => {
         <title>Sertifikat Belum Diambil - Setahun</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+
       <PageTitle>Sertifikat Belum Diambil</PageTitle>
 
       <TableContainer className="mb-8">
@@ -45,8 +49,8 @@ const BelumDiambil = ({ role }: any) => {
               <TableCell>Nama/Uraian</TableCell>
               <TableCell>No Berkas</TableCell>
               <TableCell>Tahun Berkas</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>Dibuat pada</TableCell>
+              <TableCell>Aksi</TableCell>
             </tr>
           </TableHeader>
           <TableBody>
@@ -72,15 +76,25 @@ const BelumDiambil = ({ role }: any) => {
                 <TableCell>
                   <div className="flex items-center space-x-4">
                     <Button
-                      onClick={() => onEditClicked(sertifikat.id)}
-                      layout="outline" size="small" aria-label="Edit">
+                      onClick={() => onDetailClicked(sertifikat.id)}
+                      layout="link" size="small" aria-label="Edit">
                       {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
-                      Ubah
+                      Lihat Detail
                     </Button>
-                    <Button layout="outline" size="small" aria-label="Delete">
-                      {/* <TrashIcon className="w-5 h-5" aria-hidden="true" /> */}
-                      Hapus
-                    </Button>
+                    {role === 'read-only' ? null : (
+                      <>
+                        <Button
+                          onClick={() => onEditClicked(sertifikat.id)}
+                          layout="link" size="small" aria-label="Edit">
+                          {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
+                          Ubah
+                        </Button>
+                        <Button layout="link" size="small" aria-label="Delete">
+                          {/* <TrashIcon className="w-5 h-5" aria-hidden="true" /> */}
+                          Hapus
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>

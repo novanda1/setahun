@@ -205,6 +205,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const user = await getUserByRequest(context) || null
   const role = await getRoleByRequest(context)
 
+  const cookies = await supabase.auth.api.getUserByCookie(context.req, context.res)
+
+  if (!user && cookies.token) await supabase.auth.api.signOut(cookies.token)
+
   return {
     props: {
       role,
