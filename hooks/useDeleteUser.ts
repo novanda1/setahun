@@ -22,12 +22,9 @@ const deleteUser = async (user: DeleteUserDTO): Promise<ResponseValue> => {
   try {
     const authUser = await deleteAuthUser(user);
 
-    if (!authUser.error) {
-      await supabase.from("user_roles").delete().match({ user_id: user.id });
-      await supabase.from("users").delete().match({ id: user.id });
-
+    if (!authUser.error)
       response = new ResponseValue("ok", "Delete user successfully");
-    }
+    else response = new ResponseValue("error", authUser.error);
   } catch (error) {
     response = new ResponseValue("error", "Delete user failed");
   }
