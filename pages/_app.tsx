@@ -15,13 +15,34 @@ function MyApp({ Component, pageProps }: any) {
   const [, setAuthenticatedState] = useState<
     "not-authenticated" | "authenticated"
   >("not-authenticated");
-  const { push } = useRouter();
+  const { push, query } = useRouter();
 
   async function checkUser() {
     const user = await supabase.auth.user();
     if (user) {
       setAuthenticatedState("authenticated");
     }
+  }
+
+  async function handleAuthChange(event: any, session: any) {
+    const auth = await fetch("/api/auth", {
+      method: "POST",
+      headers: new Headers({ "Content-Type": "application/json" }),
+      credentials: "same-origin",
+      body: JSON.stringify({ event, session }),
+    }).then((resp) => resp.json());
+
+    if (event === "SIGNED_IN") {
+      setAuthenticatedState("authenticated");
+      push("/?token=" + auth.token);
+    }
+
+    if (event === "SIGNED_OUT") {
+      setAuthenticatedState("not-authenticated");
+      push("/login");
+    }
+
+    return auth;
   }
 
   useEffect(() => {
@@ -31,27 +52,6 @@ function MyApp({ Component, pageProps }: any) {
   }, []);
 
   useEffect(() => {
-    async function handleAuthChange(event: any, session: any) {
-      const auth = await fetch("/api/auth", {
-        method: "POST",
-        headers: new Headers({ "Content-Type": "application/json" }),
-        credentials: "same-origin",
-        body: JSON.stringify({ event, session }),
-      }).then((resp) => resp.json());
-
-      if (event === "SIGNED_IN") {
-        setAuthenticatedState("authenticated");
-        push("/?token=" + auth.token);
-      }
-
-      if (event === "SIGNED_OUT") {
-        setAuthenticatedState("not-authenticated");
-        push("/login");
-      }
-
-      return auth;
-    }
-
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         handleAuthChange(event, session);
@@ -62,6 +62,14 @@ function MyApp({ Component, pageProps }: any) {
       authListener?.unsubscribe();
     };
   }, [push]);
+
+  // When token query exists.
+  useEffect(() => {
+    if (query?.type) {
+      if (query?.refresh_token)
+        supabase.auth.signIn({ refreshToken: query.refresh_token as string });
+    }
+  }, [query?.type]);
 
   return (
     <QueryClientProvider client={queryClient}>

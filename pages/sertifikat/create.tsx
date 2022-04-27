@@ -100,8 +100,6 @@ const CreateSertifikat: React.FC<any> = ({ role }: { role: string }) => {
 
               const errors = createValidator(CreateSertifikatDTO)(values);
 
-              console.log("errors", errors);
-
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {

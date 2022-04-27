@@ -8,19 +8,6 @@ type FilterType = {
   perPage: number;
 };
 
-// const serialize = (obj: any) => {
-//   if (obj) {
-//     const str: string[] = [];
-//     Object.keys(obj).forEach((p) => !p && delete obj[p]);
-//     Object.keys(obj).forEach((p) =>
-//       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]))
-//     );
-//     return str.join("&");
-//   }
-
-//   return "";
-// };
-
 export const getUser = async (req: any, id: string) => {
   const user = await supabase.auth.api.getUserByCookie(req);
   supabase.auth.setAuth(user.token as string);
@@ -31,10 +18,7 @@ export const getUser = async (req: any, id: string) => {
       id,
       fullname,
       nip,
-      unit,
-      user_roles (
-        role
-      )
+      unit
     `
     )
     .eq("id", id)
@@ -59,10 +43,7 @@ const getUsers = async ({ page, perPage, query }: FilterType) => {
       id,
       fullname,
       nip,
-      unit,
-      user_roles(
-        role
-      )
+      unit
     `,
       { count: "exact" }
     )

@@ -1,17 +1,14 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { supabase } from "./supabase";
 import React from "react";
 
 const WithAuth: React.FC<any> = ({ children }) => {
-  const { replace } = useRouter();
-  const user = supabase.auth.user();
+  // const { replace } = useRouter();
+  // const user = supabase.auth.user();
 
-  useEffect(() => {
-    if (!user) replace("/login");
-  }, [replace, user]);
+  // useEffect(() => {
+  //   if (!user) replace("/login");
+  // }, [replace, user]);
 
-  if (!user) return <>Waiting for authentication...</>;
+  // if (!user) return <>Waiting for authentication...</>;
 
   return <>{children}</>;
 };
