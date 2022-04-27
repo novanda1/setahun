@@ -43,6 +43,7 @@ export const getID = (token?: string | null): string => {
     const claims = jwt.verify(token, secret) as any;
     return claims?.sub;
   } catch (err) {
+    console.log("err", err, secret);
     return "";
   }
 };
