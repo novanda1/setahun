@@ -40,3 +40,6 @@ tsconfig.tsbuildinfo
 **/supabase/.branches
 **/supabase/.temp
 **/supabase/.env
+
+# Snaplet
+.snaplet
