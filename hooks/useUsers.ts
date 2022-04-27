@@ -18,7 +18,10 @@ export const getUser = async (req: any, id: string) => {
       id,
       fullname,
       nip,
-      unit
+      unit,
+      user_roles (
+        role
+      )
     `
     )
     .eq("id", id)
@@ -43,7 +46,10 @@ const getUsers = async ({ page, perPage, query }: FilterType) => {
       id,
       fullname,
       nip,
-      unit
+      unit,
+      user_roles (
+        role
+      )
     `,
       { count: "exact" }
     )
