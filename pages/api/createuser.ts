@@ -1,11 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
+import supabase from "lib/api/supabase";
 import { CreateUserDTO } from "lib/types/User";
 import { NextApiRequest, NextApiResponse } from "next";
-
-const supabase = createClient(
-  "https://benjcxrorlscnklwljhp.supabase.co",
-  process.env.SUPABASE_ROLE_KEY as string
-);
 
 export default async function handler(
   req: NextApiRequest,
@@ -26,7 +21,7 @@ export default async function handler(
   };
 
   if (process.env.NODE_ENV === "development")
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 20; i++) {
       const { data, error } = await supabase.auth.api.createUser({
         ...dynamicInput(i),
         email_confirm: true,

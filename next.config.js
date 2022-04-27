@@ -15,7 +15,7 @@ module.exports = {
     return [
       {
         source: "/server/:path*",
-        destination: "https://benjcxrorlscnklwljhp.supabase.co/:path*",
+        destination: process.env.NEXT_PUBLIC_SUPABASE_URL + "/:path*",
       },
     ];
   },
