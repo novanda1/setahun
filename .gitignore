@@ -43,3 +43,5 @@ tsconfig.tsbuildinfo
 
 # Snaplet
 .snaplet
+# Supabase
+.supabase
