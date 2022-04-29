@@ -11,10 +11,12 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 const CreateUser: React.FC<any> = ({ role }) => {
+  const { back } = useRouter();
+
   const initialValues = new CreateUserDTO();
   initialValues.user_metadata = { fullname: "", nip: 0, unit: "" };
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [, setErrorMessage] = useState("");
 
   const createUser = useCreateUser();
   const { push } = useRouter();
@@ -180,17 +182,38 @@ const CreateUser: React.FC<any> = ({ role }) => {
                 </HelperText>
               )}
 
-              <div className="mt-10 flex flex-col md:flex-row justify-between items-center">
-                <HelperText valid={false}>{errorMessage}</HelperText>
-                <Button
-                  type="submit"
-                  className="mt-3 md:mt-0 w-max"
-                  disabled={isSubmitting}
-                  block
-                >
-                  {isSubmitting ? "Memproses..." : "Tambah User"}
-                  {isSubmitting}
-                </Button>
+              <div className="flex flex-wrap mt-10 pb-11 justify-end gap-3">
+                <div className="hidden sm:block">
+                  <Button type="button" onClick={back} layout="outline">
+                    Batal
+                  </Button>
+                </div>
+                <div className="hidden sm:block">
+                  <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Memproses..." : "Tambah"}
+                  </Button>
+                </div>
+                <div className="block w-full sm:hidden">
+                  <Button
+                    type="button"
+                    onClick={back}
+                    block
+                    size="large"
+                    layout="outline"
+                  >
+                    Batal
+                  </Button>
+                </div>
+                <div className="block w-full sm:hidden">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    block
+                    size="large"
+                  >
+                    {isSubmitting ? "Memproses..." : "Tambah"}
+                  </Button>
+                </div>
               </div>
             </form>
           )}

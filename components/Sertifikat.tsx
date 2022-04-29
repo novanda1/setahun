@@ -19,6 +19,8 @@ import { Sertifikat } from "lib/types/Sertifikat";
 import { UserRole } from "lib/types/User";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
+import Loader from "components/Loader/Loader";
+import TableFilter from "./TableFilter";
 
 type Props = {
   diambil?: boolean;
@@ -73,53 +75,7 @@ const SertifikatPage: React.FC<Props> = ({
 
   return (
     <>
-      <Modal isOpen={isDeleteModalOpen} onClose={toggleDeleteModal}>
-        <ModalHeader>Hapus {deleteState?.nama_pemegang_hak}</ModalHeader>
-        <ModalBody>
-          Yakin menghapus sertifikat dengan nama pemegang hak{" "}
-          {deleteState?.nama_pemegang_hak}?
-        </ModalBody>
-        <ModalFooter>
-          <div className="hidden sm:block">
-            <Button
-              layout="outline"
-              onClick={toggleDeleteModal}
-              disabled={deleteSertifikat.isLoading}
-            >
-              Batal
-            </Button>
-          </div>
-          <div className="hidden sm:block">
-            <button
-              disabled={deleteSertifikat.isLoading}
-              onClick={onDeleteUser}
-              className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-4 py-2 rounded-lg text-sm text-white bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
-            >
-              Hapus
-            </button>
-          </div>
-          <div className="block w-full sm:hidden">
-            <Button
-              block
-              size="large"
-              layout="outline"
-              onClick={toggleDeleteModal}
-              disabled={deleteSertifikat.isLoading}
-            >
-              Batal
-            </Button>
-          </div>
-          <div className="block w-full sm:hidden">
-            <button
-              disabled={deleteSertifikat.isLoading}
-              onClick={onDeleteUser}
-              className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-4 py-2 rounded-lg text-sm text-white bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
-            >
-              Hapus
-            </button>
-          </div>
-        </ModalFooter>
-      </Modal>
+      <TableFilter />
       <TableContainer className="mb-8">
         <Table>
           <TableHeader>
@@ -215,6 +171,58 @@ const SertifikatPage: React.FC<Props> = ({
           />
         </TableFooter>
       </TableContainer>
+      <Modal isOpen={isDeleteModalOpen} onClose={toggleDeleteModal}>
+        <ModalHeader>Hapus {deleteState?.nama_pemegang_hak}</ModalHeader>
+        <ModalBody>
+          Yakin menghapus sertifikat dengan nama pemegang hak
+          {deleteState?.nama_pemegang_hak}?
+        </ModalBody>
+        <ModalFooter>
+          <div className="hidden sm:block">
+            <Button
+              layout="outline"
+              onClick={toggleDeleteModal}
+              disabled={deleteSertifikat.isLoading}
+            >
+              Batal
+            </Button>
+          </div>
+          <div className="hidden sm:block">
+            <button
+              disabled={deleteSertifikat.isLoading}
+              onClick={onDeleteUser}
+              className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-4 py-2 rounded-lg text-sm text-white bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
+            >
+              Hapus
+            </button>
+          </div>
+          <div className="block w-full sm:hidden">
+            <Button
+              block
+              size="large"
+              layout="outline"
+              onClick={toggleDeleteModal}
+              disabled={deleteSertifikat.isLoading}
+            >
+              Batal
+            </Button>
+          </div>
+          <div className="block w-full sm:hidden">
+            <button
+              disabled={deleteSertifikat.isLoading}
+              onClick={onDeleteUser}
+              className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-5 py-3 rounded-lg text-white w-full bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
+            >
+              Hapus
+            </button>
+          </div>
+        </ModalFooter>
+      </Modal>
+      {sertifikat.isLoading && (
+        <div className="">
+          <Loader text="Loading sertifikat..." />
+        </div>
+      )}
     </>
   );
 };
