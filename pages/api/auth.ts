@@ -23,13 +23,7 @@ export default async function handler(
     supabase.auth.setAuth(addedUserRoleJWT);
 
     setAuthCookie(req, res);
-
-    res.status(200).json({ token: addedUserRoleJWT });
-    return;
   } else {
-    supabase.auth.api.setAuthCookie(req, res);
-    res.send("ok");
-    res.end();
-    return;
+    setAuthCookie(req, res);
   }
 }

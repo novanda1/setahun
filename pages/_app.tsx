@@ -71,6 +71,22 @@ function MyApp({ Component, pageProps }: any) {
     }
   }, [query?.type]);
 
+  // when sign and there is a token in url
+  useEffect(() => {
+    const auth = localStorage.getItem("supabase.auth.token");
+    if (query.token && auth) {
+      let authObject = JSON.parse(auth);
+      authObject = {
+        ...authObject,
+        currentSession: {
+          ...authObject.currentSession,
+          access_token: query.token,
+        },
+      };
+      localStorage.setItem("supabase.auth.token", JSON.stringify(authObject));
+    }
+  }, [query.token]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Windmill usePreferences={true} theme={theme}>

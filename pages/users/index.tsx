@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@roketid/windmill-react-ui";
+import Loader from "components/Loader/Loader";
 import useDeleteUser from "hooks/useDeleteUser";
 import useUsers from "hooks/useUsers";
 import { getRoleByRequest } from "lib/api/utils";
@@ -87,13 +88,13 @@ const Users = ({ role }: any) => {
             </Button>
           </div>
           <div className="hidden sm:block">
-            <Button
+            <button
               disabled={deleteUser.isLoading}
               onClick={onDeleteUser}
-              className="bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
+              className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-4 py-2 rounded-lg text-sm text-white bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
             >
               Hapus
-            </Button>
+            </button>
           </div>
           <div className="block w-full sm:hidden">
             <Button
@@ -107,15 +108,13 @@ const Users = ({ role }: any) => {
             </Button>
           </div>
           <div className="block w-full sm:hidden">
-            <Button
+            <button
               disabled={deleteUser.isLoading}
               onClick={onDeleteUser}
-              className="bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
-              block
-              size="large"
+              className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-4 py-2 rounded-lg text-sm text-white bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
             >
               Hapus
-            </Button>
+            </button>
           </div>
         </ModalFooter>
       </Modal>
@@ -125,81 +124,94 @@ const Users = ({ role }: any) => {
           Tambah User Baru
         </Button>
       </div>
-      <TableContainer className="mb-8">
-        <Table>
-          <TableHeader>
-            <tr>
-              <TableCell>Nama</TableCell>
-              <TableCell>NIP</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell>
-            </tr>
-          </TableHeader>
-          <TableBody>
-            {!users.error &&
-              users?.data?.data
-                ?.filter((user) => user.id !== supabase.auth.user()?.id)
-                ?.map((user: any, i: number) => (
-                  <TableRow key={user.id}>
-                    <TableCell>
-                      <div className="flex items-center text-sm">
-                        {/* <Avatar className="hidden mr-3 md:block" src={user.avatar} alt="User avatar" /> */}
-                        <div>
-                          <p className="font-semibold">{user.fullname}</p>
-                          <p className="text-xs text-gray-600 dark:text-gray-400">
-                            {user.unit}
-                          </p>
+      {users.data &&
+      users?.data?.data?.filter((user) => user.id !== supabase.auth.user()?.id)
+        .length <= 0 ? (
+        <div>Tidak ada user</div>
+      ) : (
+        <TableContainer className="mb-8">
+          <Table>
+            <TableHeader>
+              <tr>
+                <TableCell>Nama</TableCell>
+                <TableCell>NIP</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Actions</TableCell>
+              </tr>
+            </TableHeader>
+            <TableBody>
+              {!users.error &&
+                users?.data?.data
+                  ?.filter((user) => user.id !== supabase.auth.user()?.id)
+                  ?.map((user: any, i: number) => (
+                    <TableRow key={user.id}>
+                      <TableCell>
+                        <div className="flex items-center text-sm">
+                          {/* <Avatar className="hidden mr-3 md:block" src={user.avatar} alt="User avatar" /> */}
+                          <div>
+                            <p className="font-semibold">{user.fullname}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400">
+                              {user.unit}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{user.nip}</span>
-                    </TableCell>
-                    <TableCell>
-                      <Badge type={badgeType(user.user_roles[0].role)}>
-                        {user.user_roles[0].role}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-4">
-                        <Button
-                          onClick={() => push("/users/edit?id=" + user.id)}
-                          layout="outline"
-                          size="small"
-                          aria-label="Edit"
-                        >
-                          {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
-                          Ubah
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            toggleDeleteModal();
-                            setDeleteState(user);
-                          }}
-                          layout="outline"
-                          size="small"
-                          aria-label="Delete"
-                        >
-                          {/* <TrashIcon className="w-5 h-5" aria-hidden="true" /> */}
-                          Hapus
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-          </TableBody>
-        </Table>
-        <TableFooter>
-          {!users.error && !users.isLoading && (
-            <Pagination
-              totalResults={users.data?.count || 0}
-              resultsPerPage={resultsPerPage}
-              onChange={onPageChange}
-              label="Table navigation"
-            />
-          )}
-        </TableFooter>
-      </TableContainer>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">{user.nip}</span>
+                      </TableCell>
+                      <TableCell>
+                        <Badge type={badgeType(user.user_roles[0].role)}>
+                          {user.user_roles[0].role}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center space-x-4">
+                          <Button
+                            onClick={() => push("/users/edit?id=" + user.id)}
+                            layout="outline"
+                            size="small"
+                            aria-label="Edit"
+                          >
+                            {/* <EditIcon className="w-5 h-5" aria-hidden="true" /> */}
+                            Ubah
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              toggleDeleteModal();
+                              setDeleteState(user);
+                            }}
+                            layout="outline"
+                            size="small"
+                            aria-label="Delete"
+                          >
+                            {/* <TrashIcon className="w-5 h-5" aria-hidden="true" /> */}
+                            Hapus
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+            </TableBody>
+          </Table>
+          <TableFooter>
+            {!users.error && !users.isLoading && (
+              <Pagination
+                totalResults={users.data?.count || 0}
+                resultsPerPage={resultsPerPage}
+                onChange={onPageChange}
+                label="Table navigation"
+              />
+            )}
+          </TableFooter>
+        </TableContainer>
+      )}
+      {users.isLoading && (
+        <div className="">
+          <Loader text="Loading users..." />
+        </div>
+      )}
+
+      {users.isError && <div>Something went wrong</div>}
     </Layout>
   );
 };

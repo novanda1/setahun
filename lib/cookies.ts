@@ -223,4 +223,5 @@ export function setAuthCookie(req: any, res: any) {
       }))
     );
   }
+  res.status(200).json({ token: session?.access_token || "" });
 }
