@@ -106,24 +106,6 @@ export const updateUserHandler = async (
   }
 };
 
-export const deleteUserHandler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<any>,
-  id: string
-) => {
-  const { data, error } = await supabase
-    .from("users")
-    .delete()
-    .eq("user_id", id);
-
-  if (data && !error) {
-    res.status(201).json(data);
-    return;
-  } else {
-    res.status(404).json(error);
-  }
-};
-
 export const getUserByIdHandler = async (
   req: NextApiRequest,
   res: NextApiResponse<any>
@@ -185,6 +167,7 @@ export const deleteUserByIdHandler = async (
   const id = req.query.id as string;
 
   const response = await supabase.auth.api.deleteUser(id);
+  console.log("response", response);
 
   if (response.error) {
     value = new ResponseValue(

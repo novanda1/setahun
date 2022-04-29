@@ -90,13 +90,13 @@ const SertifikatPage: React.FC<Props> = ({
             </Button>
           </div>
           <div className="hidden sm:block">
-            <Button
+            <button
               disabled={deleteSertifikat.isLoading}
               onClick={onDeleteUser}
-              className="bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
+              className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-4 py-2 rounded-lg text-sm text-white bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
             >
               Hapus
-            </Button>
+            </button>
           </div>
           <div className="block w-full sm:hidden">
             <Button
@@ -110,15 +110,13 @@ const SertifikatPage: React.FC<Props> = ({
             </Button>
           </div>
           <div className="block w-full sm:hidden">
-            <Button
+            <button
               disabled={deleteSertifikat.isLoading}
               onClick={onDeleteUser}
-              className="bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
-              block
-              size="large"
+              className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-4 py-2 rounded-lg text-sm text-white bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:ring focus:ring-red-300"
             >
               Hapus
-            </Button>
+            </button>
           </div>
         </ModalFooter>
       </Modal>

@@ -16,7 +16,7 @@ const BelumDiambil = ({ role }: any) => {
 
       <PageTitle>Sertifikat Belum Diambil</PageTitle>
 
-      <SertifikatPage />
+      <SertifikatPage role={role} />
     </Layout>
   );
 };

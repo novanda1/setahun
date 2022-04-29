@@ -15,7 +15,7 @@ function SudahDiambil({ role }: any) {
       </Head>
       <PageTitle>Sertifikat Sudah Diambil</PageTitle>
 
-      <SertifikatPage diambil />
+      <SertifikatPage role={role} diambil />
     </Layout>
   );
 }

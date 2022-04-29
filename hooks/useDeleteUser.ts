@@ -3,14 +3,6 @@ import { ResponseValue } from "lib/types/response";
 import { DeleteUserDTO } from "lib/types/User";
 import { useMutation, useQueryClient } from "react-query";
 
-const deleteAuthUser = async (user: DeleteUserDTO) => {
-  const response = await fetch(`/api/users/${user.id}`, {
-    method: "DELETE",
-  });
-
-  return response.json();
-};
-
 const deleteUser = async (user: DeleteUserDTO): Promise<ResponseValue> => {
   let response = new ResponseValue("error", "not executed");
 
@@ -20,11 +12,14 @@ const deleteUser = async (user: DeleteUserDTO): Promise<ResponseValue> => {
   }
 
   try {
-    const authUser = await deleteAuthUser(user);
+    const authUser = await supabase
+      .from("users")
+      .delete()
+      .match({ id: user.id });
 
     if (!authUser.error)
       response = new ResponseValue("ok", "Delete user successfully");
-    else response = new ResponseValue("error", authUser.error);
+    else response = new ResponseValue("error", JSON.stringify(authUser.error));
   } catch (error) {
     response = new ResponseValue("error", "Delete user failed");
   }
