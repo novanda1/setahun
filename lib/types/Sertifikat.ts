@@ -1,3 +1,4 @@
+import { plainToClass } from "class-transformer";
 import {
   IsBoolean,
   IsInt,
@@ -285,3 +286,52 @@ export class CreateSertifikatDTO {
   @IsOptional()
   tanggal_pengambilan?: string;
 }
+
+export type SertifikatArrType =
+  | "text"
+  | "number"
+  | "daerah"
+  | "date"
+  | "select";
+
+const sertifikat = plainToClass(Sertifikat, {
+  // dummy: just to get type
+  created_at: "2022-04-28T20:11:22.003062+00:00",
+  daerah: { desa: "Sukoharjo", kecamatan: "Bandung" },
+  diambil: true,
+  id: "fd8e2c3f-6dbe-4ed2-9603-894c43c60a6d",
+  luas: 896,
+  nama_pemegang_hak: "ADIN NURUL",
+  nama_penerima: "NOVANDA AHSAN",
+  nik_penerima: 1112706712312312,
+  no_berkas: 645465465,
+  no_di_301: 65465,
+  no_seri: "AB9174",
+  tahun_berkas: 2015,
+  tanggal_di_208: new Date(),
+  tanggal_pengambilan: new Date(),
+  uraian_pekerjaan: "Sertifikat Pengganti Karena Hilang",
+});
+
+export const sertifikatArr = Object.keys(sertifikat)
+  .filter((s) => s !== "id")
+  .filter((s) => s !== "created_at")
+  .map((key) => {
+    const name = key
+      ?.split("_")
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(" ");
+
+    let type: SertifikatArrType = "number";
+
+    if (key === "daerah") type = "daerah";
+    else if (key.includes("tanggal")) type = "date";
+    else if (key === "diambil") type = "select";
+    else if (typeof sertifikat[key as keyof Sertifikat] === "string")
+      type = "text";
+
+    return {
+      name,
+      type,
+    };
+  });
