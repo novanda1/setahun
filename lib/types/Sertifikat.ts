@@ -124,6 +124,9 @@ export class Sertifikat {
 
   @IsString()
   tanggal_pengambilan: string;
+
+  @IsNotEmpty()
+  bukti_fisik: File | FileObject | null;
 }
 
 export class EditSertifikatDTO {
@@ -182,6 +185,9 @@ export class EditSertifikatDTO {
 
   @IsBoolean()
   diambil: boolean;
+
+  @IsNotEmpty()
+  bukti_fisik: File | FileObject | null;
 }
 
 export class EditSertifikatBelumDiambilDTO {
@@ -235,6 +241,9 @@ export class EditSertifikatBelumDiambilDTO {
 
   @IsOptional()
   tanggal_pengambilan?: string;
+
+  @IsNotEmpty()
+  bukti_fisik: File | FileObject | null;
 }
 
 export class CreateSertifikatDTO {
@@ -285,6 +294,9 @@ export class CreateSertifikatDTO {
 
   @IsOptional()
   tanggal_pengambilan?: string;
+
+  @IsNotEmpty()
+  bukti_fisik: File | FileObject | null;
 }
 
 export type SertifikatArrType =
@@ -335,3 +347,24 @@ export const sertifikatArr = Object.keys(sertifikat)
       type,
     };
   });
+
+export interface Bucket {
+  id: string;
+  name: string;
+  owner: string;
+  created_at: string;
+  updated_at: string;
+  public: boolean;
+}
+
+export interface FileObject {
+  name: string;
+  bucket_id: string;
+  owner: string;
+  id: string;
+  updated_at: string;
+  created_at: string;
+  last_accessed_at: string;
+  metadata: {};
+  buckets: Bucket;
+}

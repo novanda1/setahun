@@ -82,7 +82,6 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                   value={values.fullname || ""}
                   name="fullname"
                   className="mt-1"
-                  placeholder="Sherly Ayu"
                 />
               </Label>
               {errors.fullname && touched.fullname && (
@@ -98,7 +97,6 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                   name="nip"
                   type="number"
                   className="mt-1"
-                  placeholder="123123123123"
                 />
               </Label>
               {errors.nip && touched.nip && (
@@ -114,7 +112,6 @@ const EditUser: React.FC<any> = ({ role, user }) => {
                   value={values.unit || ""}
                   type="text"
                   className="mt-1"
-                  placeholder="Logistik"
                 />
               </Label>
               {errors.unit && touched.unit && (

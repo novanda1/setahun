@@ -89,7 +89,6 @@ const CreateUser: React.FC<any> = ({ role }) => {
                   type="email"
                   name="email"
                   value={values.email}
-                  placeholder="john@doe.com"
                 />
               </Label>
               {errors.email && touched.email && (
@@ -105,7 +104,6 @@ const CreateUser: React.FC<any> = ({ role }) => {
                   type="password"
                   name="password"
                   value={values.password}
-                  placeholder="***************"
                 />
               </Label>
               {errors.password && touched.password && (
@@ -121,7 +119,6 @@ const CreateUser: React.FC<any> = ({ role }) => {
                   name="passwordConfirm"
                   value={values.passwordConfirm}
                   className="mt-1"
-                  placeholder="rahasia"
                 />
               </Label>
               {errors.passwordConfirm && touched.passwordConfirm && (
@@ -136,7 +133,6 @@ const CreateUser: React.FC<any> = ({ role }) => {
                   value={values.user_metadata.fullname || ""}
                   name="user_metadata.fullname"
                   className="mt-1"
-                  placeholder="Sherly Ayu"
                 />
               </Label>
               {errors.user_metadata?.fullname &&
@@ -155,7 +151,6 @@ const CreateUser: React.FC<any> = ({ role }) => {
                   name="user_metadata.nip"
                   type="number"
                   className="mt-1"
-                  placeholder="123123123123"
                 />
               </Label>
               {errors.user_metadata?.nip && touched.user_metadata?.nip && (
@@ -173,7 +168,6 @@ const CreateUser: React.FC<any> = ({ role }) => {
                   value={values.user_metadata.unit || ""}
                   type="text"
                   className="mt-1"
-                  placeholder="Logistik"
                 />
               </Label>
               {errors.user_metadata?.unit && touched.user_metadata?.unit && (

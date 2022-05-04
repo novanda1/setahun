@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: any) {
   const [, setAuthenticatedState] = useState<
     "not-authenticated" | "authenticated"
   >("not-authenticated");
-  const { push, query } = useRouter();
+  const { push, query, replace } = useRouter();
 
   async function checkUser() {
     const user = await supabase.auth.user();
@@ -84,6 +84,7 @@ function MyApp({ Component, pageProps }: any) {
         },
       };
       localStorage.setItem("supabase.auth.token", JSON.stringify(authObject));
+      replace("/");
     }
   }, [query.token]);
 
