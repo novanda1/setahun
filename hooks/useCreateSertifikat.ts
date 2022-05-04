@@ -12,7 +12,7 @@ const createSertifikat = async ({
     .from("bukti-fisik")
     .upload(
       `${sertifikat.daerah.kecamatan}/${sertifikat.daerah.desa}/${sertifikat.nama_pemegang_hak}-${sertifikat.no_seri}.pdf`,
-      bukti_fisik,
+      bukti_fisik as File,
       {
         cacheControl: "3600",
         upsert: false,
