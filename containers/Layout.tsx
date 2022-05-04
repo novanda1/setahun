@@ -12,9 +12,11 @@ import Loader from "components/Loader/Loader";
 interface ILayout {
   children: React.ReactNode;
   role?: string;
+  sidebar?: boolean;
+  nav?: boolean;
 }
 
-function Layout({ children, role }: ILayout) {
+function Layout({ children, role, sidebar = true, nav = true }: ILayout) {
   const { isSidebarOpen } = useContext(SidebarContext);
   const user = supabase.auth.user();
 
@@ -29,9 +31,9 @@ function Layout({ children, role }: ILayout) {
               }`}
             >
               <WithAuth>
-                <Sidebar />
+                {sidebar && <Sidebar />}
                 <div className="flex flex-col flex-1 w-full">
-                  <Header />
+                  {nav && <Header />}
                   <Main>{children}</Main>
                 </div>
               </WithAuth>

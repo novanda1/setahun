@@ -8,20 +8,24 @@ import {
 import PageTitle from "components/Typography/PageTitle";
 import Layout from "containers/Layout";
 import { getRoleByRequest, getSertifikatDetailByRequest } from "lib/api/utils";
-import { Sertifikat } from "lib/types/Sertifikat";
+import { FileObject, Sertifikat } from "lib/types/Sertifikat";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
+import Link from "next/link";
+import supabase from "lib/api/supabase";
 
 const SertifikatDetail: React.FC<any> = ({
   role,
   sertifikat,
+  buktiFisik,
 }: {
   role: string;
   sertifikat: Sertifikat;
+  buktiFisik: FileObject;
 }) => {
-  const { back } = useRouter();
+  const { back, asPath } = useRouter();
 
   return (
     <>
@@ -93,6 +97,23 @@ const SertifikatDetail: React.FC<any> = ({
                   </TableRow>
                 );
             })}
+
+            <TableRow>
+              <TableCell>Bukti Fisik</TableCell>
+              <TableCell>
+                <span className="text-sm">
+                  {buktiFisik ? (
+                    <a className="underline">
+                      <Link href={asPath.replace("detail", "download")}>
+                        Download
+                      </Link>
+                    </a>
+                  ) : (
+                    "-"
+                  )}
+                </span>
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
 
@@ -124,10 +145,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const sertifikat = (await getSertifikatDetailByRequest(context)) || null;
   const role = await getRoleByRequest(context);
 
+  const path = `${sertifikat.daerah.kecamatan}/${sertifikat.daerah.desa}`;
+  const filename = `${sertifikat.nama_pemegang_hak}-${sertifikat.no_seri}`;
+  const { data } = await supabase.storage.from("bukti-fisik").list(path, {
+    limit: 100,
+    search: filename,
+  });
+
   return {
     props: {
       role,
       sertifikat,
+      buktiFisik: (data && data[0]) || null,
     },
   };
 };
