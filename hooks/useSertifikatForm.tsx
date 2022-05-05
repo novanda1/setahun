@@ -279,7 +279,7 @@ const SertifikatForm: React.FC<{
               <HelperText valid={false}>{errors.bukti_fisik}</HelperText>
             )}
 
-            <div className="pt-10"></div>
+            <div className="mt-10"></div>
             <SectionTitle>Tipe Sertifikat</SectionTitle>
 
             <div className="mt-4">

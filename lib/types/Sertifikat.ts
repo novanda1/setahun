@@ -21,7 +21,7 @@ export const uraianPekerjaan = [
   "Pencatatan Perubahan Penggunaan Tanah",
   "Pendaftaran SK Hak",
   "Pendaftaran Tanah Pertama Kali Pengakuan/Penegasan Hak",
-  "Pendaftaran Tanah Pertama Kali Wakaf untuk Tanah yang Belum Sertifikat",
+  "Pendaftaran Tanah Pertama Kali untuk Wakaf",
   "Penggabungan Bidang",
   "Pengukuran dan Pemetaan Kadastral (Peta Bidang)",
   "Peralihan Hak - Hibah",
@@ -44,7 +44,7 @@ export type UraianPekerjaan =
   | "Pencatatan Perubahan Penggunaan Tanah"
   | "Pendaftaran SK Hak"
   | "Pendaftaran Tanah Pertama Kali Pengakuan/Penegasan Hak"
-  | "Pendaftaran Tanah Pertama Kali Wakaf untuk Tanah yang Belum Sertifikat"
+  | "Pendaftaran Tanah Pertama Kali untuk Wakaf"
   | "Penggabungan Bidang"
   | "Pengukuran dan Pemetaan Kadastral (Peta Bidang)"
   | "Peralihan Hak - Hibah"

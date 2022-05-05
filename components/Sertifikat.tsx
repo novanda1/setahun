@@ -57,7 +57,7 @@ const SertifikatPage: React.FC<Props> = ({
 
   // modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const [deleteState, setDeleteState] = useState<Sertifikat | null>();
+  const [deleteState, setDeleteState] = useState<Sertifikat | null>(null);
   const deleteSertifikat = useDeleteSertifikat();
 
   const toggleDeleteModal = useCallback(() => {
@@ -66,11 +66,12 @@ const SertifikatPage: React.FC<Props> = ({
   }, [isDeleteModalOpen, deleteState]);
 
   const onDeleteUser = useCallback(() => {
-    deleteSertifikat.mutate(deleteState?.id as string, {
-      onSuccess() {
-        toggleDeleteModal();
-      },
-    });
+    if (deleteState)
+      deleteSertifikat.mutate(deleteState, {
+        onSuccess() {
+          toggleDeleteModal();
+        },
+      });
   }, [deleteState, deleteSertifikat, toggleDeleteModal]);
 
   return (

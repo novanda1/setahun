@@ -21,7 +21,7 @@ const editSertifikat = async ({
         bukti_fisik as File,
         {
           cacheControl: "3600",
-          upsert: false,
+          upsert: true,
         }
       ));
 

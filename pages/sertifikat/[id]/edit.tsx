@@ -65,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       role,
       sertifikat,
-      buktiFisik: data && data[0],
+      buktiFisik: (data && data[0]) || null,
     },
   };
 };
